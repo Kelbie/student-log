@@ -1,31 +1,30 @@
-
 exports.creds = {
   // Required
-  identityMetadata: 'https://login.microsoftonline.com/<tenant_name>.onmicrosoft.com/.well-known/openid-configuration',
-  // or equivalently: 'https://login.microsoftonline.com/<tenant_guid>/.well-known/openid-configuration'
+  // identityMetadata: 'https://login.microsoftonline.com/<tenant_name>.onmicrosoft.com/.well-known/openid-configuration',
+  identityMetadata: 'https://login.microsoftonline.com/51a0a69c-0e4f-4b3d-b642-12e013198635/.well-known/openid-configuration',
   //
   // or you can use the common endpoint
   // 'https://login.microsoftonline.com/common/.well-known/openid-configuration'
   // To use the common endpoint, you have to either set `validateIssuer` to false, or provide the `issuer` value.
 
   // Required, the client ID of your app in AAD
-  clientID: '<your_client_id>',
+  clientID: '9b15638e-6d41-4897-9d69-9450dc1ac435',
 
   // Required, must be 'code', 'code id_token', 'id_token code' or 'id_token'
-  responseType: 'code id_token',
+  responseType: 'id_token',
 
   // Required
   responseMode: 'form_post',
 
   // Required, the reply URL registered in AAD for your app
-  redirectUrl: 'http://localhost:3000/auth/openid/return',
+  redirectUrl: 'http://localhost:30662/auth/openid/return',
 
   // Required if we use http for redirectUrl
   allowHttpForRedirectUrl: true,
 
   // Required if `responseType` is 'code', 'id_token code' or 'code id_token'.
   // If app key contains '\', replace it with '\\'.
-  clientSecret: '<your_client_secret>',
+  clientSecret: 'keyboard cat',
 
   // Required to set to false if you don't want to validate issuer
   validateIssuer: true,
@@ -49,8 +48,8 @@ exports.creds = {
   // rollover purpose. We always use the first set of key/iv pair to encrypt cookie, but we will try every set of
   // key/iv pair to decrypt cookie. Key can be any string of length 32, and iv can be any string of length 12.
   cookieEncryptionKeys: [
-    { 'key': '12345678901234567890123456789012', 'iv': '123456789012' },
-    { 'key': 'abcdefghijklmnopqrstuvwxyzabcdef', 'iv': 'abcdefghijkl' }
+      { 'key': '12345678901234567890123456789012', 'iv': '123456789012' },
+      { 'key': 'abcdefghijklmnopqrstuvwxyzabcdef', 'iv': 'abcdefghijkl' }
   ],
 
   // Optional. The additional scope you want besides 'openid', for example: ['email', 'profile'].
@@ -76,7 +75,7 @@ exports.creds = {
 exports.resourceURL = 'https://graph.windows.net';
 
 // The url you need to go to destroy the session with AAD
-exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000';
+exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:30662';
 
 // If you want to use the mongoDB session store for session middleware, set to true; otherwise we will use the default
 // session store provided by express-session.
