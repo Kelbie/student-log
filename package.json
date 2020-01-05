@@ -20,7 +20,7 @@
       "mongoose": "^4.6.2",
       "nodemon": "^2.0.2",
       "passport": "*",
-      "passport-azure-ad": "^4.2.1",
+      "passport-azure-ad": "^4.2.1"
   },
   "devDependencies": {
       "@babel/cli": "^7.6.0",
