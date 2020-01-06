@@ -36,10 +36,66 @@ var passport = require("passport");
 var util = require("util");
 var bunyan = require("bunyan");
 var config = require("./config");
+var connect = require("connect");
+const path = require("path");
 
 // set up database for express session
 var MongoStore = require("connect-mongo")(expressSession);
 var mongoose = require("mongoose");
+
+import { GraphQLServer } from "graphql-yoga";
+
+const opts = {
+    port: 30662,
+    endpoint: "/graphql",
+    subscriptions: "/subscriptions",
+    playground: "/playground",
+    cors: {
+        credentials: true,
+        origin: ["http://localhost:30662"] // your frontend url.
+    }
+};
+
+const typeDefs = `
+    type Profile {
+        name: String
+    }
+    
+    type Query {
+        getProfile: Profile
+    }
+
+    type Mutation {
+        login: Profile
+    }
+
+`
+
+const resolvers = {
+    Mutation: {
+        login: async (_, { }, { req }) => {
+            return {
+                name: `${req.user.name.givenName} ${req.user.name.familyName}`
+            };
+        },
+    },
+    Query: {
+        getProfile: async (_, { }, { req }) => {
+            if (req.user) {
+                return {
+                    name: `${req.user.name.givenName} ${req.user.name.familyName}`
+                };
+            }
+            return { name: null };
+        }
+    },
+}
+
+const context = req => ({
+    req: req.request
+});
+
+const server = new GraphQLServer({ typeDefs, resolvers, context });
 
 // Start QuickStart here
 
@@ -50,7 +106,7 @@ var log = bunyan.createLogger({
 });
 
 /******************************************************************************
- * Set up passport in the app 
+ * Set up passport in the app
  ******************************************************************************/
 
 //-----------------------------------------------------------------------------
@@ -85,11 +141,11 @@ var findByOid = function (oid, fn) {
 
 //-----------------------------------------------------------------------------
 // Use the OIDCStrategy within Passport.
-// 
+//
 // Strategies in passport require a `verify` function, which accepts credentials
 // (in this case, the `oid` claim in id_token), and invoke a callback to find
 // the corresponding user object.
-// 
+//
 // The following are the accepted prototypes for the `verify` function
 // (1) function(iss, sub, done)
 // (2) function(iss, sub, profile, done)
@@ -100,166 +156,194 @@ var findByOid = function (oid, fn) {
 //
 // To do prototype (6), passReqToCallback must be set to true in the config.
 //-----------------------------------------------------------------------------
-passport.use(new OIDCStrategy({
-    identityMetadata: config.creds.identityMetadata,
-    clientID: config.creds.clientID,
-    responseType: config.creds.responseType,
-    responseMode: config.creds.responseMode,
-    redirectUrl: config.creds.redirectUrl,
-    allowHttpForRedirectUrl: config.creds.allowHttpForRedirectUrl,
-    clientSecret: config.creds.clientSecret,
-    validateIssuer: config.creds.validateIssuer,
-    isB2C: config.creds.isB2C,
-    issuer: config.creds.issuer,
-    passReqToCallback: config.creds.passReqToCallback,
-    scope: config.creds.scope,
-    loggingLevel: config.creds.loggingLevel,
-    nonceLifetime: config.creds.nonceLifetime,
-    nonceMaxAmount: config.creds.nonceMaxAmount,
-    useCookieInsteadOfSession: config.creds.useCookieInsteadOfSession,
-    cookieEncryptionKeys: config.creds.cookieEncryptionKeys,
-    clockSkew: config.creds.clockSkew,
-},
-    function (iss, sub, profile, accessToken, refreshToken, done) {
-        if (!profile.oid) {
-            return done(new Error("No oid found"), null);
-        }
-        // asynchronous verification, for effect...
-        process.nextTick(function () {
-            findByOid(profile.oid, function (err, user) {
-                if (err) {
-                    return done(err);
-                }
-                if (!user) {
-                    // "Auto-registration"
-                    users.push(profile);
-                    return done(null, profile);
-                }
-                return done(null, user);
+passport.use(
+    new OIDCStrategy(
+        {
+            identityMetadata: config.creds.identityMetadata,
+            clientID: config.creds.clientID,
+            responseType: config.creds.responseType,
+            responseMode: config.creds.responseMode,
+            redirectUrl: config.creds.redirectUrl,
+            allowHttpForRedirectUrl: config.creds.allowHttpForRedirectUrl,
+            clientSecret: config.creds.clientSecret,
+            validateIssuer: config.creds.validateIssuer,
+            isB2C: config.creds.isB2C,
+            issuer: config.creds.issuer,
+            passReqToCallback: config.creds.passReqToCallback,
+            scope: config.creds.scope,
+            loggingLevel: config.creds.loggingLevel,
+            nonceLifetime: config.creds.nonceLifetime,
+            nonceMaxAmount: config.creds.nonceMaxAmount,
+            useCookieInsteadOfSession: config.creds.useCookieInsteadOfSession,
+            cookieEncryptionKeys: config.creds.cookieEncryptionKeys,
+            clockSkew: config.creds.clockSkew
+        },
+        function (iss, sub, profile, accessToken, refreshToken, done) {
+            if (!profile.oid) {
+                return done(new Error("No oid found"), null);
+            }
+            // asynchronous verification, for effect...
+            process.nextTick(function () {
+                findByOid(profile.oid, function (err, user) {
+                    if (err) {
+                        return done(err);
+                    }
+                    if (!user) {
+                        // "Auto-registration"
+                        users.push(profile);
+                        return done(null, profile);
+                    }
+                    return done(null, user);
+                });
             });
-        });
-    }
-));
-
+        }
+    )
+);
 
 //-----------------------------------------------------------------------------
 // Config the app, include middlewares
 //-----------------------------------------------------------------------------
 var app = express();
 
-app.set("views", __dirname + "/views");
-app.set("view engine", "ejs");
-app.use(express.logger());
-app.use(methodOverride());
-app.use(cookieParser());
+server.express.set("views", __dirname + "/views");
+server.express.set("view engine", "ejs");
+server.express.use(methodOverride());
+server.express.use(cookieParser());
+server.express.use(connect());
 
 // set up session middleware
-if (config.useMongoDBSessionStore) {
-    mongoose.connect(config.databaseUri);
-    app.use(express.session({
-        secret: "secret",
-        cookie: { maxAge: config.mongoDBSessionMaxAge * 1000 },
-        store: new MongoStore({
-            mongooseConnection: mongoose.connection,
-            clear_interval: config.mongoDBSessionMaxAge
-        })
-    }));
-} else {
-    app.use(expressSession({ secret: "keyboard cat", resave: true, saveUninitialized: false }));
-}
+// if (config.useMongoDBSessionStore) {
+//   mongoose.connect(config.databaseUri);
+//   app.use(express.session({
+//     secret: 'secret',
+//     cookie: {maxAge: config.mongoDBSessionMaxAge * 1000},
+//     store: new MongoStore({
+//       mongooseConnection: mongoose.connection,
+//       clear_interval: config.mongoDBSessionMaxAge
+//     })
+//   }));
+// } else {
+server.express.use(
+    expressSession({
+        secret: "keyboard cat",
+        resave: true,
+        saveUninitialized: false
+    })
+);
+// }
 
-app.use(bodyParser.urlencoded({ extended: true }));
+server.express.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(app.router);
-app.use(express.static(__dirname + "/../../public"));
+server.express.use(passport.initialize());
+server.express.use(passport.session());
+server.express.use(express.static(__dirname + "/../../public"));
 
 //-----------------------------------------------------------------------------
 // Set up the route controller
 //
-// 1. For 'login' route and 'returnURL' route, use `passport.authenticate`. 
+// 1. For 'login' route and 'returnURL' route, use `passport.authenticate`.
 // This way the passport middleware can redirect the user to login page, receive
 // id_token etc from returnURL.
 //
-// 2. For the routes you want to check if user is already logged in, use 
+// 2. For the routes you want to check if user is already logged in, use
 // `ensureAuthenticated`. It checks if there is an user stored in session, if not
 // it will call `passport.authenticate` to ask for user to log in.
 //-----------------------------------------------------------------------------
 function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) { return next(); }
+    if (req.isAuthenticated()) {
+        return next();
+    }
     res.redirect("/login");
-};
+}
 
-app.get("/", function (req, res) {
-    res.render("index", { user: req.user });
-});
+// server.express.get('/', function(req, res) {
+//   console.log(req.user);
+//   res.render('index', { user: req.user });
+// });
 
 // '/account' is only available to logged in user
-app.get("/account", ensureAuthenticated, function (req, res) {
+server.express.get("/account", ensureAuthenticated, function (req, res) {
+    console.log(req.session);
     res.render("account", { user: req.user });
 });
 
-app.get("/login",
+server.express.get(
+    "/login",
     function (req, res, next) {
-        passport.authenticate("azuread-openidconnect",
-            {
-                response: res,                      // required
-                resourceURL: config.resourceURL,    // optional. Provide a value if you want to specify the resource.
-                customState: "my_state",            // optional. Provide a value if you want to provide custom state value.
-                failureRedirect: "/"
-            }
-        )(req, res, next);
+        let redirect = req.query.redirect;
+        passport.authenticate("azuread-openidconnect", {
+            response: res, // required
+            resourceURL: config.resourceURL, // optional. Provide a value if you want to specify the resource.
+            customState: redirect, // optional. Provide a value if you want to provide custom state value.
+            failureRedirect: "/"
+        })(req, res, next);
     },
     function (req, res) {
         log.info("Login was called in the Sample");
         res.redirect("/");
-    });
+    }
+);
 
 // 'GET returnURL'
 // `passport.authenticate` will try to authenticate the content returned in
 // query (such as authorization code). If authentication fails, user will be
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
-app.get("/auth/openid/return",
+server.express.get(
+    "/auth/openid/return",
     function (req, res, next) {
-        passport.authenticate("azuread-openidconnect",
-            {
-                response: res,                      // required
-                failureRedirect: "/"
-            }
-        )(req, res, next);
+        passport.authenticate("azuread-openidconnect", {
+            response: res, // required
+            failureRedirect: "/"
+        })(req, res, next);
     },
     function (req, res) {
         log.info("We received a return from AzureAD.");
-        res.redirect("/");
-    });
+        res.redirect(req.body.state);
+    }
+);
 
 // 'POST returnURL'
 // `passport.authenticate` will try to authenticate the content returned in
 // body (such as authorization code). If authentication fails, user will be
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
-app.post("/auth/openid/return",
+server.express.post(
+    "/auth/openid/return",
     function (req, res, next) {
-        passport.authenticate("azuread-openidconnect",
-            {
-                response: res,                      // required
-                failureRedirect: '/'
-            }
-        )(req, res, next);
+        req.body.state.slice(38);
+        passport.authenticate("azuread-openidconnect", {
+            response: res, // required
+            failureRedirect: "/"
+        })(req, res, next);
     },
     function (req, res) {
         log.info("We received a return from AzureAD.");
-        res.redirect("/");
-    });
+        res.redirect(req.body.state);
+    }
+);
 
 // 'logout' route, logout from passport, and destroy the session with AAD.
-app.get("/logout", function (req, res) {
+server.express.get("/logout", function (req, res) {
     req.session.destroy(function (err) {
         req.logOut();
-        res.redirect(config.destroySessionUrl);
+        res.redirect(req.query.redirect);
     });
 });
 
-app.listen(3000);
+server.express.use(express.static(path.join(__dirname + "/client/build")));
+
+server.express.get("*", (req, res, next) => {
+    // Handle graphql-yoga specific routes
+    if (
+        req.url == opts.playground ||
+        req.url == opts.subscriptions ||
+        req.url == opts.endpoint
+    ) {
+        // Return next() so that the GraphQLServer will handle it
+        return next();
+    }
+    res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
+
+server.start(opts, () => console.log("Server is running on localhost:30662"));
