@@ -7,13 +7,25 @@ import styled, { ThemeProvider } from "styled-components";
 
 import "./styles.css";
 
+import moment from "moment";
+
+import StepWizard from "react-step-wizard";
+
+import Timetable from "./components/Timetable";
+import TimetablePage from "./components/TimetablePage";
+
 import "./styles.css";
+import DayPicker from "./components/DayPicker";
 
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo-hooks";
 
+import date from "date-and-time";
+
 import { StoreContext, useMappedState } from "redux-react-hook";
 import { store } from "./store";
+
+import ical from "ical";
 
 import Header from "./components/Header";
 import Nav from "./components/Nav";
@@ -30,7 +42,7 @@ function MyRouter(props) {
             <Header />
             <div className="container">
                 <Nav />
-                <Route exact path="/timetable" />
+                <Route exact path="/timetable" component={TimetablePage} />
                 <Route exact path="/class/:id" />
                 <Route exact path="/profile" />
                 <Route exact path="/settings" />

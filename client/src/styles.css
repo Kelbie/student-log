@@ -12,3 +12,10 @@ html {
 *, *:before, *:after {
     box-sizing: inherit;
 }
+
+.classes {
+    grid-auto-rows: auto;
+    display: grid;
+    grid-gap: 24px;
+    grid-template-columns: max-content 1fr;
+}
