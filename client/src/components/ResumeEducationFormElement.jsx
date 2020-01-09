@@ -24,6 +24,8 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
     const [isEditable, setIsEditable] = useState(editable);
     const [editDropdownActive, setEditDropdownActive] = useState(false);
 
+    console.log(222, props.watch(`name[${props.index}]`));
+
     return <div {...props}>
         <div {...handle} className="handle">
             <FontAwesomeIcon icon={faGripVertical}  />
@@ -31,7 +33,7 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
                 <label>School Name*</label>
-                <input type="text" name={`name[${props.index}]`} ref={register({required: true})} defaultValue={content.name} />
+                <input type="text" name={`name[${props.index}]`} ref={register({required: true})} placeholder="Stanford University" defaultValue={content.name} />
                 {
                     errors.name ? 
                         errors.name[props.index] && <span id={`name${props.index}Error`}>This field is required</span>
@@ -39,28 +41,29 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 }
 
                 <label>School Location</label>
-                <input type="text" name={`location[${props.index}]`} ref={register} defaultValue={content.location} />
+                <input type="text" name={`location[${props.index}]`} ref={register} placeholder="Stanford, CA" />
 
                 <label>Degree</label>
-                <input type="text"  name={`degree[${props.index}]`} ref={register} defaultValue={content.degree} />
+                <input type="text"  name={`degree[${props.index}]`} ref={register} placeholder="BS" />
 
                 <label>Major</label>
-                <input type="text" name={`major[${props.index}]`} ref={register} defaultValue={content.major} />
+                <input type="text" name={`major[${props.index}]`} ref={register} placeholder="Computer Science" />
 
                 <label>GPA</label>
-                <input type="text" name={`gpa[${props.index}]`} ref={register} defaultValue={content.gpa} />
+                <input type="text" name={`gpa[${props.index}]`} ref={register} placeholder="3.6" />
 
                 <label>Start Date</label>
-                <input type="text" name={`start[${props.index}]`} ref={register} defaultValue={content.start} />
+                <input type="text" name={`start[${props.index}]`} ref={register} placeholder="Sep 2015" />
 
                 <label>End Date</label>
-                <input type="text" name={`end[${props.index}]`} ref={register} defaultValue={content.end} />
+                <input type="text" name={`end[${props.index}]`} ref={register} placeholder="June 2019" />
 
                 <Button2 onClick={async () => {
                     props.delete()
                 }}>Delete</Button2>
 
                 <Button2 onClick={async () => {
+                    console.log(props.watch())
                     const errors = await props.triggerValidation();
                     console.log(923,errors)
                     if (errors) {

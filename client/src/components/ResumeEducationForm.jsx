@@ -59,22 +59,23 @@ function createArrayWithNumbers(length) {
     return Array.from({ length }, (_, k) => k + 1);
 }
 
-function Education(name, location, degree, major, gpa, start, end) {
-    return {
-        name, 
-        location,
-        degree,
-        major,
-        gpa, 
-        start, 
-        end
-    }
+function Education(index, name, location, degree, major, gpa, start, end) {
+    let result = {}
+    result[`name[${index}]`] = name;
+    result[`location[${index}]`] = location;
+    result[`degree[${index}]`] = degree;
+    result[`major[${index}]`] = major;
+    result[`gpa[${index}]`] = gpa;
+    result[`start[${index}]`] = start;
+    result[`end[${index}]`] = end;
+    return result;
 }
 
 function EducationForm(props) {
     const [items, setItems] = useState([{
             id: "item-0",
             content: Education(
+                "0",
                 "Awesome University", 
                 "Planet Earth", 
                 "BSc", 
@@ -89,6 +90,7 @@ function EducationForm(props) {
     {
         id: "item-1",
         content: Education(
+            "1",
             "Awesome College", 
             "Planet Earth", 
             "BSc", 
@@ -102,12 +104,33 @@ function EducationForm(props) {
     }]);
 
     
-    const { register, handleSubmit, watch, errors, triggerValidation } = useForm();
+    const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
+        defaultValues: {
+            ...Education(
+                "0",
+                "Awesome University", 
+                "Planet Earth", 
+                "BSc", 
+                "Computer Science", 
+                "",
+                "2018", 
+                "2020"
+            ),
+            ...Education(
+                "1",
+                "Awesome College", 
+                "Planet Earth", 
+                "BSc", 
+                "Software Development", 
+                "",
+                "2016", 
+                "2018"
+            )
+        }
+    });
     const onSubmit = data => console.log(data);
     
     const watchAllFields = watch();
-    
-    console.log(123, errors);
     
     function del(id) {
         setItems([...items.filter(item_ => {
