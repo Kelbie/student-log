@@ -101,12 +101,21 @@ function EducationForm(props) {
         isEditable: false
     }]);
 
+    
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm();
     const onSubmit = data => console.log(data);
-
+    
     const watchAllFields = watch();
-
+    
     console.log(123, errors);
+    
+    function del(id) {
+        setItems([...items.filter(item_ => {
+            if (item_.id != id) {
+                return true
+            }
+        })]);
+    }
 
     return <form onSubmit={handleSubmit(onSubmit)} {...props}>
         <h1>Your Educational Background</h1>
@@ -133,6 +142,9 @@ function EducationForm(props) {
                                         content={item.content} 
                                         editable={item.isEditable} 
                                         triggerValidation={triggerValidation}
+                                        delete={() => {
+                                            del(item.id)
+                                        }}
                                         errors={errors}
                                     />
                             </div>

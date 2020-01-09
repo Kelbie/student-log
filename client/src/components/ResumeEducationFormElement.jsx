@@ -57,6 +57,10 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 <input type="text" name={`end[${props.index}]`} ref={register} defaultValue={content.end} />
 
                 <Button2 onClick={async () => {
+                    props.delete()
+                }}>Delete</Button2>
+
+                <Button2 onClick={async () => {
                     const errors = await props.triggerValidation();
                     console.log(923,errors)
                     if (errors) {
