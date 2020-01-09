@@ -13,7 +13,8 @@ import {
 	faCog,
 	faUserCircle,
 	faBook,
-	faBus
+	faBus,
+	faUser
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -102,6 +103,14 @@ function Nav(props) {
 					setActive("work");
 				}}
 			>Work</Button>
+			<Button
+				to="/resume"
+				active={active === "resume" ? 1 : 0}
+				icon={faUser}
+				onClick={() => {
+					setActive("resume");
+				}}
+			>Resume</Button>
 			<Button
 				to="/transport"
 				active={active === "transport" ? 1 : 0}

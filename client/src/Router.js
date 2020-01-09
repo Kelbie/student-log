@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 
 import ReactDOM from "react-dom";
 
@@ -31,6 +31,7 @@ import Header from "./components/Header";
 import Nav from "./components/Nav";
 
 import { setDarkTheme, setLightTheme } from "./actions/actions";
+import ResumePage from "./components/ResumePage";
 
 const client = new ApolloClient({
     uri: "http://localhost:30662/graphql"
@@ -42,13 +43,16 @@ function MyRouter(props) {
             <Header />
             <div className="container">
                 <Nav />
-                <Route exact path="/timetable" component={TimetablePage} />
-                <Route exact path="/class/:id" />
-                <Route exact path="/profile" />
-                <Route exact path="/settings" />
-                <Route exact path="/work" />
-                <Route exact path="/work/:id" />
-                <Route exact path="/job/new" />
+                <Switch>
+                    <Route exact path="/timetable" component={TimetablePage} />
+                    <Route exact path="/class/:id" />
+                    <Route exact path="/profile" />
+                    <Route exact path="/settings" />
+                    <Route exact path="/work" />
+                    <Route exact path="/work/:id" />
+                    <Route exact path="/job/new" />
+                    <Route path="/resume" component={ResumePage} />
+                </Switch>
             </div>
         </Router>
     </div>
