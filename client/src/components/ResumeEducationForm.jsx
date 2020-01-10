@@ -76,31 +76,16 @@ function EducationForm(props) {
             id: "item-0",
             content: Education(
                 "0",
-                "Awesome University", 
-                "Planet Earth", 
-                "BSc", 
-                "Computer Science", 
-                "",
-                "2018", 
-                "2020"
+                "Stanford University", 
+                "Stanford, CA", 
+                "BS", 
+                "Computer Science",
+                "3.6", 
+                "Sep 2015", 
+                "Jun 2019"
             ),
             isFixed: false,
             isEditable: false
-    },
-    {
-        id: "item-1",
-        content: Education(
-            "1",
-            "Awesome College", 
-            "Planet Earth", 
-            "BSc", 
-            "Software Development", 
-            "",
-            "2016", 
-            "2018"
-        ),
-        isFixed: false,
-        isEditable: false
     }]);
 
     
@@ -108,24 +93,14 @@ function EducationForm(props) {
         defaultValues: {
             ...Education(
                 "0",
-                "Awesome University", 
-                "Planet Earth", 
-                "BSc", 
-                "Computer Science", 
-                "",
-                "2018", 
-                "2020"
+                "Stanford University", 
+                "Stanford, CA", 
+                "BS", 
+                "Computer Science",
+                "3.6", 
+                "Sep 2015", 
+                "Jun 2019"
             ),
-            ...Education(
-                "1",
-                "Awesome College", 
-                "Planet Earth", 
-                "BSc", 
-                "Software Development", 
-                "",
-                "2016", 
-                "2018"
-            )
         }
     });
     const onSubmit = data => console.log(data);
@@ -183,14 +158,10 @@ function EducationForm(props) {
                 isFixed: false,
                 isEditable: true
             }])
-        }}>Add Education</Button2>
+        }}>Add School</Button2>
     </form>
 }
 
 export default styled(EducationForm)`
     color: ${props => props.theme.is === "dark" ? "white" : "black"};
-
-    ${Button2} {
-        width: 100%;
-    }
 `;

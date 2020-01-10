@@ -58,18 +58,21 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 <label>End Date</label>
                 <input type="text" name={`end[${props.index}]`} ref={register} placeholder="June 2019" />
 
-                <Button2 onClick={async () => {
-                    props.delete()
-                }}>Delete</Button2>
+                <div className="buttons">
+                    <Button2 onClick={async () => {
+                        props.delete()
+                    }}>Delete</Button2>
 
-                <Button2 onClick={async () => {
-                    console.log(props.watch())
-                    const errors = await props.triggerValidation();
-                    console.log(923,errors)
-                    if (errors) {
-                        setIsEditable(false);
-                    }
-                }}>Save</Button2>
+                    <Button2 onClick={async () => {
+                        console.log(props.watch())
+                        const errors = await props.triggerValidation();
+                        console.log(923,errors)
+                        if (errors) {
+                            setIsEditable(false);
+                        }
+                    }}>Save</Button2>
+                </div>
+
             </div>
             <div className={`render ${isEditable ? 'hidden' : ''}`}>
                 <div className="left">
@@ -165,8 +168,17 @@ export default styled(FormElement)`
                 display: none;
             }
 
-            ${Button2} {
+            .buttons {
+                display: flex;
                 margin-top: 8px;
+
+                ${Button2}:first-child {
+                    margin-left: 0px;
+                }
+
+                ${Button2} {
+                    margin-left: 4px;
+                }
             }
         }
 
