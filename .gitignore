@@ -30,3 +30,4 @@ build
 node_modules
 *.lock
 .DS_Store
+resumake.io/
