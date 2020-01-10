@@ -5,10 +5,14 @@ import styled from "styled-components";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV, faGripVertical } from "@fortawesome/free-solid-svg-icons";
-import { BrowserRouter as Router, Route, Link, Switch, useRouteMatch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch, useRouteMatch, withRouter } from "react-router-dom";
 import Button, { Button2 } from "./Button";
 
 import ResumeEducationFrom from "./ResumeEducationForm";
+import ResumeWorkFrom from "./ResumeWorkForm";
+import ResumeAwardsForm from "./ResumeAwardsForm";
+import ResumeProfileForm from "./ResumeProfileForm";
+import ResumeProjectsForm from "./ResumeProjectsForm";
 
 // fake data generator
 const getItems = count =>
@@ -54,18 +58,22 @@ const getListStyle = isDraggingOver => ({
 });
 
 function ResumeNavElement({handle, ...props}) {
+    console.log(222, props);
+
+    let active = "/resume/"+props.title.toLowerCase() === props.location.pathname;
+
     return <div {...props}>
-        <div {...handle} className="handle">
+        <div {...handle} className={`handle`}>
             <FontAwesomeIcon icon={faGripVertical}  />
         </div>
-        <Link to={`/resume/${props.title.toLowerCase()}`} className="title">
+        <Link to={`/resume/${props.title.toLowerCase()}`} className={`title ${ active ? "active" : "" }`}>
             {props.title}
-            <div className="underline"></div>
+            <div className={`underline`}></div>
         </Link>
     </div>
 }
 
-ResumeNavElement = styled(ResumeNavElement)`
+ResumeNavElement = styled(withRouter(ResumeNavElement))`
     display: flex;
 
     .handle {
@@ -74,10 +82,16 @@ ResumeNavElement = styled(ResumeNavElement)`
         margin-right: 8px;
     }
 
+    
     .title {
+        transition: 0.1s ease 0s;
         text-decoration: none;
         position: relative;
         color: ${props => props.theme.is === "dark" ? "white" : "black"};
+        
+        &.active {
+            color: ${props => props.theme.PRIMARY_COLOR};
+        }
 
         &:hover > .underline {
             width: 100%;
@@ -90,8 +104,8 @@ ResumeNavElement = styled(ResumeNavElement)`
             position: absolute;
             bottom: 0;
             background: ${props => props.theme.PRIMARY_COLOR};
-
         }
+
     }
 `;
 
@@ -203,10 +217,10 @@ function ResumePage(props) {
                 {/* <TemplatesForm /> */}
             </Route>
             <Route path={`${path}/profile`}>
-                {/* <ProfileForm /> */}
+                <ResumeProfileForm />
             </Route>
             <Route path={`${path}/work`}>
-                {/* <ResumeWorkForm /> */}
+                <ResumeWorkFrom />
             </Route>
             <Route path={`${path}/education`}>
                 <ResumeEducationFrom />
@@ -215,15 +229,19 @@ function ResumePage(props) {
                 {/* <SkillsForm /> */}
             </Route>
             <Route path={`${path}/Projects`}>
-                {/* <ProjectsForm /> */}
+                <ResumeProjectsForm />
             </Route>
             <Route path={`${path}/awards`}>
-                {/* <AwardsForm /> */}
+                <ResumeAwardsForm />
             </Route>
         </Switch>
     </div>
 }
 
-export default styled(ResumePage)`
+export default styled(withRouter(ResumePage))`
     display: flex;
+
+    > *:last-child {
+        flex-grow: 1;
+    }
 `;
