@@ -409,7 +409,6 @@ server.express.get(
         let redirect = req.query.redirect;
         passport.authenticate("azuread-openidconnect", {
             response: res, // required
-            resourceURL: config.resourceURL, // optional. Provide a value if you want to specify the resource.
             customState: redirect, // optional. Provide a value if you want to provide custom state value.
             failureRedirect: "/"
         })(req, res, next);
