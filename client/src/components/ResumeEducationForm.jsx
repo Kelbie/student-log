@@ -64,7 +64,7 @@ function createArrayWithNumbers(length) {
 
 function EducationForm(props) {
     const { action, state } = useStateMachine(updateAction);
-    const [items, setItems] = useState(state.educations.map((education, i) => {
+    const [items, setItems] = useState(state.education.map((education, i) => {
         return {
             id: `item-${i}`,
             content: education,
@@ -75,7 +75,7 @@ function EducationForm(props) {
     
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            educations: state.educations
+            education: state.education
         }
     });
     const onSubmit = data => action(data);
@@ -117,7 +117,7 @@ function EducationForm(props) {
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
-                                            action({educations: state.educations.filter((education, i) => {
+                                            action({education: state.education.filter((education, i) => {
                                                 return i != item.id.split("-")[1]
                                             })})
                                         }}

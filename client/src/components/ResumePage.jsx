@@ -250,7 +250,7 @@ createStore({
             summary: "Recognized for creating the most awesome project at a hackathon", 
         }
     ],
-    educations: [
+    education: [
         {
             name: "Stanford University", 
             location: "Stanford, CA", 
