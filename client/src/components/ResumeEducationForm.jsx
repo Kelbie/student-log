@@ -12,6 +12,9 @@ import { Button2 } from "./Button";
 
 import { useForm } from 'react-hook-form'
 
+import { useStateMachine } from "little-state-machine";
+import updateAction from "../updateAction";
+
 
 // fake data generator
 const getItems = count =>
@@ -59,51 +62,23 @@ function createArrayWithNumbers(length) {
     return Array.from({ length }, (_, k) => k + 1);
 }
 
-function Education(index, name, location, degree, major, gpa, start, end) {
-    let result = {}
-    result[`name[${index}]`] = name;
-    result[`location[${index}]`] = location;
-    result[`degree[${index}]`] = degree;
-    result[`major[${index}]`] = major;
-    result[`gpa[${index}]`] = gpa;
-    result[`start[${index}]`] = start;
-    result[`end[${index}]`] = end;
-    return result;
-}
-
 function EducationForm(props) {
-    const [items, setItems] = useState([{
-            id: "item-0",
-            content: Education(
-                "0",
-                "Stanford University", 
-                "Stanford, CA", 
-                "BS", 
-                "Computer Science",
-                "3.6", 
-                "Sep 2015", 
-                "Jun 2019"
-            ),
+    const { action, state } = useStateMachine(updateAction);
+    const [items, setItems] = useState(state.educations.map((education, i) => {
+        return {
+            id: `item-${i}`,
+            content: education,
             isFixed: false,
             isEditable: false
-    }]);
-
+        }
+    }));
     
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            ...Education(
-                "0",
-                "Stanford University", 
-                "Stanford, CA", 
-                "BS", 
-                "Computer Science",
-                "3.6", 
-                "Sep 2015", 
-                "Jun 2019"
-            ),
+            educations: state.educations
         }
     });
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => action(data);
     
     const watchAllFields = watch();
     

@@ -12,6 +12,9 @@ import { Button2 } from "./Button";
 
 import { useForm } from 'react-hook-form'
 
+import { useStateMachine } from "little-state-machine";
+import updateAction from "../updateAction";
+
 
 // fake data generator
 const getItems = count =>
@@ -59,43 +62,25 @@ function createArrayWithNumbers(length) {
     return Array.from({ length }, (_, k) => k + 1);
 }
 
-function Awards(index, name, date, awarder, summary) {
-    let result = {}
-    result[`name[${index}]`] = name;
-    result[`date[${index}]`] = date;
-    result[`awarder[${index}]`] = awarder;
-    result[`summary[${index}]`] = summary;
-    return result;
-}
-
 function AwardsForm(props) {
-    const [items, setItems] = useState([{
-            id: "item-0",
-            content: Awards(
-                "0",
-                "Supreme Hacker", 
-                "May 2015", 
-                "HackNY", 
-                "Recognized for creating the most awesome project at a hackathon", 
-            ),
+    const { action, state } = useStateMachine(updateAction);
+    const [items, setItems] = useState(state.awards.map((award, i) => {
+        return {
+            id: `item-${i}`,
+            content: award,
             isFixed: false,
             isEditable: false
-    }
-    ]);
+        }
+    }));
+
 
     
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            ...Awards(
-                "0",
-                "Supreme Hacker", 
-                "May 2015", 
-                "HackNY", 
-                "Recognized for creating the most awesome project at a hackathon", 
-            ),
+            awards: state.awards
         }
     });
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => {action(data)};
     
     const watchAllFields = watch();
     

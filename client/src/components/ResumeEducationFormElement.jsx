@@ -33,7 +33,7 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
                 <label>School Name*</label>
-                <input type="text" name={`name[${props.index}]`} ref={register({required: true})} placeholder="Stanford University" defaultValue={content.name} />
+                <input type="text" name={`educations[${props.index}].name`} ref={register({required: true})} placeholder="Stanford University" defaultValue={content.name} />
                 {
                     errors.name ? 
                         errors.name[props.index] && <span id={`name${props.index}Error`}>This field is required</span>
@@ -41,32 +41,30 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 }
 
                 <label>School Location</label>
-                <input type="text" name={`location[${props.index}]`} ref={register} placeholder="Stanford, CA" />
+                <input type="text" name={`educations[${props.index}].location`} ref={register} placeholder="Stanford, CA" />
 
                 <label>Degree</label>
-                <input type="text"  name={`degree[${props.index}]`} ref={register} placeholder="BS" />
+                <input type="text"  name={`educations[${props.index}].degree`} ref={register} placeholder="BS" />
 
                 <label>Major</label>
-                <input type="text" name={`major[${props.index}]`} ref={register} placeholder="Computer Science" />
+                <input type="text" name={`educations[${props.index}].major`} ref={register} placeholder="Computer Science" />
 
                 <label>GPA</label>
-                <input type="text" name={`gpa[${props.index}]`} ref={register} placeholder="3.6" />
+                <input type="text" name={`educations[${props.index}].gpa`} ref={register} placeholder="3.6" />
 
                 <label>Start Date</label>
-                <input type="text" name={`start[${props.index}]`} ref={register} placeholder="Sep 2015" />
+                <input type="text" name={`educations[${props.index}].start`} ref={register} placeholder="Sep 2015" />
 
                 <label>End Date</label>
-                <input type="text" name={`end[${props.index}]`} ref={register} placeholder="June 2019" />
+                <input type="text" name={`educations[${props.index}].end`} ref={register} placeholder="June 2019" />
 
                 <div className="buttons">
                     <Button2 onClick={async () => {
                         props.delete()
                     }}>Delete</Button2>
 
-                    <Button2 onClick={async () => {
-                        console.log(props.watch())
+                    <Button2 type="submit" onClick={async () => {
                         const errors = await props.triggerValidation();
-                        console.log(923,errors)
                         if (errors) {
                             setIsEditable(false);
                         }
@@ -77,21 +75,21 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
             <div className={`render ${isEditable ? 'hidden' : ''}`}>
                 <div className="left">
                     <div className="name">
-                        {props.watch(`name[${props.index}]`)}
+                        {props.watch(`educations[${props.index}].name`)}
                     </div>
                     <div className="course">
                         <span className="major">
-                            {props.watch(`major[${props.index}]`)}
+                            {props.watch(`educations[${props.index}].major`)}
                         </span>
                         <span>
                             {
-                                props.watch(`major[${props.index}]`) && 
-                                props.watch(`degree[${props.index}]`) ?
+                                props.watch(`educations[${props.index}].major`) && 
+                                props.watch(`educations[${props.index}].degree`) ?
                                 ", " : null
                             }
                         </span>
                         <span className="degree">
-                            {props.watch(`degree[${props.index}]`)}
+                            {props.watch(`educations[${props.index}].degree`)}
                         </span>
                     </div>
                     {/* <div className="gpa">
@@ -100,22 +98,22 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 </div>
                 <div className="right">
                     <div className="location">
-                        {props.watch(`location[${props.index}]`)}
+                        {props.watch(`education[${props.index}].location`)}
                     </div>
                     <div className="start-end">
                         <span className="start">
-                            {props.watch(`start[${props.index}]`)}
+                            {props.watch(`educations[${props.index}].start`)}
                         </span>
                         <span className="gap">
                             
                             {
                                 // If there is an end date then put the dash in
-                                props.watch(`end[${props.index}]`)  ? 
+                                props.watch(`educations[${props.index}].end`)  ? 
                                     " - " : null
                             }
                         </span>
                         <span className="end">
-                            {props.watch(`end[${props.index}]`)}
+                            {props.watch(`educations[${props.index}].end`)}
                         </span>
                     </div>
                 </div>

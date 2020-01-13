@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV, faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import { BrowserRouter as Router, Route, Link, Switch, useRouteMatch, withRouter } from "react-router-dom";
 import Button, { Button2 } from "./Button";
+import { StateMachineProvider, createStore, useStateMachine } from "little-state-machine";
+import updateAction from "../updateAction";
 
 import ResumeEducationFrom from "./ResumeEducationForm";
 import ResumeWorkFrom from "./ResumeWorkForm";
@@ -207,34 +209,90 @@ ResumeNav = styled(ResumeNav)`
     margin-right: 8px;
 `;
 
+createStore({
+    sections: [
+        "TEMPLATE",
+        "PROFILE",
+        "EDUCATION",
+        "WORK",
+        "SKILLS",
+        "AWARDS"
+    ],
+    template: 1,
+    profile: {
+        name: "John Smith",
+        email: "johnsmith@gmail.com",
+        number: "(555) 123-4567",
+        location: "New York, NY",
+        link: "mycoolportfolio.com/myname"
+    },
+    work: [
+        {
+            name: "Google", 
+            title: "Software Engineer", 
+            location: "Mountain View, CA", 
+            start: "May 2015", 
+            end: "Present"
+        }
+    ],
+    projects: [
+        {
+            name: "Piper Chat", 
+            description: "A video chat app with great picture quality.", 
+            link: "http://piperchat.com", 
+        }
+    ],
+    awards: [
+        {
+            name: "Supreme Hacker", 
+            date: "May 2015", 
+            awarder: "HackNY", 
+            summary: "Recognized for creating the most awesome project at a hackathon", 
+        }
+    ],
+    educations: [
+        {
+            name: "Stanford University", 
+            location: "Stanford, CA", 
+            degree: "BS", 
+            major: "Computer Science",
+            gpa: "3.6", 
+            start: "Sep 2015", 
+            end: "Jun 2019"
+        }
+    ]
+});
+
 function ResumePage(props) {
     let { path, url } = useRouteMatch();
 
     return <div {...props}>
-        <ResumeNav />
-        <Switch>
-            <Route path={`${path}/templates`}>
-                {/* <TemplatesForm /> */}
-            </Route>
-            <Route path={`${path}/profile`}>
-                <ResumeProfileForm />
-            </Route>
-            <Route path={`${path}/work`}>
-                <ResumeWorkFrom />
-            </Route>
-            <Route path={`${path}/education`}>
-                <ResumeEducationFrom />
-            </Route>
-            <Route path={`${path}/skills`}>
-                {/* <SkillsForm /> */}
-            </Route>
-            <Route path={`${path}/Projects`}>
-                <ResumeProjectsForm />
-            </Route>
-            <Route path={`${path}/awards`}>
-                <ResumeAwardsForm />
-            </Route>
-        </Switch>
+        <StateMachineProvider>
+            <ResumeNav />
+            <Switch>
+                <Route path={`${path}/templates`}>
+                    {/* <TemplatesForm /> */}
+                </Route>
+                <Route path={`${path}/profile`}>
+                    <ResumeProfileForm />
+                </Route>
+                <Route path={`${path}/work`}>
+                    <ResumeWorkFrom />
+                </Route>
+                <Route path={`${path}/education`}>
+                    <ResumeEducationFrom />
+                </Route>
+                <Route path={`${path}/skills`}>
+                    {/* <SkillsForm /> */}
+                </Route>
+                <Route path={`${path}/Projects`}>
+                    <ResumeProjectsForm />
+                </Route>
+                <Route path={`${path}/awards`}>
+                    <ResumeAwardsForm />
+                </Route>
+            </Switch>
+        </StateMachineProvider>
     </div>
 }
 

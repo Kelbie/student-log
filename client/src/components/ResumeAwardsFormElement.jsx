@@ -33,7 +33,7 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
                 <label>Award Name*</label>
-                <input type="text" name={`name[${props.index}]`} ref={register({required: true})} placeholder="Supreme Hacker" />
+                <input type="text" name={`awards[${props.index}].name`} ref={register({required: true})} placeholder="Supreme Hacker" />
                 {
                     errors.name ? 
                         errors.name[props.index] && <span id={`name${props.index}Error`}>This field is required</span>
@@ -41,23 +41,21 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 }
 
                 <label>Award Date</label>
-                <input type="text" name={`date[${props.index}]`} ref={register} placeholder="May 2015" />
+                <input type="text" name={`awards[${props.index}].date`} ref={register} placeholder="May 2015" />
 
                 <label>Awarder</label>
-                <input type="text" name={`awarder[${props.index}]`} ref={register} placeholder="HackNY" />
+                <input type="text" name={`awards[${props.index}].awarder`} ref={register} placeholder="HackNY" />
 
                 <label>Summary</label>
-                <input type="text" name={`summary[${props.index}]`} ref={register} placeholder="Recognized for creating the most awesome project at a hackathon" />
+                <input type="text" name={`awards[${props.index}].summary`} ref={register} placeholder="Recognized for creating the most awesome project at a hackathon" />
 
-                <div className="buttons">
+                <div type="submit" className="buttons">
                     <Button2 onClick={async () => {
                         props.delete()
                     }}>Delete</Button2>
 
-                    <Button2 onClick={async () => {
-                        console.log(props.watch())
+                    <Button2 type="submit" onClick={async () => {
                         const errors = await props.triggerValidation();
-                        console.log(923,errors)
                         if (errors) {
                             setIsEditable(false);
                         }
@@ -68,28 +66,28 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 <div className="top">
                     <div className="left">
                         <div className="name">
-                            {props.watch(`name[${props.index}]`)}
+                            {props.watch(`awards[${props.index}].name`)}
                         </div>
                         <div className="course">
                             <span className="major">
-                                {props.watch(`awarder[${props.index}]`)}
+                                {props.watch(`awards[${props.index}].awarder`)}
                             </span>
                             <span className="degree">
-                                {props.watch(`degree[${props.index}]`)}
+                                {props.watch(`awards[${props.index}].degree`)}
                             </span>
                         </div>
                     </div>
                     <div className="right">
                         <div className="location">
-                            {props.watch(`location[${props.index}]`)}
+                            {props.watch(`awards[${props.index}].location`)}
                         </div>
                         <div className="start-end">
-                            {props.watch(`date[${props.index}]`)}
+                            {props.watch(`awards[${props.index}].date`)}
                         </div>
                     </div>
                 </div>
                 <div className="bottom">
-                    {props.watch(`summary[${props.index}]`)}
+                    {props.watch(`awards[${props.index}].summary`)}
                 </div>
             </div>
         </div>

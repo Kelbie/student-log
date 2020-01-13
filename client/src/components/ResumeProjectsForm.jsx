@@ -12,6 +12,8 @@ import { Button2 } from "./Button";
 
 import { useForm } from 'react-hook-form'
 
+import { useStateMachine } from "little-state-machine";
+import updateAction from "../updateAction";
 
 // fake data generator
 const getItems = count =>
@@ -59,40 +61,25 @@ function createArrayWithNumbers(length) {
     return Array.from({ length }, (_, k) => k + 1);
 }
 
-function Projects(index, name, description, link) {
-    let result = {}
-    result[`name[${index}]`] = name;
-    result[`description[${index}]`] = description;
-    result[`link[${index}]`] = link;
-    return result;
-}
-
 function ProjectsForm(props) {
-    const [items, setItems] = useState([{
-            id: "item-0",
-            content: Projects(
-                "0",
-                "Piper Chat", 
-                "A video chat app with great picture quality.", 
-                "http://piperchat.com", 
-            ),
+    const { action, state } = useStateMachine(updateAction);
+
+    const [items, setItems] = useState(state.projects.map((project, i) => {
+        return {
+            id: `item-${i}`,
+            content: project,
             isFixed: false,
             isEditable: false
-    }
-    ]);
+        }
+    }));
 
     
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            ...Projects(
-                "0",
-                "Piper Chat", 
-                "A video chat app with great picture quality.", 
-                "http://piperchat.com", 
-            ),
+            projects: state.projects
         }
     });
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => action(data);
     
     const watchAllFields = watch();
     

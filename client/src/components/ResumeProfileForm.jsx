@@ -11,7 +11,8 @@ import ResumeProfileFormElement from "./ResumeProfileFormElement";
 import { Button2 } from "./Button";
 
 import { useForm } from 'react-hook-form'
-
+import { useStateMachine } from "little-state-machine";
+import updateAction from "../updateAction";
 
 // fake data generator
 const getItems = count =>
@@ -59,48 +60,25 @@ function createArrayWithNumbers(length) {
     return Array.from({ length }, (_, k) => k + 1);
 }
 
-function Profile(index, name, email, number, location, link) {
-    let result = {}
-    result[`name[${index}]`] = name;
-    result[`email[${index}]`] = email;
-    result[`number[${index}]`] = number;
-    result[`location[${index}]`] = location;
-    result[`link[${index}]`] = link;
-    return result;
-}
 
 function ProfileForm(props) {
     const [items, setItems] = useState([{
             id: "item-0",
-            content: Profile(
-                "0",
-                "John Smith",
-                "johnsmith@gmail.com",
-                "(555) 123-4567",
-                "New York, NY",
-                "mycoolportfolio.com/myname"
-            ),
             isFixed: false,
             isEditable: true
     }
     ]);
 
     
+    const { action, state } = useStateMachine(updateAction);
+    const onSubmit = data => { console.log(12837981729837, state); action(data) }
+    
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            ...Profile(
-                "0",
-                "Supreme Hacker", 
-                "May 2015", 
-                "HackNY", 
-                "Recognized for creating the most awesome project at a hackathon", 
-            ),
+            profile: state.profile
         }
     });
-    const onSubmit = data => console.log(data);
-    
-    const watchAllFields = watch();
-    
+
     function del(id) {
         setItems([...items.filter(item_ => {
             if (item_.id != id) {

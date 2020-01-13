@@ -33,7 +33,7 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
                 <label>Project Name*</label>
-                <input type="text" name={`name[${props.index}]`} ref={register({required: true})} placeholder="Supreme Hacker" />
+                <input type="text" name={`projects[${props.index}].name`} ref={register({required: true})} placeholder="Supreme Hacker" />
                 {
                     errors.name ? 
                         errors.name[props.index] && <span id={`name${props.index}Error`}>This field is required</span>
@@ -41,10 +41,10 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 }
 
                 <label>Project Description</label>
-                <input type="text" name={`description[${props.index}]`} ref={register} placeholder="A video chat app with great picture quality" />
+                <input type="text" name={`projects[${props.index}].description`} ref={register} placeholder="A video chat app with great picture quality" />
 
                 <label>Link to Project</label>
-                <input type="text" name={`link[${props.index}]`} ref={register} placeholder="http://piperchat.com" />
+                <input type="text" name={`projects[${props.index}].link`} ref={register} placeholder="http://piperchat.com" />
 
                 <div className="buttons">
                     <Button2 onClick={async () => {
@@ -65,17 +65,17 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 <div className="top">
                     <div className="left">
                         <div className="name">
-                            {props.watch(`name[${props.index}]`)}
+                            {props.watch(`projects[${props.index}].name`)}
                         </div>
                     </div>
                     <div className="right">
                         <div className="link">
-                            {props.watch(`link[${props.index}]`)}
+                            {props.watch(`projects[${props.index}].link`)}
                         </div>
                     </div>
                 </div>
                 <div className="bottom">
-                    {props.watch(`description[${props.index}]`)}
+                    {props.watch(`projects[${props.index}].description`)}
                 </div>
             </div>
         </div>

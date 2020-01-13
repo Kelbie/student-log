@@ -24,27 +24,25 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
     const [isEditable, setIsEditable] = useState(editable);
     const [editDropdownActive, setEditDropdownActive] = useState(false);
 
-    console.log(222, props.watch(`name[${props.index}]`));
-
     return <div {...props}>
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
                 <label>Full Name</label>
-                <input type="text" name={`name[${props.index}]`} ref={register} placeholder="John Smith" />
+                <input type="text" name={`profile.name`} ref={register} placeholder="John Smith" />
 
                 <label>Email</label>
-                <input type="text" name={`date[${props.index}]`} ref={register} placeholder="johnsmith@gmail.com" />
+                <input type="text" name={`profile.email`} ref={register} placeholder="johnsmith@gmail.com" />
 
                 <label>Phone Number</label>
-                <input type="text" name={`awarder[${props.index}]`} ref={register} placeholder="(555) 123-4567" />
+                <input type="text" name={`profile.number`} ref={register} placeholder="(555) 123-4567" />
 
                 <label>Location</label>
-                <input type="text" name={`summary[${props.index}]`} ref={register} placeholder="New York, NY" />
+                <input type="text" name={`profile.location`} ref={register} placeholder="New York, NY" />
 
                 <label>Link</label>
-                <input type="text" name={`summary[${props.index}]`} ref={register} placeholder="mycoolportfolio.com/myname" />
+                <input type="text" name={`profile.link`} ref={register} placeholder="mycoolportfolio.com/myname" />
 
-                <div className="buttons">
+                <div type="submit" className="buttons">
                     <Button2 onClick={async () => {
                         const errors = await props.triggerValidation();
                     }}>Save</Button2>

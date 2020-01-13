@@ -10,6 +10,9 @@ import ResumeWorkFormElement from "./ResumeWorkFormElement";
 
 import { Button2 } from "./Button";
 
+import { useStateMachine } from "little-state-machine";
+import updateAction from "../updateAction";
+
 import { useForm } from 'react-hook-form'
 
 
@@ -70,34 +73,25 @@ function Work(index, name, title, location, start ,end) {
 }
 
 function WorkForm(props) {
-    const [items, setItems] = useState([{
-            id: "item-0",
-            content: Work(
-                "0",
-                "Google", 
-                "Software Engineer", 
-                "Mountain View, CA", 
-                "May 2015", 
-                "Present"
-            ),
+    const { action, state } = useStateMachine(updateAction);
+    
+    const [items, setItems] = useState(state.work.map((work, i) => {
+        return {
+            id: `item-${i}`,
+            content: work,
             isFixed: false,
             isEditable: false
-    }]);
+        }
+    }));
 
     
+
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            ...Work(
-                "0",
-                "Google", 
-                "Software Engineer", 
-                "Mountain View, CA", 
-                "May 2015", 
-                "Present"
-            )
+            work: state.work
         }
     });
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => action(data);
     
     const watchAllFields = watch();
     

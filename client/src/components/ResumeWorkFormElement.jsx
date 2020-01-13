@@ -24,8 +24,6 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
     const [isEditable, setIsEditable] = useState(editable);
     const [editDropdownActive, setEditDropdownActive] = useState(false);
 
-    console.log(222, props.watch(`name[${props.index}]`));
-
     return <div {...props}>
         <div {...handle} className="handle">
             <FontAwesomeIcon icon={faGripVertical}  />
@@ -33,7 +31,7 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
                 <label>Company Name*</label>
-                <input type="text" name={`name[${props.index}]`} ref={register({required: true})} placeholder="Google" defaultValue={content.name} />
+                <input type="text" name={`work[${props.index}].name`} ref={register({required: true})} placeholder="Google" defaultValue={content.name} />
                 {
                     errors.name ? 
                         errors.name[props.index] && <span id={`name${props.index}Error`}>This field is required</span>
@@ -41,23 +39,23 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
                 }
 
                 <label>Job Title</label>
-                <input type="text" name={`title[${props.index}]`} ref={register} placeholder="Software Engineer" />
+                <input type="text" name={`work[${props.index}].title`} ref={register} placeholder="Software Engineer" />
 
                 <label>Job Location</label>
-                <input type="text" name={`location[${props.index}]`} ref={register} placeholder="Mountain View, CA" />
+                <input type="text" name={`work[${props.index}].location`} ref={register} placeholder="Mountain View, CA" />
 
                 <label>Start Date</label>
-                <input type="text" name={`start[${props.index}]`} ref={register} placeholder="Sep 2015" />
+                <input type="text" name={`work[${props.index}].start`} ref={register} placeholder="Sep 2015" />
 
                 <label>End Date</label>
-                <input type="text" name={`end[${props.index}]`} ref={register} placeholder="June 2019" />
+                <input type="text" name={`work[${props.index}].end`} ref={register} placeholder="June 2019" />
 
                 <div className="buttons">
                     <Button2 onClick={async () => {
                         props.delete()
                     }}>Delete</Button2>
 
-                    <Button2 onClick={async () => {
+                    <Button2 type="submit" onClick={async () => {
                         console.log(props.watch())
                         const errors = await props.triggerValidation();
                         console.log(923,errors)
@@ -71,31 +69,31 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
             <div className={`render ${isEditable ? 'hidden' : ''}`}>
                 <div className="left">
                     <div className="name">
-                        {props.watch(`name[${props.index}]`)}
+                        {props.watch(`work[${props.index}].name`)}
                     </div>
                     <div className="work">
                         <span className="work">
-                            {props.watch(`title[${props.index}]`)}
+                            {props.watch(`work[${props.index}].title`)}
                         </span>
                     </div>
                 </div>
                 <div className="right">
                     <div className="location">
-                        {props.watch(`location[${props.index}]`)}
+                        {props.watch(`work[${props.index}].location`)}
                     </div>
                     <div className="start-end">
                         <span className="start">
-                            {props.watch(`start[${props.index}]`)}
+                            {props.watch(`work[${props.index}].start`)}
                         </span>
                         <span className="gap">
                             {
                                 // If there is an end date then put the dash in
-                                props.watch(`end[${props.index}]`)  ? 
+                                props.watch(`work[${props.index}].end`)  ? 
                                     " - " : null
                             }
                         </span>
                         <span className="end">
-                            {props.watch(`end[${props.index}]`)}
+                            {props.watch(`work[${props.index}].end`)}
                         </span>
                     </div>
                 </div>
