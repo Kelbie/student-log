@@ -130,6 +130,9 @@ function WorkForm(props) {
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
+                                            action({work: state.work.filter((work, i) => {
+                                                return i != item.id.split("-")[1]
+                                            })})
                                         }}
                                         errors={errors}
                                     />

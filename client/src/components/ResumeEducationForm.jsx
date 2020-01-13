@@ -117,6 +117,9 @@ function EducationForm(props) {
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
+                                            action({educations: state.educations.filter((education, i) => {
+                                                return i != item.id.split("-")[1]
+                                            })})
                                         }}
                                         errors={errors}
                                     />

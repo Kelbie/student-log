@@ -119,6 +119,9 @@ function AwardsForm(props) {
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
+                                            action({awards: state.awards.filter((award, i) => {
+                                                return i != item.id.split("-")[1]
+                                            })})
                                         }}
                                         errors={errors}
                                     />

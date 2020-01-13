@@ -118,6 +118,9 @@ function ProjectsForm(props) {
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
+                                            action({projects: state.projects.filter((project, i) => {
+                                                return i != item.id.split("-")[1]
+                                            })})
                                         }}
                                         errors={errors}
                                     />
