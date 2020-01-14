@@ -338,6 +338,12 @@ passport.use(
 // Config the app, include middlewares
 //-----------------------------------------------------------------------------
 var app = express();
+var proxy = require('http-proxy-middleware');
+
+server.express.use(
+    '/api/generate/resume',
+    proxy({ target: 'http://localhost:3001', changeOrigin: true })
+);
 
 server.express.set("views", __dirname + "/views");
 server.express.set("view engine", "ejs");
