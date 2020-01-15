@@ -22,6 +22,7 @@ import ResumeProfileForm from "./ResumeProfileForm";
 import ResumeProjectsForm from "./ResumeProjectsForm";
 import ResumeWorkFrom from "./ResumeWorkForm";
 import TemplatesForm from "./TemplatesForm";
+import ResumeSkillsForm from "./ResumeSkillsForm";
 
 // fake data generator
 const getItems = count =>
@@ -67,8 +68,6 @@ const getListStyle = isDraggingOver => ({
 });
 
 function ResumeNavElement({handle, ...props}) {
-    console.log(222, props);
-
     let active = "/resume/"+props.title.toLowerCase() === props.location.pathname;
 
     return <div {...props}>
@@ -228,8 +227,6 @@ function ResumePDF(props) {
             return section.toLowerCase();
         })
 
-        console.log(data, 123123123)
-
         const request = {
             method: 'POST',
             headers: {
@@ -243,8 +240,6 @@ function ResumePDF(props) {
         const blob = await response.blob()
         const url = URL.createObjectURL(blob)
         setUrl(url);
-
-        console.log(123123123, url);
     }, []);
 
     
@@ -283,97 +278,88 @@ ResumePDF = styled(ResumePDF)`
     }
 `;
 
-class ResumeNav extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            items: [
-            {
-                id: "item-2",
-                content: "Work",
-                isFixed: false
-            },
-            {
-                id: "item-3",
-                content: "Education",
-                isFixed: false
-            },
-            {
-                id: "item-4",
-                content: "Skills",
-                isFixed: false
-            },
-            {
-                id: "item-5",
-                content: "Projects",
-                isFixed: false
-            },
-            {
-                id: "item-6",
-                content: "Awards", 
-                isFixed: false
-            }]
-        };
-        this.onDragEnd = this.onDragEnd.bind(this);
-    }
+function ResumeNav(props) {
+    const [items, setItems] = useState([
+        {
+            id: "item-2",
+            content: "Work",
+            isFixed: false
+        },
+        {
+            id: "item-3",
+            content: "Education",
+            isFixed: false
+        },
+        {
+            id: "item-4",
+            content: "Skills",
+            isFixed: false
+        },
+        {
+            id: "item-5",
+            content: "Projects",
+            isFixed: false
+        },
+        {
+            id: "item-6",
+            content: "Awards", 
+            isFixed: false
+        }
+    ])
 
-    onDragEnd(result) {
+    function onDragEnd(result) {
         // dropped outside the list
         if (!result.destination) {
             return;
         }
 
-        const items = reorder(
-            this.state.items,
+        const items_ = reorder(
+            items,
             result.source.index,
             result.destination.index
         );
 
-        this.setState({
-            items
-        });
+        setItems(items_)
     }
 
     // Normally you would want to split things out into separate components.
     // But in this example everything is just done in one place for simplicity
-    render() {
-        return (
-            <div {...this.props}>
-                <ResumeNavElement handle={false} title={"Templates"} />
-                <ResumeNavElement handle={false} title={"Profile"} />
-                <DragDropContext onDragEnd={this.onDragEnd}>
-                    <Droppable droppableId="droppable">
-                        {(provided, snapshot) => (
-                            <div
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                            >
-                                {this.state.items.map((item, index) => (
-                                    <Draggable isDragDisabled={item.isFixed} key={item.id} draggableId={item.id} index={index} direction={'vertical'}
-                                    >
-                                        {(provided, snapshot) => (
-                                            <div
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                style={getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps.style
-                                                )}
-                                                >
-                                                <ResumeNavElement handle={item.isFixed == false ? provided.dragHandleProps : false} title={item.content} />
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-                <Button2 onClick={() => this.props.showPDF(true)}>Generate PDF</Button2>
-            </div>
-        );
-    }
+    return (
+        <div {...props}>
+            <ResumeNavElement handle={false} title={"Templates"} />
+            <ResumeNavElement handle={false} title={"Profile"} />
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                    {(provided, snapshot) => (
+                        <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
+                            {items.map((item, index) => (
+                                <Draggable isDragDisabled={item.isFixed} key={item.id} draggableId={item.id} index={index} direction={'vertical'}
+                                >
+                                    {(provided, snapshot) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            style={getItemStyle(
+                                                snapshot.isDragging,
+                                                provided.draggableProps.style
+                                            )}
+                                            >
+                                            <ResumeNavElement handle={item.isFixed == false ? provided.dragHandleProps : false} title={item.content} />
+                                        </div>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
+            <Button2 onClick={() => props.showPDF(true)}>Generate PDF</Button2>
+        </div>
+    );
 }
 
 ResumeNav = styled(ResumeNav)`
@@ -405,7 +391,7 @@ function ResumePage(props) {
                 <ResumeEducationFrom />
             </Route>
             <Route path={`${path}/skills`}>
-                {/* <SkillsForm /> */}
+                <ResumeSkillsForm />
             </Route>
             <Route path={`${path}/Projects`}>
                 <ResumeProjectsForm />

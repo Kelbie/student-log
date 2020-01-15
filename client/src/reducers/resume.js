@@ -58,6 +58,14 @@ const initialState = {
             start: "Sep 2015", 
             end: "Jun 2019"
         }
+    ],
+    skills: [
+        {
+            name: "Programming Languages",
+            keywords: [
+                "Java"
+            ]
+        }
     ]
 };
 
