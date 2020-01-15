@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { rgba } from "polished";
 import styled from "styled-components";
 
-import {rgba} from "polished";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV, faGripVertical } from "@fortawesome/free-solid-svg-icons";
-
-import EditDropdown from "./EditDropdown";
 import { Button2 } from "./Button";
+import EditDropdown from "./EditDropdown";
 
 function isEmpty(obj) {
     for(var prop in obj) {

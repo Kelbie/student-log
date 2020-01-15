@@ -1,24 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
+import { faEllipsisV, faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { rgba } from "polished";
 import styled from "styled-components";
 
-import {rgba} from "polished";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV, faGripVertical } from "@fortawesome/free-solid-svg-icons";
-
-import EditDropdown from "./EditDropdown";
 import { Button2 } from "./Button";
-
-function isEmpty(obj) {
-    for(var prop in obj) {
-      if(obj.hasOwnProperty(prop)) {
-        return false;
-      }
-    }
-  
-    return JSON.stringify(obj) === JSON.stringify({});
-  }
+import EditDropdown from "./EditDropdown";
 
 function FormElement({handle, content, register, editable, errors, ...props}) {
     const [isEditable, setIsEditable] = useState(editable);
@@ -33,7 +22,7 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
                 <label>School Name*</label>
-                <input type="text" name={`education[${props.index}].name`} ref={register({required: true})} placeholder="Stanford University" defaultValue={content.name} />
+                <input type="text" name={`education[${props.index}].name`} ref={register({required: true})} placeholder="Stanford University" />
                 {
                     errors.name ? 
                         errors.name[props.index] && <span id={`name${props.index}Error`}>This field is required</span>

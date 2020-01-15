@@ -54,6 +54,9 @@ class DraggableForm extends React.Component {
     }
 
     onDragEnd(result) {
+
+        this.props.onDragEnd(result.source.index, result.destination?.index)
+
         // dropped outside the list
         if (!result.destination) {
             return;
@@ -68,8 +71,6 @@ class DraggableForm extends React.Component {
         this.setState({
             items
         });
-
-        this.props.setItems(items);
     }
 
     // For when items are added dynamically

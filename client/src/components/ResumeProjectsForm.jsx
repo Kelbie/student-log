@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
+
+import move from "lodash-move";
+
+import { Draggable } from "react-beautiful-dnd";
+
+import { useForm } from 'react-hook-form';
+
+import { useDispatch, useMappedState } from "redux-react-hook";
 
 import styled from "styled-components";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-import DraggableForm from "./DraggableForm";
-
-import ResumeProjectsFormElement from "./ResumeProjectsFormElement";
+import { saveResume } from "../actions/actions";
 
 import { Button2 } from "./Button";
-
-import { useForm } from 'react-hook-form'
-
-import { useStateMachine } from "little-state-machine";
-import updateAction from "../updateAction";
+import DraggableForm from "./DraggableForm";
+import ResumeProjectsFormElement from "./ResumeProjectsFormElement";
 
 // fake data generator
 const getItems = count =>
@@ -62,26 +63,39 @@ function createArrayWithNumbers(length) {
 }
 
 function ProjectsForm(props) {
-    const { action, state } = useStateMachine(updateAction);
+    // Get projects resume from store
+    const mapState = useCallback(
+        state => ({
+            projects: state.resume.projects
+        }),
+        []
+    );
+        
+    const { projects } = useMappedState(mapState);
 
-    const [items, setItems] = useState(state.projects.map((project, i) => {
+    // State for each item
+    const [items, setItems] = useState(projects.map((project, i) => {
         return {
             id: `item-${i}`,
-            content: project,
             isFixed: false,
             isEditable: false
         }
     }));
 
-    
+    // Form config
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            projects: state.projects
+            projects: projects
         }
     });
-    const onSubmit = data => action(data);
-    
-    const watchAllFields = watch();
+
+    // Dispatch on save
+    const dispatch = useDispatch();
+    const onSubmit = data => {
+        dispatch(
+            saveResume(data)
+        )
+    };
     
     function del(id) {
         setItems([...items.filter(item_ => {
@@ -89,11 +103,21 @@ function ProjectsForm(props) {
                 return true
             }
         })]);
+        dispatch(saveResume({projects: projects.filter((project, i) => {
+            return i != id.split("-")[1]
+        })}));
     }
 
     return <form onSubmit={handleSubmit(onSubmit)} {...props}>
         <h1>Your Projects</h1>
-        <DraggableForm items={items} setItems={setItems}>
+        <DraggableForm items={items} setItems={setItems} onDragEnd={
+            (start, end) => {
+                setItems(move(items, start, end))
+                dispatch(
+                    saveResume({projects: move(projects,start,end)})
+                )
+            }
+        }>
             {
                 items.map((item, index) => {
                     return <Draggable key={item.id} draggableId={item.id} index={index} direction={'vertical'}>
@@ -113,14 +137,10 @@ function ProjectsForm(props) {
                                         register={register} 
                                         handle={item.isFixed === false ? 
                                             provided.dragHandleProps : false} 
-                                        content={item.content} 
                                         editable={item.isEditable} 
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
-                                            action({projects: state.projects.filter((project, i) => {
-                                                return i != item.id.split("-")[1]
-                                            })})
                                         }}
                                         errors={errors}
                                     />

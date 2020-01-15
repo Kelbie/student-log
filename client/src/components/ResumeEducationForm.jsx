@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
+
+import move from "lodash-move";
+
+import { Draggable } from "react-beautiful-dnd";
+
+import { useForm } from 'react-hook-form';
+
+import { useDispatch, useMappedState } from "redux-react-hook";
 
 import styled from "styled-components";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-import DraggableForm from "./DraggableForm";
-
-import ResumeEducationFormElement from "./ResumeEducationFormElement";
+import { saveResume } from "../actions/actions";
 
 import { Button2 } from "./Button";
-
-import { useForm } from 'react-hook-form'
-
-import { useStateMachine } from "little-state-machine";
-import updateAction from "../updateAction";
-
+import DraggableForm from "./DraggableForm";
+import ResumeEducationFormElement from "./ResumeEducationFormElement";
 
 // fake data generator
 const getItems = count =>
@@ -63,24 +63,39 @@ function createArrayWithNumbers(length) {
 }
 
 function EducationForm(props) {
-    const { action, state } = useStateMachine(updateAction);
-    const [items, setItems] = useState(state.education.map((education, i) => {
+    // Get education resume from store
+    const mapState = useCallback(
+        state => ({
+            education: state.resume.education
+        }),
+        []
+    );
+    
+    const { education } = useMappedState(mapState);
+
+    // State for each item
+    const [items, setItems] = useState(education.map((education, i) => {
         return {
             id: `item-${i}`,
-            content: education,
             isFixed: false,
             isEditable: false
         }
     }));
     
+    // Form config
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            education: state.education
+            education
         }
     });
-    const onSubmit = data => action(data);
     
-    const watchAllFields = watch();
+    // Dispatch on save
+    const dispatch = useDispatch();
+    const onSubmit = data => {
+        dispatch(
+            saveResume(data)
+        )
+    };
     
     function del(id) {
         setItems([...items.filter(item_ => {
@@ -88,11 +103,21 @@ function EducationForm(props) {
                 return true
             }
         })]);
+        dispatch(saveResume({education: education.filter((project, i) => {
+            return i != id.split("-")[1]
+        })}));
     }
 
     return <form onSubmit={handleSubmit(onSubmit)} {...props}>
         <h1>Your Educational Background</h1>
-        <DraggableForm items={items} setItems={setItems}>
+        <DraggableForm items={items} setItems={setItems}  onDragEnd={
+            (start, end) => {
+                setItems(move(items, start, end))
+                dispatch(
+                    saveResume({education: move(education,start,end)})
+                )
+            }
+        }>
             {
                 items.map((item, index) => {
                     return <Draggable key={item.id} draggableId={item.id} index={index} direction={'vertical'}>
@@ -112,14 +137,10 @@ function EducationForm(props) {
                                         register={register} 
                                         handle={item.isFixed === false ? 
                                             provided.dragHandleProps : false} 
-                                        content={item.content} 
                                         editable={item.isEditable} 
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
-                                            action({education: state.education.filter((education, i) => {
-                                                return i != item.id.split("-")[1]
-                                            })})
                                         }}
                                         errors={errors}
                                     />

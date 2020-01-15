@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
+
+import { Draggable } from "react-beautiful-dnd";
+
+import { useForm } from 'react-hook-form';
+
+import { useDispatch, useMappedState } from "redux-react-hook";
 
 import styled from "styled-components";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { saveResume } from "../actions/actions";
 
 import DraggableForm from "./DraggableForm";
-
 import ResumeProfileFormElement from "./ResumeProfileFormElement";
-
-import { Button2 } from "./Button";
-
-import { useForm } from 'react-hook-form'
-import { useStateMachine } from "little-state-machine";
-import updateAction from "../updateAction";
 
 // fake data generator
 const getItems = count =>
@@ -62,29 +61,40 @@ function createArrayWithNumbers(length) {
 
 
 function ProfileForm(props) {
+    // State for item
     const [items, setItems] = useState([{
-            id: "item-0",
-            isFixed: false,
-            isEditable: true
-    }
-    ]);
-
+        id: "item-0",
+        isFixed: false,
+        isEditable: true
+    }]);
     
-    const { action, state } = useStateMachine(updateAction);
-    const onSubmit = data => { console.log(12837981729837, state); action(data) }
-    
+    // Get profile resume from store
+    const mapState = useCallback(
+        state => ({
+            profile: state.resume.profile
+        }),
+        []
+    );
+        
+    const { profile } = useMappedState(mapState);
+        
+    // Form config
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            profile: state.profile
+            profile
         }
     });
-
-    function del(id) {
-        setItems([...items.filter(item_ => {
-            if (item_.id != id) {
-                return true
-            }
-        })]);
+        
+    // Dispatch on save
+    const dispatch = useDispatch();
+    const onSubmit = data => { 
+        dispatch(
+            saveResume(
+                {
+                    profile: data
+                }
+            )
+        ) 
     }
 
     return <form onSubmit={handleSubmit(onSubmit)} {...props}>
@@ -112,9 +122,7 @@ function ProfileForm(props) {
                                         content={item.content} 
                                         editable={item.isEditable} 
                                         triggerValidation={triggerValidation}
-                                        delete={() => {
-                                            del(item.id)
-                                        }}
+                                        delete={() => {}}
                                         errors={errors}
                                     />
                             </div>

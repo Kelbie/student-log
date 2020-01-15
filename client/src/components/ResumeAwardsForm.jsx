@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
+
+import move from "lodash-move";
+
+import { Draggable } from "react-beautiful-dnd";
+
+import { useForm } from 'react-hook-form';
+import { useDispatch, useMappedState } from "redux-react-hook";
 
 import styled from "styled-components";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-import DraggableForm from "./DraggableForm";
-
-import ResumeAwardsFormElement from "./ResumeAwardsFormElement";
+import { saveResume } from "../actions/actions";
 
 import { Button2 } from "./Button";
-
-import { useForm } from 'react-hook-form'
-
-import { useStateMachine } from "little-state-machine";
-import updateAction from "../updateAction";
-
+import DraggableForm from "./DraggableForm";
+import ResumeAwardsFormElement from "./ResumeAwardsFormElement";
 
 // fake data generator
 const getItems = count =>
@@ -63,38 +62,61 @@ function createArrayWithNumbers(length) {
 }
 
 function AwardsForm(props) {
-    const { action, state } = useStateMachine(updateAction);
-    const [items, setItems] = useState(state.awards.map((award, i) => {
+    // Get awards resume from store
+    const mapState = useCallback(
+        state => ({
+            awards: state.resume.awards
+        }),
+        []
+    );
+        
+    const { awards } = useMappedState(mapState);
+
+    // State for each item
+    const [items, setItems] = useState(awards.map((award, i) => {
         return {
             id: `item-${i}`,
-            content: award,
             isFixed: false,
             isEditable: false
         }
     }));
 
-
-    
+    // Form config
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            awards: state.awards
+            awards
         }
     });
-    const onSubmit = data => {action(data)};
-    
-    const watchAllFields = watch();
-    
+
+    // Dispatch on save
+    const dispatch = useDispatch();
+    const onSubmit = data => {
+        dispatch(
+            saveResume(data)
+        )
+    };
+
     function del(id) {
         setItems([...items.filter(item_ => {
             if (item_.id != id) {
                 return true
             }
         })]);
+        dispatch(saveResume({awards: awards.filter((award, i) => {
+            return i != id.split("-")[1]
+        })}));
     }
 
     return <form onSubmit={handleSubmit(onSubmit)} {...props}>
         <h1>Honors & Awards</h1>
-        <DraggableForm items={items} setItems={setItems}>
+        <DraggableForm items={items} setItems={setItems} onDragEnd={
+            (start, end) => {
+                setItems(move(items, start, end))
+                dispatch(
+                    saveResume({awards: move(awards,start,end)})
+                )
+            }
+        }>
             {
                 items.map((item, index) => {
                     return <Draggable key={item.id} draggableId={item.id} index={index} direction={'vertical'}>
@@ -114,14 +136,10 @@ function AwardsForm(props) {
                                         register={register} 
                                         handle={item.isFixed === false ? 
                                             provided.dragHandleProps : false} 
-                                        content={item.content} 
                                         editable={item.isEditable} 
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
-                                            action({awards: state.awards.filter((award, i) => {
-                                                return i != item.id.split("-")[1]
-                                            })})
                                         }}
                                         errors={errors}
                                     />

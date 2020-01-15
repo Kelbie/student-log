@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
+
+import move from "lodash-move";
+
+import { Draggable } from "react-beautiful-dnd";
+
+import { useForm } from 'react-hook-form';
+
+import { useDispatch, useMappedState } from "redux-react-hook";
 
 import styled from "styled-components";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-import DraggableForm from "./DraggableForm";
-
-import ResumeWorkFormElement from "./ResumeWorkFormElement";
+import { saveResume } from "../actions/actions";
 
 import { Button2 } from "./Button";
-
-import { useStateMachine } from "little-state-machine";
-import updateAction from "../updateAction";
-
-import { useForm } from 'react-hook-form'
-
-
-// fake data generator
-const getItems = count =>
-    Array.from({ length: count }, (v, k) => k).map(k => ({
-        id: `item-${k}`,
-        content: `item ${k}`
-    }));
+import DraggableForm from "./DraggableForm";
+import ResumeWorkFormElement from "./ResumeWorkFormElement";
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -73,27 +66,38 @@ function Work(index, name, title, location, start ,end) {
 }
 
 function WorkForm(props) {
-    const { action, state } = useStateMachine(updateAction);
+    // Get work resume from store
+    const mapState = useCallback(
+        state => ({
+            work: state.resume.work
+        }),
+        []
+    );
+        
+    const { work } = useMappedState(mapState);
     
-    const [items, setItems] = useState(state.work.map((work, i) => {
+    const [items, setItems] = useState(work.map((work, i) => {
         return {
             id: `item-${i}`,
-            content: work,
             isFixed: false,
             isEditable: false
         }
     }));
 
-    
-
+    // Form config
     const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
         defaultValues: {
-            work: state.work
+            work
         }
     });
-    const onSubmit = data => action(data);
-    
-    const watchAllFields = watch();
+
+    // Dispatch on save
+    const dispatch = useDispatch();
+    const onSubmit = data => {
+        dispatch(
+            saveResume(data)
+        )
+    };
     
     function del(id) {
         setItems([...items.filter(item_ => {
@@ -101,11 +105,21 @@ function WorkForm(props) {
                 return true
             }
         })]);
+        dispatch(saveResume({work: work.filter((work, i) => {
+            return i != id.split("-")[1]
+        })}));
     }
 
     return <form onSubmit={handleSubmit(onSubmit)} {...props}>
         <h1>Your Work Experience</h1>
-        <DraggableForm items={items} setItems={setItems}>
+        <DraggableForm items={items} setItems={setItems} onDragEnd={
+            (start, end) => {
+                setItems(move(items, start, end))
+                dispatch(
+                    saveResume({work: move(work,start,end)})
+                )
+            }
+        }>
             {
                 items.map((item, index) => {
                     return <Draggable key={item.id} draggableId={item.id} index={index} direction={'vertical'}>
@@ -125,14 +139,10 @@ function WorkForm(props) {
                                         register={register} 
                                         handle={item.isFixed === false ? 
                                             provided.dragHandleProps : false} 
-                                        content={item.content} 
                                         editable={item.isEditable} 
                                         triggerValidation={triggerValidation}
                                         delete={() => {
                                             del(item.id)
-                                            action({work: state.work.filter((work, i) => {
-                                                return i != item.id.split("-")[1]
-                                            })})
                                         }}
                                         errors={errors}
                                     />
@@ -145,7 +155,6 @@ function WorkForm(props) {
         <Button2 onClick={() => {
             setItems([...items, {
                 id: `item-${items.length}`,
-                content: 'new item',
                 isFixed: false,
                 isEditable: true
             }])

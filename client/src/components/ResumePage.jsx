@@ -1,24 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+
+import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import _ from "lodash";
+
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+
+import { Link, Route, Switch, useRouteMatch, withRouter } from "react-router-dom";
+
+import { useMappedState } from "redux-react-hook";
 
 import styled from "styled-components";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV, faGripVertical } from "@fortawesome/free-solid-svg-icons";
-import { BrowserRouter as Router, Route, Link, Switch, useRouteMatch, withRouter } from "react-router-dom";
-import Button, { Button2 } from "./Button";
-import { StateMachineProvider, createStore, useStateMachine } from "little-state-machine";
-import updateAction from "../updateAction";
-
-import ResumeEducationFrom from "./ResumeEducationForm";
-import ResumeWorkFrom from "./ResumeWorkForm";
+import { Button2 } from "./Button";
 import ResumeAwardsForm from "./ResumeAwardsForm";
+import ResumeEducationFrom from "./ResumeEducationForm";
 import ResumeProfileForm from "./ResumeProfileForm";
 import ResumeProjectsForm from "./ResumeProjectsForm";
-
-import { Document, Page, Outline } from 'react-pdf/dist/esm/entry.webpack';
-
-import _ from "lodash"; 
+import ResumeWorkFrom from "./ResumeWorkForm";
+import TemplatesForm from "./TemplatesForm";
 
 // fake data generator
 const getItems = count =>
@@ -116,11 +119,20 @@ ResumeNavElement = styled(withRouter(ResumeNavElement))`
 `;
 
 function ResumePDF(props) {
-    const { state } = useStateMachine(updateAction);
+    // Get resume from store
+    const mapState = useCallback(
+        state => ({
+            resume: state.resume
+        }),
+        []
+    );
+        
+    const { resume } = useMappedState(mapState);
+
     const [url, setUrl] = useState("");
 
     useEffect(async () => {
-        let data = state;
+        let data = resume;
 
         // Profile Map
         data = _.mapKeys(data, function(value, key) {
@@ -327,7 +339,7 @@ class ResumeNav extends React.Component {
     render() {
         return (
             <div {...this.props}>
-                <ResumeNavElement handle={false} title={"Template"} />
+                <ResumeNavElement handle={false} title={"Templates"} />
                 <ResumeNavElement handle={false} title={"Profile"} />
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="droppable">
@@ -368,100 +380,40 @@ ResumeNav = styled(ResumeNav)`
     margin-right: 8px;
 `;
 
-createStore({
-    sections: [
-        "TEMPLATE",
-        "PROFILE",
-        "EDUCATION",
-        "PROJECTS",
-        "WORK",
-        "SKILLS",
-        "AWARDS"
-    ],
-    template: 1,
-    profile: {
-        name: "John Smith",
-        email: "johnsmith@gmail.com",
-        number: "(555) 123-4567",
-        location: "New York, NY",
-        link: "mycoolportfolio.com/myname"
-    },
-    work: [
-        {
-            name: "Google", 
-            title: "Software Engineer", 
-            location: "Mountain View, CA", 
-            start: "May 2015", 
-            end: "Present"
-        }
-    ],
-    projects: [
-        {
-            name: "Piper Chat", 
-            description: "A video chat app with great picture quality.", 
-            link: "http://piperchat.com", 
-            keywords: [
-                "NodeJS", "ExpressJS", "PostgreSQL", "GraphQL", "ReactJS", "Stripe API"
-            ]
-        }
-    ],
-    awards: [
-        {
-            name: "Supreme Hacker", 
-            date: "May 2015", 
-            awarder: "HackNY", 
-            summary: "Recognized for creating the most awesome project at a hackathon", 
-        }
-    ],
-    education: [
-        {
-            name: "Stanford University", 
-            location: "Stanford, CA", 
-            degree: "BS", 
-            major: "Computer Science",
-            gpa: "3.6", 
-            start: "Sep 2015", 
-            end: "Jun 2019"
-        }
-    ]
-});
-
 function ResumePage(props) {
     const [showPDF, setShowPDF] = useState(false);
     let { path, url } = useRouteMatch();
 
     return <div {...props}>
-        <StateMachineProvider>
-            <ResumeNav showPDF={(b) => setShowPDF(b)} />
-            {
-                showPDF ?
-                    <ResumePDF showPDF={(b) => setShowPDF(b)} />
-                    : ""
-            }
-            <Switch>
-                <Route path={`${path}/templates`}>
-                    {/* <TemplatesForm /> */}
-                </Route>
-                <Route path={`${path}/profile`}>
-                    <ResumeProfileForm />
-                </Route>
-                <Route path={`${path}/work`}>
-                    <ResumeWorkFrom />
-                </Route>
-                <Route path={`${path}/education`}>
-                    <ResumeEducationFrom />
-                </Route>
-                <Route path={`${path}/skills`}>
-                    {/* <SkillsForm /> */}
-                </Route>
-                <Route path={`${path}/Projects`}>
-                    <ResumeProjectsForm />
-                </Route>
-                <Route path={`${path}/awards`}>
-                    <ResumeAwardsForm />
-                </Route>
-            </Switch>
-        </StateMachineProvider>
+        <ResumeNav showPDF={(b) => setShowPDF(b)} />
+        {
+            showPDF ?
+                <ResumePDF showPDF={(b) => setShowPDF(b)} />
+                : ""
+        }
+        <Switch>
+            <Route path={`${path}/templates`}>
+                <TemplatesForm />
+            </Route>
+            <Route path={`${path}/profile`}>
+                <ResumeProfileForm />
+            </Route>
+            <Route path={`${path}/work`}>
+                <ResumeWorkFrom />
+            </Route>
+            <Route path={`${path}/education`}>
+                <ResumeEducationFrom />
+            </Route>
+            <Route path={`${path}/skills`}>
+                {/* <SkillsForm /> */}
+            </Route>
+            <Route path={`${path}/Projects`}>
+                <ResumeProjectsForm />
+            </Route>
+            <Route path={`${path}/awards`}>
+                <ResumeAwardsForm />
+            </Route>
+        </Switch>
     </div>
 }
 

@@ -20,7 +20,7 @@ function isEmpty(obj) {
     return JSON.stringify(obj) === JSON.stringify({});
   }
 
-function FormElement({handle, content, register, editable, errors, ...props}) {
+function FormElement({handle, register, editable, errors, ...props}) {
     const [isEditable, setIsEditable] = useState(editable);
     const [editDropdownActive, setEditDropdownActive] = useState(false);
 
@@ -31,7 +31,7 @@ function FormElement({handle, content, register, editable, errors, ...props}) {
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
                 <label>Company Name*</label>
-                <input type="text" name={`work[${props.index}].name`} ref={register({required: true})} placeholder="Google" defaultValue={content.name} />
+                <input type="text" name={`work[${props.index}].name`} ref={register({required: true})} placeholder="Google" />
                 {
                     errors.name ? 
                         errors.name[props.index] && <span id={`name${props.index}Error`}>This field is required</span>
