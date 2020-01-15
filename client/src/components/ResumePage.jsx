@@ -21,7 +21,7 @@ import ResumeEducationFrom from "./ResumeEducationForm";
 import ResumeProfileForm from "./ResumeProfileForm";
 import ResumeProjectsForm from "./ResumeProjectsForm";
 import ResumeWorkFrom from "./ResumeWorkForm";
-import TemplatesForm from "./TemplatesForm";
+import ResumeTemplatesForm from "./ResumeTemplatesForm";
 import ResumeSkillsForm from "./ResumeSkillsForm";
 
 // fake data generator
@@ -379,7 +379,7 @@ function ResumePage(props) {
         }
         <Switch>
             <Route path={`${path}/templates`}>
-                <TemplatesForm />
+                <ResumeTemplatesForm />
             </Route>
             <Route path={`${path}/profile`}>
                 <ResumeProfileForm />
