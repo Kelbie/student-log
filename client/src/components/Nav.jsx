@@ -110,7 +110,7 @@ function Nav(props) {
 				onClick={() => {
 					setActive("resume");
 				}}
-			>Resume</Button>
+			>Résumé</Button>
 			<Button
 				to="/transport"
 				active={active === "transport" ? 1 : 0}
