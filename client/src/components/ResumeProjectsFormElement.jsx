@@ -25,7 +25,7 @@ function FormElement({handle, register, editable, errors, ...props}) {
 
     return <div {...props}>
         <div {...handle} className="handle">
-            <FontAwesomeIcon icon={faGripVertical}  />
+            ::
         </div>
         <div className="content">
             <div className={`form ${!isEditable ? 'hidden' : ''}`}>
@@ -99,6 +99,7 @@ export default styled(FormElement)`
         color: ${props => props.theme.PRIMARY_COLOR};
         visibility: ${props => props.handle ? 'visible' : 'hidden' };
         margin-right: 8px;
+        font-family: "Times New Roman";
     }
 
     .content {

@@ -72,7 +72,7 @@ function ResumeNavElement({handle, ...props}) {
 
     return <div {...props}>
         <div {...handle} className={`handle`}>
-            <FontAwesomeIcon icon={faGripVertical}  />
+            ::
         </div>
         <Link to={`/resume/${props.title.toLowerCase()}`} className={`title ${ active ? "active" : "" }`}>
             {props.title}
@@ -88,6 +88,7 @@ ResumeNavElement = styled(withRouter(ResumeNavElement))`
         color: ${props => props.theme.PRIMARY_COLOR};
         visibility: ${props => props.handle ? 'visible' : 'hidden' };
         margin-right: 8px;
+        font-family: "Times New Roman";
     }
 
     
