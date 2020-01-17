@@ -36,7 +36,7 @@ function TemplatesForm(props) {
     // Form config
     const { register, handleSubmit, watch, errors, triggerValidation, setValue } = useForm({
         defaultValues: {
-            template: 1
+            template: "1"
         }
     });
 
@@ -52,91 +52,62 @@ function TemplatesForm(props) {
         ) 
     }
 
-    // Hack because I couldn't figure out how to apply defaultChecked
     useEffect(() => {
-        document.getElementById(`template${template}`).checked = true;
-    }, []);
+        dispatch(saveResume({template: parseInt(watch("template"))}))
+    }, [watch("template")])
 
-    
     return <form onSubmit={handleSubmit(onSubmit)} {...props}>
         <div>
             <img src={template1} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template1" value="1" />
+            <input ref={register} type="radio" name="template" id="template1" value="1" />
             <label htmlFor="template1"></label>
         </div>
 
         <div>
             <img src={template2} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template2" value="2" />
+            <input ref={register} type="radio" name="template" id="template2" value="2" />
             <label htmlFor="template2"></label>
         </div>
 
         <div>
             <img src={template3} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template3" value="3" />
+            <input ref={register} type="radio" name="template" id="template3" value="3" />
             <label htmlFor="template3"></label>
         </div>
 
         <div>
             <img src={template4} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template4" value="4" />
+            <input ref={register} type="radio" name="template" id="template4" value="4" />
             <label htmlFor="template4"></label>
         </div>
 
         <div>
             <img src={template5} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template5" value="5" />
+            <input ref={register} type="radio" name="template" id="template5" value="5" />
             <label htmlFor="template5"></label>
         </div>
 
         <div>
             <img src={template6} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template6" value="6" />
+            <input ref={register} type="radio" name="template" id="template6" value="6" />
             <label htmlFor="template6"></label>
         </div>
 
         <div>
             <img src={template7} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template7" value="7" />
+            <input ref={register} type="radio" name="template" id="template7" value="7" />
             <label htmlFor="template7"></label>
         </div>
 
         <div>
             <img src={template8} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template8" value="8" />
+            <input ref={register} type="radio" name="template" id="template8" value="8" />
             <label htmlFor="template8"></label>
         </div>
 
         <div>
             <img src={template9} alt=""/>
-            <input ref={register} onChange={(e, radio) => {
-                    dispatch(saveResume({template: parseInt(watch("template"))}))
-                }
-            } type="radio" name="template" id="template9" value="9" />
+            <input ref={register} type="radio" name="template" id="template9" value="9" />
             <label htmlFor="template9"></label>
         </div>
     </form>
