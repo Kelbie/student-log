@@ -6,7 +6,7 @@ const SECONDARY_COLOR = "#8E9DEF";
 const initialState = {
     PRIMARY_COLOR,
     SECONDARY_COLOR,
-    is: "light"
+    is: "dark"
 };
 
 // Reducer
