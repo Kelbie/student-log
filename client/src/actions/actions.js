@@ -25,3 +25,9 @@ export const toggleTheme = () => {
         type: ACTION_TYPES.TOGGLE_THEME
     }
 }
+export const saveResume = (resume) => {
+    return {
+        type: ACTION_TYPES.SAVE_RESUME,
+        payload: resume
+    }
+}
