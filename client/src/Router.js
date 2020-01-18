@@ -25,6 +25,8 @@ import date from "date-and-time";
 import { StoreContext, useMappedState } from "redux-react-hook";
 import { store } from "./store";
 
+import Search from "./components/Search";
+
 import ical from "ical";
 
 import Header from "./components/Header";
@@ -32,6 +34,7 @@ import Nav from "./components/Nav";
 
 import { setDarkTheme, setLightTheme } from "./actions/actions";
 import ResumePage from "./components/ResumePage";
+import WorkPage from "./components/WorkPage";
 
 const client = new ApolloClient({
     uri: "http://localhost:30662/graphql"
@@ -48,8 +51,8 @@ function MyRouter(props) {
                     <Route exact path="/class/:id" />
                     <Route exact path="/profile" />
                     <Route exact path="/settings" />
-                    <Route exact path="/work" />
                     <Route exact path="/work/:id" />
+                    <Route exact path="/work" component={WorkPage} />
                     <Route exact path="/job/new" />
                     <Route path="/resume" component={ResumePage} />
                 </Switch>
