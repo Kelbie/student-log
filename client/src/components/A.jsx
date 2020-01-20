@@ -15,6 +15,10 @@ A = styled(A)`
 		${props => props.theme.PRIMARY_COLOR},
 		${props => props.theme.SECONDARY_COLOR}
 	);
+	position: sticky;
+    background: -webkit-linear-gradient(${props => props.theme.PRIMARY_COLOR}, ${props => props.theme.SECONDARY_COLOR});
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 
 	&:after {
 		content: "";
