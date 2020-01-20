@@ -81,7 +81,7 @@ function DayPicker(props) {
                             setFocused(null);
                         }
                     }}
-                ></Button>
+                >Pick Week</Button>
             </div>
             <div className="days">
                 <Day
