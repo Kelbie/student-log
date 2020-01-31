@@ -1,0 +1,144 @@
+enum ResumeSections {
+    TEMPLATE,
+    PROFILE,
+    EDUCATION,
+    WORK,
+    SKILLS,
+    PROJECTS,
+    AWARDS
+}
+
+type ResumeProfile {
+    name: String,
+    email: String,
+    number: String,
+    location: String,
+    link: String,
+    position: Int!
+}
+
+type ResumeJob {
+    id: String,
+    name: String,
+    title: String,
+    location: String,
+    start: String,
+    end: String,
+    position: Int!
+}
+
+type ResumeSchool {
+    id: String,
+    name: String,
+    location: String,
+    degree: String,
+    major: String,
+    gpa: String,
+    start: String,
+    end: String,
+    position: Int!
+}
+
+type ResumeSkill {
+    id: String,
+    name: String,
+    position: Int!
+}
+
+type ResumeProject {
+    id: String,
+    name: String,
+    description: String,
+    link: String,
+    position: Int!
+}
+
+type ResumeAward {
+    id: String,
+    name: String,
+    date: String,
+    awarder: String,
+    summary: String,
+    position: Int!
+}
+
+enum ResumeSectionsInput {
+    TEMPLATE,
+    PROFILE,
+    EDUCATION,
+    WORK,
+    SKILLS,
+    PROJECTS,
+    AWARDS
+}
+
+input ResumeProfileInput {
+    name: String,
+    email: String,
+    number: String,
+    location: String,
+    link: String,
+    position: Int!
+}
+
+input ResumeJobInput {
+    name: String,
+    title: String,
+    location: String,
+    start: String,
+    end: String,
+    position: Int!
+}
+
+input ResumeSchoolInput {
+    name: String,
+    location: String,
+    degree: String,
+    major: String,
+    gpa: String,
+    start: String,
+    end: String,
+    position: Int!
+}
+
+input ResumeSkillInput {
+    name: String,
+    position: Int!
+}
+
+input ResumeProjectInput {
+    name: String,
+    description: String,
+    link: String,
+    position: Int!
+}
+
+input ResumeAwardInput {
+    name: String,
+    date: String,
+    awarder: String,
+    summary: String,
+    position: Int!
+}
+
+input ResumeInput {
+    sections: [ResumeSectionsInput!]!,
+    template: Int,
+    profile: ResumeProfileInput,
+    jobs: [ResumeJobInput],
+    schools: [ResumeSchoolInput],
+    skills: [ResumeSkillInput],
+    projects: [ResumeProjectInput],
+    awards: [ResumeAwardInput]
+}
+
+type Resume {
+    sections: [ResumeSectionsInput],
+    template: Int,
+    profile: ResumeProfile,
+    jobs: [ResumeJob],
+    schools: [ResumeSchool],
+    skills: [ResumeSkill],
+    projects: [ResumeProject],
+    awards: [ResumeAward]
+}

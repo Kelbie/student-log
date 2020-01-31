@@ -2,6 +2,8 @@ import React from "react";
 
 import styled, { withTheme } from "styled-components";
 
+import getSlug from 'speakingurl';
+
 import date from "date-and-time";
 
 import ImageMask from "./ImageMask";
@@ -10,6 +12,8 @@ import { darken, opacify, rgba } from "polished";
 import A from "./A";
 
 import moment from "moment";
+import Button, {ButtonLink2, Button2, ButtonExternal} from "./Button";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 function Placeholder(props) {
     return (
@@ -32,36 +36,40 @@ function Class(props) {
                 <div className="photo-container"></div>
                 <div className="text">
                     <div className="left">
-                        <div className="module raise">
-                            {props.company}
-                        </div>
-                        <A to={`/work/${props.id}`} className="title">
+                        <A to={`/work/${props.id}/${getSlug(props.title + " " + props.company)}`} className="title">
                             {props.title}
                         </A>
                         <div className="module raise">
+                            {props.company}
+                            {` • `}
                             {props.type}
                         </div>
                     </div>
-                    <div className="right">
-                        <div>
-                            {props.date.format("MMM DD")}
+                    {
+                        props.apply_link ? 
+                            <ButtonExternal variant={"fill"} href={props.apply_link} icon={faExternalLinkAlt}>Apply</ButtonExternal>
+                        :
+                        <div className="right">
+                            <div>
+                                {props.date.format("MMM DD")}
+                            </div>
+                            <div className="new">
+                                {
+                                    props.date.add(3, "days").isAfter(moment(new Date())) ? "NEW" : ""
+                                }
+                            </div>
                         </div>
-                        <div className="new">
-                            {
-                                props.date.add(3, "days").isAfter(moment(new Date())) ? "NEW" : ""
-                            }
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
-            {props.featured ?
-                <div className="bottom">
+                {props.featured ? 
+            <div className="bottom">
                     <div className="duration-container">
                         <div className="duration raise">FEATURED</div>
-                    </div>
-                </div>
-                : ""
-            }
+                    </div> 
+            </div>
+                    : ""
+                }
         </div>
     );
 }
@@ -74,10 +82,9 @@ Class = styled(Class)`
     border-radius: 4px;
     box-shadow: 0px 0px 16px 0px
         ${props =>
-        props.featured
-            ? rgba(props.theme.SECONDARY_COLOR, 0.3)
-            : "rgba(0,0,0,0.1)"};
-
+            props.featured
+                ? rgba(props.theme.SECONDARY_COLOR, 0.3)
+                : "rgba(0,0,0,0.1)"};
     .gradient {
         border-radius: 4px;
         position: absolute;
@@ -91,14 +98,13 @@ Class = styled(Class)`
         background: linear-gradient(
             to bottom right,
             ${props =>
-        props.featured ? props.theme.PRIMARY_COLOR : props.theme.is === "dark" ? "#24252d" : "white"},
+                props.featured ? props.theme.PRIMARY_COLOR :  props.theme.is === "dark" ? "#24252d" : "white"},
             ${props =>
-        props.featured ? props.theme.SECONDARY_COLOR : props.theme.is === "dark" ? "#24252d" : "white"}
+                props.featured ? props.theme.SECONDARY_COLOR : props.theme.is === "dark" ? "#24252d" : "white"}
         );
         mix-blend-mode: ${props =>
-        props.theme.is === "dark" ? "multiply" : "lighten"};
+            props.theme.is === "dark" ? "multiply" : "lighten"};
     }
-
     /* Styling for main section */
     &::before {
         position: absolute;
@@ -114,7 +120,6 @@ Class = styled(Class)`
         background: ${props => (props.theme.is === "dark" ? "black" : "white")};
         border-radius: 4px;
     }
-
     .top {
         display: flex;
         position: relative;
@@ -122,9 +127,9 @@ Class = styled(Class)`
         padding: 16px;
         border-radius: 0px 0px 0px 0px;
         background: ${props =>
-        props.theme.is === "dark" ? "#24252d" : "#fff"};
+            props.theme.is === "dark" ? "#24252d" : "#fff"};
         mix-blend-mode: ${props =>
-        props.theme.is === "dark" ? "lighten" : "darken"};
+            props.theme.is === "dark" ? "lighten" : "darken"};
         /* &::before {
             content: "";
             width: 100%;
@@ -132,7 +137,6 @@ Class = styled(Class)`
             background: black;
         } */
     }
-
     .photo-container {
         width: 48px;
         height: 48px;
@@ -140,17 +144,14 @@ Class = styled(Class)`
         flex-shrink: 0;
         background: ${props => props.theme.is === "dark" ? "#17171C" : "#F8F7F7"};
     }
-
     .text {
         display: grid;
         grid-template-columns: 1fr max-content;
         flex-grow: 1;
-
         .left {
             margin-right: 8px;
-            border-right: 1px solid ${props => props.theme.is === "dark" ? "#494a55" : "#d9d9d9"};
+            border-right: 1px solid ${props => !props.apply_link ? props.theme.is === "dark" ? "#494a55" : "#d9d9d9" : "none"};
         }
-
         .right {
             text-align: right;
             color: ${props => (props.theme.is === "dark" ? "#cbcbcb" : "#848484")};
@@ -158,7 +159,6 @@ Class = styled(Class)`
             flex-direction: column;
             justify-content: space-between;
             margin-left: 8px;
-
             .new {
                 position: sticky;
                 font-weight: 600;
@@ -172,13 +172,11 @@ Class = styled(Class)`
             }
         }
     }
-
     .time {
         color: ${props => (props.theme.is === "dark" ? "#cbcbcb" : "#848484")};
         font-size: 12px;
         font-weight: 600;
     }
-
     .title {
         position: sticky;
         font-weight: 600;
@@ -190,69 +188,59 @@ Class = styled(Class)`
         -webkit-text-fill-color: transparent;
         font-size: 20px;
     }
-
     .module {
         color: ${props => (props.theme.is === "dark" ? "#cbcbcb" : "#848484")};
         font-size: 16px;
     }
-
     .raise {
         position: relative;
         z-index: 2;
         isolation: isolate;
     }
-
     .drop {
         position: initial;
     }
-
     .bottom {
         position: relative;
         height: 24px;
         width: 100%;
         background: ${props => (props.theme.is === "dark" ? "white" : "black")};
     }
-
     .duration-container {
         position: absolute;
         display: inline-block;
         background: ${props =>
-        props.theme.is === "dark" ? "#24252d" : "#fff"};
+            props.theme.is === "dark" ? "#24252d" : "#fff"};
         border: 2px solid
             ${props => (props.theme.is === "dark" ? "white" : "black")};
         bottom: 0;
         left: 24px;
     }
-
     .duration {
         background: ${props =>
-        props.theme.is === "dark" ? "#24252d" : "#fff"};
+            props.theme.is === "dark" ? "#24252d" : "#fff"};
         padding: 8px;
         color: ${props => (props.theme.is === "dark" ? "#cbcbcb" : "#919191")};
         font-size: 10px;
         font-weight: 600;
         text-transform: uppercase;
     }
-
     .images {
         display: flex;
         position: absolute;
         bottom: 0;
         right: 24px;
     }
-
     .image,
     ${Placeholder} {
         width: 100%;
         height: 100%;
         mix-blend-mode: lighten;
     }
-
     img {
         width: 100%;
         height: 100%;
     }
-
     .image-container {
         width: 32px;
         height: 32px;
@@ -264,7 +252,6 @@ Class = styled(Class)`
         overflow: hidden;
         background: gray;
     }
-
     grid-row: span ${props => props.index};
 `;
 

@@ -1,0 +1,30 @@
+input JobInput {
+    job_title: String,
+    category: String,
+    job_type: String,
+    apply_link: String,
+    job_desc: String,
+    name: String,
+    company_statement: String,
+    logo: String,
+    website: String,
+    email: String,
+    company_desc: String,
+    bundle: String
+}
+
+type Job {
+    id: String,
+    job_title: String,
+    category: String,
+    job_type: String,
+    apply_link: String,
+    job_desc: String,
+    name: String,
+    company_statement: String,
+    logo: String,
+    website: String,
+    email: String,
+    company_desc: String,
+    bundle: String
+}

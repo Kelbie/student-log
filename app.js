@@ -38,17 +38,20 @@ var bunyan = require("bunyan");
 var config = require("./config");
 var connect = require("connect");
 const path = require("path");
+var http = require("http");
 
 // set up database for express session
 var MongoStore = require("connect-mongo")(expressSession);
 var mongoose = require("mongoose");
 
+import latex from "node-latex";
+
 import ical from "node-ical";
+
+// GraphQL
 import { GraphQLServer } from "graphql-yoga";
-
-import moment from "moment";
-
-import fetch from "node-fetch";
+import { default as resolvers } from "./resolvers";
+import { default as typeDefs } from './typeDefs'
 
 const opts = {
     port: 30662,
@@ -58,170 +61,6 @@ const opts = {
     cors: {
         credentials: true,
         origin: ["http://localhost:30662"] // your frontend url.
-    }
-};
-
-const typeDefs = `
-    type Class {
-        id: String,
-        type: String
-        start: String,
-        end: String,
-        module: Module,
-        groups: [Group],
-        staff: [Staff],
-        rooms: [Room]
-    }
-
-    type Module {
-        title: String
-        id: String,
-    }
-
-    type Room {
-        id: String,
-        building: String,
-        details: String
-    }
-
-    type Staff {
-        name: String
-    }
-
-    type Group {
-        name: String
-    }
-
-    type Profile {
-        name: String
-    }
-
-    type Query {
-        getTimetable(date: String): [Class]
-        getProfile: Profile
-    }
-
-    type Mutation {
-        login: Profile
-    }
-`;
-
-async function fromURL(url) {
-    return await new Promise((resolve, reject) => {
-        return ical.fromURL(
-            "https://timetables.rgu.ac.uk/iCal/ical/ical/MQ4XQSUG745746/schedule.ics",
-            {},
-            function (err, data) {
-                if (err) {
-                    reject(err);
-                }
-                resolve(data);
-            }
-        );
-    });
-}
-
-let timetable = null;
-
-const resolvers = {
-    Mutation: {
-        login: async (_, { }, { req }) => {
-            return {
-                name: `${req.user.name.givenName} ${req.user.name.familyName}`
-            };
-        },
-    },
-    Query: {
-        getTimetable: async (_, { date }) => {
-            let data;
-            if (!timetable) {
-                data = await fromURL(
-                    "https://timetables.rgu.ac.uk/iCal/ical/ical/MQ4XQSUG745746/schedule.ics"
-                );
-                console.log(123, data);
-                timetable = data;
-            } else {
-                data = timetable;
-            }
-            // console.log(data);
-
-            let classes = [];
-
-            let keys = Object.keys(data).filter(function (key) {
-                let day1 = parseInt(data[key].start.getTime()) / 1000;
-                let day2 = parseInt(date) / 1000;
-                let isSame = moment
-                    .unix(day1)
-                    .isSame(moment.unix(day2), "date");
-                return isSame;
-            });
-
-            keys.map(key => {
-                let class_ = {
-                    id: key,
-                    start: data[key].start,
-                    end: data[key].end
-                };
-                const description_split = data[key].description.split("\n");
-                const d = description_split.map(row => {
-                    const row_split = row.split(":");
-                    let rooms, staff, groups;
-                    switch (row_split[0]) {
-                        case "Room":
-                            rooms = row_split[1].split(";");
-                            return rooms.map(room => {
-                                return { id: room.trim() };
-                            });
-                        case "Staff":
-                            staff = row_split[1].split(";");
-                            return staff.map(staff => {
-                                let first = staff.split(",")[1];
-                                let last = staff.split(",")[0];
-                                return {
-                                    name: `${first.trim()} ${last.trim()}`
-                                };
-                            });
-                        case "Group":
-                            groups = row_split[1].split(";");
-                            return groups.map(group => {
-                                return { name: group.trim() };
-                            });
-                        case "Module":
-                            if (row_split[1].trim() === "Non-Modular Event") {
-                                return {
-                                    title: row_split[1].trim()
-                                };
-                            }
-                            let module = row_split[1].split("-");
-                            return {
-                                title: module[0].trim(),
-                                id: module[1].trim()
-                            };
-                        case "Event category":
-                            return { type: row_split[1] };
-                    }
-                    return {};
-                });
-                classes.push({
-                    ...class_,
-                    rooms: d[1],
-                    groups: d[4],
-                    staff: d[3],
-                    module: d[0],
-                    type: d[2].type
-                });
-            });
-            console.log(classes);
-            return classes;
-        },
-        getProfile: async (_, { }, { req }) => {
-            if (req.user) {
-                return {
-                    name: `${req.user.name.givenName} ${req.user.name.familyName}`
-                };
-            }
-            return { name: null };
-        }
     }
 };
 
@@ -373,6 +212,7 @@ server.express.use(
 // }
 
 server.express.use(bodyParser.urlencoded({ extended: true }));
+// server.express.use(bodyParser.json())
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
@@ -398,11 +238,6 @@ function ensureAuthenticated(req, res, next) {
     res.redirect("/login");
 }
 
-// server.express.get('/', function(req, res) {
-//   console.log(req.user);
-//   res.render('index', { user: req.user });
-// });
-
 // '/account' is only available to logged in user
 server.express.get("/account", ensureAuthenticated, function (req, res) {
     console.log(req.session);
@@ -416,6 +251,7 @@ server.express.get(
         passport.authenticate("azuread-openidconnect", {
             response: res, // required
             customState: redirect, // optional. Provide a value if you want to provide custom state value.
+            // tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635',
             failureRedirect: "/"
         })(req, res, next);
     },
@@ -434,7 +270,7 @@ server.express.get(
     function (req, res, next) {
         passport.authenticate("azuread-openidconnect", {
             response: res, // required
-            failureRedirect: "/"
+            failureRedirect: "/",
         })(req, res, next);
     },
     function (req, res) {
@@ -450,10 +286,9 @@ server.express.get(
 server.express.post(
     "/auth/openid/return",
     function (req, res, next) {
-        req.body.state.slice(38);
         passport.authenticate("azuread-openidconnect", {
             response: res, // required
-            failureRedirect: "/"
+            failureRedirect: "/",
         })(req, res, next);
     },
     function (req, res) {

@@ -30,6 +30,18 @@ function Class(props) {
                 </div>
                 <A href={`/class/2`} className="title">{props.module.title}</A>
                 <div className="module raise">{props.module.id}</div>
+                <div className="module raise rooms">
+                    {
+                        props.rooms.map((room, i) => {
+                        return <>
+                            <span>{room.number}</span>
+                            {
+                            i !== props.rooms.length - 1 ? " • " : ""
+                            }
+                        </>
+                        })
+                    }
+                </div>
             </div>
             <div className="bottom">
                 <div className="duration-container">

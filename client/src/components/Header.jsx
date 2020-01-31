@@ -127,9 +127,11 @@ function Header(props) {
     ]);
 
     return <div {...props}>
-        <h1>STUDENT<span>LOG</span></h1>
-        <input type="checkbox" value={true} onClick={toggleTheme} />
-        <ThemePicker />
+        <h1>
+            <span className="student">STUDENT</span><span className="log">LOG</span>
+        </h1>
+        {/* <input type="checkbox" value={true} onClick={toggleTheme} /> */}
+        {/* <ThemePicker /> */}
     </div>
 }
 
@@ -144,9 +146,10 @@ Header = styled(Header)`
     padding: 24px 0px 8px 12px !important;
 
     h1 {
+        padding: 0px 12px 4px 12px;
         font-size: 20px; 
         color: ${props => props.theme.is === "dark" ? "white" : "#939399"};
-        span {
+        span.log {
             font-weight: 600;
             position: sticky;
             background: -webkit-linear-gradient(${props => props.theme.PRIMARY_COLOR}, ${props => props.theme.SECONDARY_COLOR});

@@ -32,9 +32,13 @@ import ical from "ical";
 import Header from "./components/Header";
 import Nav from "./components/Nav";
 
+import { AzureAD, AuthenticationStatus } from "react-aad-msal";
+
 import { setDarkTheme, setLightTheme } from "./actions/actions";
 import ResumePage from "./components/ResumePage";
 import WorkPage from "./components/WorkPage";
+import WorkPosting from "./components/WorkPosting";
+import AboutPage from "./components/AboutPage";
 
 const client = new ApolloClient({
     uri: "http://localhost:30662/graphql"
@@ -51,10 +55,11 @@ function MyRouter(props) {
                     <Route exact path="/class/:id" />
                     <Route exact path="/profile" />
                     <Route exact path="/settings" />
-                    <Route exact path="/work/:id" />
                     <Route exact path="/work" component={WorkPage} />
+                    <Route exact path="/work/:id" component={WorkPosting} />
                     <Route exact path="/job/new" />
                     <Route path="/resume" component={ResumePage} />
+                    <Route path="/about" component={AboutPage} />
                 </Switch>
             </div>
         </Router>
@@ -63,7 +68,7 @@ function MyRouter(props) {
 
 MyRouter = styled(MyRouter)`
     min-height: 100vh;
-    padding: 8px;
+    padding: 16px;
     background: ${props => props.theme.is === "dark" ? "#17171C" : "#F8F7F7"};
 
     ${Nav} {

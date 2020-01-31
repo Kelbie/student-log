@@ -6,9 +6,13 @@ import styled from "styled-components";
 
 import A from "./A";
 import WorkElement2 from "./WorkElement";
-import { Button2 } from "./Button";
+import Button, { Button2 } from "./Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faBriefcase, faPlus } from "@fortawesome/free-solid-svg-icons";
+
+// GraphQL
+import gql from "graphql-tag";
+import { useQuery } from "react-apollo-hooks";
 
 import { useDispatch, useMappedState } from "redux-react-hook";
 import {
@@ -42,19 +46,17 @@ WorkElement = styled(WorkElement)`
     padding: 16px;
     box-shadow: 0px 0px 16px 0px
         ${props =>
-        props.theme.is === "dark"
-            ? "rgba(0,0,0,0.3)"
-            : "rgba(192, 192, 192, 0.3)"};
-
+            props.theme.is === "dark"
+                ? "rgba(0,0,0,0.3)"
+                : "rgba(192, 192, 192, 0.3)"};
     .photo-container {
         width: 48px;
         height: 48px;
         flex-shrink: 0;
         background: ${props =>
-        props.theme.is === "dark" ? "#17171C" : "#F8F7F7"};
+            props.theme.is === "dark" ? "#17171C" : "#F8F7F7"};
         margin-right: 8px;
     }
-
     .title {
         position: sticky;
         font-weight: 600;
@@ -66,11 +68,9 @@ WorkElement = styled(WorkElement)`
         -webkit-text-fill-color: transparent;
         font-size: 20px;
     }
-
     .text {
         color: ${props => (props.theme.is === "dark" ? "#CBCBCB" : "black")};
     }
-
     .details {
         > * {
             margin-right: 4px;
@@ -198,32 +198,27 @@ Filter = styled(Filter)`
     background: ${props => (props.theme.is === "dark" ? "#24252D" : "white")};
     box-shadow: 0px 0px 16px 0px
         ${props =>
-        props.theme.is === "dark"
-            ? "rgba(0,0,0,0.3)"
-            : "rgba(192, 192, 192, 0.3)"};
+            props.theme.is === "dark"
+                ? "rgba(0,0,0,0.3)"
+                : "rgba(192, 192, 192, 0.3)"};
     border-radius: 4px;
     padding: 16px;
-
     color: ${props => (props.theme.is === "dark" ? "#CBCBCB" : "black")};
     grid-area: filter;
-
     fieldset {
         border: none;
         legend {
             font-weight: bold;
         }
-
         label {
             font-size: 12px;
         }
         > * {
             display: block;
         }
-
         input {
             margin-right: 4px;
         }
-
         margin-bottom: 8px;
     }
 `;
@@ -244,13 +239,11 @@ Search = styled(Search)`
     display: flex;
     flex-direction: row;
     grid-area: search;
-
     svg {
         align-self: center;
         color: white;
         margin: 8px;
     }
-
     .search {
         background: -webkit-linear-gradient(
             ${props => props.theme.PRIMARY_COLOR},
@@ -261,7 +254,6 @@ Search = styled(Search)`
         display: flex;
         margin-right: 4px;
     }
-
     input {
         border: none;
         margin: 2px;
@@ -269,12 +261,32 @@ Search = styled(Search)`
         border-radius: 0px 4px 4px 0px;
         padding: 4px 8px;
         background: ${props =>
-        props.theme.is === "dark" ? "#17171C" : "white"};
+            props.theme.is === "dark" ? "#17171C" : "white"};
         caret-color: ${props =>
-        props.theme.is === "dark" ? "white" : "#17171C"};
+            props.theme.is === "dark" ? "white" : "#17171C"};
         color: ${props => (props.theme.is === "dark" ? "white" : "#17171C")};
         flex-grow: 1;
     }
+`;
+
+const GET_JOBS = gql`
+  query getWork($first: Int, $offset: Int) {
+    getWork(first: $first, offset: $offset) {
+        id,
+        job_title,
+        category,
+        job_type,
+        apply_link,
+        job_desc,
+        name,
+        company_statement,
+        logo,
+        website,
+        email,
+        company_desc,
+        bundle
+    }
+  }
 `;
 
 function WorkPage(props) {
@@ -282,58 +294,12 @@ function WorkPage(props) {
         document.title = "Work / StudentLog";
     }, []);
 
-    const [work, setWork] = useState([
-        {
-            title: " Tier 3 Customer Support Engineer",
-            company: "Files.com",
-            type: "Full-time",
-            category: "Programming",
-            featured: true
-        },
-        {
-            title: "Remote Customer Support Specialist (Technical Support)",
-            company: "HubSpot",
-            type: "Full-time",
-            category: "Programming",
-            featured: true
-        },
-        {
-            title:
-                " Ad-Tech Support Representative",
-            company: "AdButler",
-            type: "Full-time",
-            category: "Programming",
-            featured: true
-        },
-        {
-            title: "Customer Service Representative",
-            company: "GoGoGrandparent",
-            type: "Internship",
-            category: "Programming",
-            featured: true
-        },
-        {
-            title: "Manager of Customer Support",
-            company: "Close",
-            type: "Internship",
-            category: "Programming",
-            featured: false
-        },
-        {
-            title: "Migrations Engineer - APAC",
-            company: "Kinsta",
-            type: "Full-time",
-            category: "Programming",
-            featured: false
-        },
-        {
-            title: "Something",
-            company: "Udrafter",
-            type: "Project",
-            category: "Programming",
-            featured: false
+    const { data, error, loading } = useQuery(GET_JOBS, {
+        variables: {
+            first: 20,
+            offset: 0
         }
-    ]);
+    });
 
     const mapState = useCallback(
         state => ({
@@ -346,107 +312,36 @@ function WorkPage(props) {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setResults(work));
-    }, [work]);
+        if (data) {
+            if (data.getWork) {
+                dispatch(setResults(data.getWork));
+            }
+        }
+    }, [data]);
 
-    console.log(filter);
+    if (error || loading) {
+        return <div>Loading...</div>
+    }
 
     return (
         <div {...props}>
             <Filter />
-            <Search />
+            {/* <Search /> */}
+            <Button variant={"fill"} to="/job/new" icon={faPlus}>Post Job</Button>
             <div className="list">
-                <div className="search-results">{work.length} results</div>
-                {work
-                    .filter(function (w) {
-                        let passType = false;
-
-                        for (let i = 0; i < filter.types.length; i++) {
-                            if (
-                                w.type === filter.types[i].name &&
-                                filter.types[i].active
-                            ) {
-                                passType = true;
-                            }
-                        }
-
-                        let passCompanies = false;
-
-                        for (let i = 0; i < filter.companies.length; i++) {
-                            if (
-                                w.company === filter.companies[i].name &&
-                                filter.companies[i].active
-                            ) {
-                                passCompanies = true;
-                            }
-                        }
-
-                        let passCategories = false;
-
-                        for (let i = 0; i < filter.categories.length; i++) {
-                            if (
-                                w.category === filter.categories[i].name &&
-                                filter.categories[i].active
-                            ) {
-                                passCategories = true;
-                            }
-                        }
-
-                        if (!passType) {
-                            passType = filter.types.every(function (el) {
-                                return !el.active;
-                            });
-                        }
-
-                        if (!passCompanies) {
-                            passCompanies = filter.companies.every(function (
-                                el
-                            ) {
-                                return !el.active;
-                            });
-                        }
-
-                        if (!passCategories) {
-                            passCategories = filter.categories.every(function (
-                                el
-                            ) {
-                                return !el.active;
-                            });
-                        }
-
-                        return passCompanies && passType && passCategories;
-                    })
+                <div className="search-results">{data.getWork.length} results</div>
+                {data.getWork
                     .map((w, i) => {
-                        if (w.featured) {
-                            return (
-                                <WorkElement2
-                                    id={
-                                        w.company.replace(" ", "-") +
-                                        "-" +
-                                        w.title.replace(/[(){}_ ]/g, "-")
-                                    }
-                                    title={w.title}
-                                    company={w.company}
-                                    type={w.type}
-                                    featured={w.featured}
-                                    date={moment(new Date()).add(-i, "days")}
-                                />
-                            );
-                        } else {
-                            return (
-                                <WorkElement2
-                                    id={
-                                        w.company.replace(" ", "-") +
-                                        w.title.replace(" ", "-")
-                                    }
-                                    title={w.title}
-                                    company={w.company}
-                                    type={w.type}
-                                    featured={w.featured}
-                                    date={moment(new Date()).add(-i, "days")}
-                                />
-                            );
-                        }
+                        return (
+                            <WorkElement2
+                                id={w.id}
+                                title={w.job_title}
+                                company={w.name}
+                                job_type={w.job_type}
+                                featured={["good", "better", "best"].includes(w.bundle) ? true : false}
+                                date={moment(new Date()).add(-i, "days")}
+                            />
+                        );
                     })}
             </div>
         </div>
@@ -461,7 +356,6 @@ WorkPage = styled(WorkPage)`
     grid-template-columns: max-content 1fr;
     grid-template-rows: max-content 1fr;
     grid-gap: 8px;
-
     @media only screen and (max-width: 700px) {
         grid-template-areas:
             "search"
@@ -469,11 +363,9 @@ WorkPage = styled(WorkPage)`
             "results";
         grid-template-columns: 1fr;
     }
-
     .search-results {
         color: ${props => (props.theme.is === "dark" ? "#CBCBCB" : "black")};
     }
-
     .list {
         grid-area: results;
         flex-grow: 1;
