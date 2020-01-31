@@ -56,6 +56,7 @@ const GET_CLASSES = gql`
         },
         rooms {
             id,
+            number
         }
         }
     }
@@ -113,6 +114,7 @@ function Timetable(props) {
                                 index={class_.duration}
                                 title={class_.module.title}
                                 module={class_.module}
+                                rooms={class_.rooms}
                                 start={class_.start}
                                 end={class_.end}
                                 duration={class_.duration}
