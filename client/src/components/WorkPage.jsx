@@ -331,6 +331,64 @@ function WorkPage(props) {
             <div className="list">
                 <div className="search-results">{data.getWork.length} results</div>
                 {data.getWork
+                    .filter(function(w) {
+                        let passType = false;
+                        console.log(w);
+                        for (let i = 0; i < filter.types.length; i++) {
+                            if (
+                                w.job_type === filter.types[i].name &&
+                                filter.types[i].active
+                            ) {
+                                passType = true;
+                            }
+                        }
+
+                        let passCompanies = false;
+
+                        for (let i = 0; i < filter.companies.length; i++) {
+                            if (
+                                w.name === filter.companies[i].name &&
+                                filter.companies[i].active
+                            ) {
+                                passCompanies = true;
+                            }
+                        }
+
+                        let passCategories = false;
+
+                        for (let i = 0; i < filter.categories.length; i++) {
+                            if (
+                                w.category === filter.categories[i].name &&
+                                filter.categories[i].active
+                            ) {
+                                passCategories = true;
+                            }
+                        }
+
+                        if (!passType) {
+                            passType = filter.types.every(function(el) {
+                                return !el.active;
+                            });
+                        }
+
+                        if (!passCompanies) {
+                            passCompanies = filter.companies.every(function(
+                                el
+                            ) {
+                                return !el.active;
+                            });
+                        }
+
+                        if (!passCategories) {
+                            passCategories = filter.categories.every(function(
+                                el
+                            ) {
+                                return !el.active;
+                            });
+                        }
+
+                        return passCompanies && passType && passCategories;
+                    })
                     .map((w, i) => {
                         return (
                             <WorkElement2
