@@ -21,61 +21,61 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-"use strict";
+'use strict';
 
 /******************************************************************************
  * Module dependencies.
  *****************************************************************************/
 
-var express = require("express");
-var cookieParser = require("cookie-parser");
-var expressSession = require("express-session");
-var bodyParser = require("body-parser");
-var methodOverride = require("method-override");
-var passport = require("passport");
-var util = require("util");
-var bunyan = require("bunyan");
-var config = require("./config");
-var connect = require("connect");
-const path = require("path");
-var http = require("http");
+var express = require('express');
+var cookieParser = require('cookie-parser');
+var expressSession = require('express-session');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var passport = require('passport');
+var util = require('util');
+var bunyan = require('bunyan');
+var config = require('./config');
+var connect = require('connect');
+const path = require('path');
+var http = require('http');
 
 // set up database for express session
-var MongoStore = require("connect-mongo")(expressSession);
-var mongoose = require("mongoose");
+var MongoStore = require('connect-mongo')(expressSession);
+var mongoose = require('mongoose');
 
-import latex from "node-latex";
+import latex from 'node-latex';
 
-import ical from "node-ical";
+import ical from 'node-ical';
 
 // GraphQL
-import { GraphQLServer } from "graphql-yoga";
-import { default as resolvers } from "./resolvers";
-import { default as typeDefs } from './typeDefs'
+import { GraphQLServer } from 'graphql-yoga';
+import { default as resolvers } from './resolvers';
+import { default as typeDefs } from './typeDefs';
 
 const opts = {
-    port: 30662,
-    endpoint: "/graphql",
-    subscriptions: "/subscriptions",
-    playground: "/playground",
-    cors: {
-        credentials: true,
-        origin: ["http://localhost:30662"] // your frontend url.
-    }
+  port: 30662,
+  endpoint: '/graphql',
+  subscriptions: '/subscriptions',
+  playground: '/playground',
+  cors: {
+    credentials: true,
+    origin: ['http://localhost:30662'] // your frontend url.
+  }
 };
 
 const context = req => ({
-    req: req.request
+  req: req.request
 });
 
 const server = new GraphQLServer({ typeDefs, resolvers, context });
 
 // Start QuickStart here
 
-var OIDCStrategy = require("passport-azure-ad").OIDCStrategy;
+var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
 var log = bunyan.createLogger({
-    name: "Microsoft OIDC Example Web Application"
+  name: 'Microsoft OIDC Example Web Application'
 });
 
 /******************************************************************************
@@ -88,28 +88,28 @@ var log = bunyan.createLogger({
 // this will be as simple as storing the user ID when serializing, and finding
 // the user by ID when deserializing.
 //-----------------------------------------------------------------------------
-passport.serializeUser(function (user, done) {
-    done(null, user.oid);
+passport.serializeUser(function(user, done) {
+  done(null, user.oid);
 });
 
-passport.deserializeUser(function (oid, done) {
-    findByOid(oid, function (err, user) {
-        done(err, user);
-    });
+passport.deserializeUser(function(oid, done) {
+  findByOid(oid, function(err, user) {
+    done(err, user);
+  });
 });
 
 // array to hold logged in users
 var users = [];
 
-var findByOid = function (oid, fn) {
-    for (var i = 0, len = users.length; i < len; i++) {
-        var user = users[i];
-        log.info("we are using user: ", user);
-        if (user.oid === oid) {
-            return fn(null, user);
-        }
+var findByOid = function(oid, fn) {
+  for (var i = 0, len = users.length; i < len; i++) {
+    var user = users[i];
+    log.info('we are using user: ', user);
+    if (user.oid === oid) {
+      return fn(null, user);
     }
-    return fn(null, null);
+  }
+  return fn(null, null);
 };
 
 //-----------------------------------------------------------------------------
@@ -130,47 +130,47 @@ var findByOid = function (oid, fn) {
 // To do prototype (6), passReqToCallback must be set to true in the config.
 //-----------------------------------------------------------------------------
 passport.use(
-    new OIDCStrategy(
-        {
-            identityMetadata: config.creds.identityMetadata,
-            clientID: config.creds.clientID,
-            responseType: config.creds.responseType,
-            responseMode: config.creds.responseMode,
-            redirectUrl: config.creds.redirectUrl,
-            allowHttpForRedirectUrl: config.creds.allowHttpForRedirectUrl,
-            clientSecret: config.creds.clientSecret,
-            validateIssuer: config.creds.validateIssuer,
-            isB2C: config.creds.isB2C,
-            issuer: config.creds.issuer,
-            passReqToCallback: config.creds.passReqToCallback,
-            scope: config.creds.scope,
-            loggingLevel: config.creds.loggingLevel,
-            nonceLifetime: config.creds.nonceLifetime,
-            nonceMaxAmount: config.creds.nonceMaxAmount,
-            useCookieInsteadOfSession: config.creds.useCookieInsteadOfSession,
-            cookieEncryptionKeys: config.creds.cookieEncryptionKeys,
-            clockSkew: config.creds.clockSkew
-        },
-        function (iss, sub, profile, accessToken, refreshToken, done) {
-            if (!profile.oid) {
-                return done(new Error("No oid found"), null);
-            }
-            // asynchronous verification, for effect...
-            process.nextTick(function () {
-                findByOid(profile.oid, function (err, user) {
-                    if (err) {
-                        return done(err);
-                    }
-                    if (!user) {
-                        // "Auto-registration"
-                        users.push(profile);
-                        return done(null, profile);
-                    }
-                    return done(null, user);
-                });
-            });
-        }
-    )
+  new OIDCStrategy(
+    {
+      identityMetadata: config.creds.identityMetadata,
+      clientID: config.creds.clientID,
+      responseType: config.creds.responseType,
+      responseMode: config.creds.responseMode,
+      redirectUrl: config.creds.redirectUrl,
+      allowHttpForRedirectUrl: config.creds.allowHttpForRedirectUrl,
+      clientSecret: config.creds.clientSecret,
+      validateIssuer: config.creds.validateIssuer,
+      isB2C: config.creds.isB2C,
+      issuer: config.creds.issuer,
+      passReqToCallback: config.creds.passReqToCallback,
+      scope: config.creds.scope,
+      loggingLevel: config.creds.loggingLevel,
+      nonceLifetime: config.creds.nonceLifetime,
+      nonceMaxAmount: config.creds.nonceMaxAmount,
+      useCookieInsteadOfSession: config.creds.useCookieInsteadOfSession,
+      cookieEncryptionKeys: config.creds.cookieEncryptionKeys,
+      clockSkew: config.creds.clockSkew
+    },
+    function(iss, sub, profile, accessToken, refreshToken, done) {
+      if (!profile.oid) {
+        return done(new Error('No oid found'), null);
+      }
+      // asynchronous verification, for effect...
+      process.nextTick(function() {
+        findByOid(profile.oid, function(err, user) {
+          if (err) {
+            return done(err);
+          }
+          if (!user) {
+            // "Auto-registration"
+            users.push(profile);
+            return done(null, profile);
+          }
+          return done(null, user);
+        });
+      });
+    }
+  )
 );
 
 //-----------------------------------------------------------------------------
@@ -180,12 +180,12 @@ var app = express();
 var proxy = require('http-proxy-middleware');
 
 server.express.use(
-    '/api/generate/resume',
-    proxy({ target: 'http://localhost:3001', changeOrigin: true })
+  '/api/generate/resume',
+  proxy({ target: 'http://localhost:3001', changeOrigin: true })
 );
 
-server.express.set("views", __dirname + "/views");
-server.express.set("view engine", "ejs");
+server.express.set('views', __dirname + '/views');
+server.express.set('view engine', 'ejs');
 server.express.use(methodOverride());
 server.express.use(cookieParser());
 server.express.use(connect());
@@ -203,11 +203,11 @@ server.express.use(connect());
 //   }));
 // } else {
 server.express.use(
-    expressSession({
-        secret: "keyboard cat",
-        resave: true,
-        saveUninitialized: false
-    })
+  expressSession({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: false
+  })
 );
 // }
 
@@ -218,7 +218,7 @@ server.express.use(bodyParser.urlencoded({ extended: true }));
 // persistent login sessions (recommended).
 server.express.use(passport.initialize());
 server.express.use(passport.session());
-server.express.use(express.static(__dirname + "/../../public"));
+server.express.use(express.static(__dirname + '/../../public'));
 
 //-----------------------------------------------------------------------------
 // Set up the route controller
@@ -232,33 +232,33 @@ server.express.use(express.static(__dirname + "/../../public"));
 // it will call `passport.authenticate` to ask for user to log in.
 //-----------------------------------------------------------------------------
 function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
 }
 
 // '/account' is only available to logged in user
-server.express.get("/account", ensureAuthenticated, function (req, res) {
-    console.log(req.session);
-    res.render("account", { user: req.user });
+server.express.get('/account', ensureAuthenticated, function(req, res) {
+  console.log(req.session);
+  res.render('account', { user: req.user });
 });
 
 server.express.get(
-    "/login",
-    function (req, res, next) {
-        let redirect = req.query.redirect;
-        passport.authenticate("azuread-openidconnect", {
-            response: res, // required
-            customState: redirect, // optional. Provide a value if you want to provide custom state value.
-            // tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635',
-            failureRedirect: "/"
-        })(req, res, next);
-    },
-    function (req, res) {
-        log.info("Login was called in the Sample");
-        res.redirect("/");
-    }
+  '/login',
+  function(req, res, next) {
+    let redirect = req.query.redirect;
+    passport.authenticate('azuread-openidconnect', {
+      response: res, // required
+      customState: redirect, // optional. Provide a value if you want to provide custom state value.
+      // tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635',
+      failureRedirect: '/'
+    })(req, res, next);
+  },
+  function(req, res) {
+    log.info('Login was called in the Sample');
+    res.redirect('/');
+  }
 );
 
 // 'GET returnURL'
@@ -266,17 +266,17 @@ server.express.get(
 // query (such as authorization code). If authentication fails, user will be
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
 server.express.get(
-    "/auth/openid/return",
-    function (req, res, next) {
-        passport.authenticate("azuread-openidconnect", {
-            response: res, // required
-            failureRedirect: "/",
-        })(req, res, next);
-    },
-    function (req, res) {
-        log.info("We received a return from AzureAD.");
-        res.redirect(req.body.state);
-    }
+  '/auth/openid/return',
+  function(req, res, next) {
+    passport.authenticate('azuread-openidconnect', {
+      response: res, // required
+      failureRedirect: '/'
+    })(req, res, next);
+  },
+  function(req, res) {
+    log.info('We received a return from AzureAD.');
+    res.redirect(req.body.state);
+  }
 );
 
 // 'POST returnURL'
@@ -284,40 +284,36 @@ server.express.get(
 // body (such as authorization code). If authentication fails, user will be
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
 server.express.post(
-    "/auth/openid/return",
-    function (req, res, next) {
-        passport.authenticate("azuread-openidconnect", {
-            response: res, // required
-            failureRedirect: "/",
-        })(req, res, next);
-    },
-    function (req, res) {
-        log.info("We received a return from AzureAD.");
-        res.redirect(req.body.state);
-    }
+  '/auth/openid/return',
+  function(req, res, next) {
+    passport.authenticate('azuread-openidconnect', {
+      response: res, // required
+      failureRedirect: '/'
+    })(req, res, next);
+  },
+  function(req, res) {
+    log.info('We received a return from AzureAD.');
+    res.redirect(req.body.state);
+  }
 );
 
 // 'logout' route, logout from passport, and destroy the session with AAD.
-server.express.get("/logout", function (req, res) {
-    req.session.destroy(function (err) {
-        req.logOut();
-        res.redirect(req.query.redirect);
-    });
+server.express.get('/logout', function(req, res) {
+  req.session.destroy(function(err) {
+    req.logOut();
+    res.redirect(req.query.redirect);
+  });
 });
 
-server.express.use(express.static(path.join(__dirname + "/client/build")));
+server.express.use(express.static(path.join(__dirname + '/client/build')));
 
-server.express.get("*", (req, res, next) => {
-    // Handle graphql-yoga specific routes
-    if (
-        req.url == opts.playground ||
-        req.url == opts.subscriptions ||
-        req.url == opts.endpoint
-    ) {
-        // Return next() so that the GraphQLServer will handle it
-        return next();
-    }
-    res.sendFile(path.join(__dirname + "/client/build/index.html"));
+server.express.get('*', (req, res, next) => {
+  // Handle graphql-yoga specific routes
+  if (req.url == opts.playground || req.url == opts.subscriptions || req.url == opts.endpoint) {
+    // Return next() so that the GraphQLServer will handle it
+    return next();
+  }
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
-server.start(opts, () => console.log("Server is running on localhost:30662"));
+server.start(opts, () => console.log('Server is running on localhost:30662'));

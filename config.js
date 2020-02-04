@@ -48,8 +48,8 @@ exports.creds = {
   // rollover purpose. We always use the first set of key/iv pair to encrypt cookie, but we will try every set of
   // key/iv pair to decrypt cookie. Key can be any string of length 32, and iv can be any string of length 12.
   cookieEncryptionKeys: [
-      { 'key': '12345678901234567890123456789012', 'iv': '123456789012' },
-      { 'key': 'abcdefghijklmnopqrstuvwxyzabcdef', 'iv': 'abcdefghijkl' }
+    { key: '12345678901234567890123456789012', iv: '123456789012' },
+    { key: 'abcdefghijklmnopqrstuvwxyzabcdef', iv: 'abcdefghijkl' }
   ],
 
   // Optional. The additional scope you want besides 'openid', for example: ['email', 'profile'].
@@ -65,7 +65,7 @@ exports.creds = {
   nonceMaxAmount: 5,
 
   // Optional. The clock skew allowed in token validation, the default value is 300 seconds.
-  clockSkew: null,
+  clockSkew: null
 };
 
 // Optional.
@@ -75,7 +75,8 @@ exports.creds = {
 exports.resourceURL = 'https://graph.windows.net';
 
 // The url you need to go to destroy the session with AAD
-exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:30662';
+exports.destroySessionUrl =
+  'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:30662';
 
 // If you want to use the mongoDB session store for session middleware, set to true; otherwise we will use the default
 // session store provided by express-session.
@@ -86,4 +87,4 @@ exports.useMongoDBSessionStore = false;
 exports.databaseUri = 'mongodb://localhost/OIDCStrategy';
 
 // How long you want to keep session in mongoDB.
-exports.mongoDBSessionMaxAge = 24 * 60 * 60;  // 1 day (unit is second)
+exports.mongoDBSessionMaxAge = 24 * 60 * 60; // 1 day (unit is second)

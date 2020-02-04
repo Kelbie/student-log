@@ -1,34 +1,34 @@
 type Class {
-    id: String,
-    type: String
-    start: String,
-    end: String,
-    module: Module,
-    groups: [Group],
-    staff: [Staff],
-    rooms: [Room]
+  id: String
+  type: String
+  start: String
+  end: String
+  module: Module
+  groups: [Group]
+  staff: [Staff]
+  rooms: [Room]
 }
 
 type Module {
-    title: String
-    id: String,
+  title: String
+  id: String
 }
 
 type Room {
-    id: String,
-    number: String,
-    building: String,
-    details: String
+  id: String
+  number: String
+  building: String
+  details: String
 }
 
 type Staff {
-    name: String
+  name: String
 }
 
 type Group {
-    name: String
+  name: String
 }
 
 type Profile {
-    name: String
+  name: String
 }

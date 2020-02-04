@@ -1,13 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import Markdown from "react-markdown";
+import Markdown from 'react-markdown';
 
 function WorkPosting(props) {
-    return <div {...props}>
-        <div className="job-desc">
-            <Markdown source={`
+  return (
+    <div {...props}>
+      <div className="job-desc">
+        <Markdown
+          source={`
 AdButler is hiring!
 
 
@@ -58,21 +60,23 @@ We are growing our Customer Support team, seeking the best and brightest to join
 - Employer Paid Ad-Ops training and courses.
 - Flexibility to work anywhere with a high-speed internet connection.
 - Flexible schedule
-            `} />
-        </div>
+            `}
+        />
+      </div>
     </div>
+  );
 }
 
 WorkPosting = styled(WorkPosting)`
-    ${Markdown} {
-        * {
-            color: ${props => props.theme.is === "dark" ? "#E0E0E0" : "#17171C"};
-            font-family: Montserrat;
-        }
-        ul {
-            margin-left: 20px;
-        }
+  ${Markdown} {
+    * {
+      color: ${props => (props.theme.is === 'dark' ? '#E0E0E0' : '#17171C')};
+      font-family: Montserrat;
     }
+    ul {
+      margin-left: 20px;
+    }
+  }
 `;
 
 export default WorkPosting;

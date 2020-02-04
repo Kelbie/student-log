@@ -1,21 +1,23 @@
 * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    font-family: "Blinker";
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Blinker';
 }
 
 html {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-*, *:before, *:after {
-    box-sizing: inherit;
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
 .classes {
-    grid-auto-rows: auto;
-    display: grid;
-    grid-gap: 24px;
-    grid-template-columns: max-content 1fr;
+  grid-auto-rows: auto;
+  display: grid;
+  grid-gap: 24px;
+  grid-template-columns: max-content 1fr;
 }

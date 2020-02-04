@@ -1,13 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { UserAgentApplication } from "msal";
+import { UserAgentApplication } from 'msal';
 
 function Auth(props) {
-
-
-    return <div>
-
-    </div>
+  return <div></div>;
 }
 
 export default Auth;

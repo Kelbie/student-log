@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // import {
 //     AzureAD,
@@ -12,39 +12,36 @@ import styled from "styled-components";
 // import { authProvider } from "../authProvider";
 
 // GraphQL
-import gql from "graphql-tag";
-import { useQuery } from "react-apollo-hooks";
+import gql from 'graphql-tag';
+import { useQuery } from 'react-apollo-hooks';
 
 const GET_PROFILE = gql`
-    query {
-        getProfile {
-            name
-        }
+  query {
+    getProfile {
+      name
     }
+  }
 `;
 
 function ProfilePage({ staticContext, ...props }) {
-    const { data, error, loading } = useQuery(GET_PROFILE, {
-        fetchPolicy: "cache-first",
-        variables: {}
-    });
+  const { data, error, loading } = useQuery(GET_PROFILE, {
+    fetchPolicy: 'cache-first',
+    variables: {}
+  });
 
-    useEffect(() => {
-        document.title = "Profile / StudentLog";
-    }, [])
+  useEffect(() => {
+    document.title = 'Profile / StudentLog';
+  }, []);
 
-    if (loading) {
-        return <div>Loading...</div>
-    }
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-    return (<div {...props}>
-        {data.getProfile.name}
-    </div>
-    );
+  return <div {...props}>{data.getProfile.name}</div>;
 }
 
 ProfilePage = styled(ProfilePage)`
-    color: white;
-`
+  color: white;
+`;
 
 export default ProfilePage;
