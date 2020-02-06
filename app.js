@@ -1,58 +1,32 @@
-/**
- * Copyright (c) Microsoft Corporation
- *  All Rights Reserved
- *  MIT License
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the 'Software'), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify,
- * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
- * OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 'use strict';
 
-/******************************************************************************
- * Module dependencies.
- *****************************************************************************/
-
-var express = require('express');
-var cookieParser = require('cookie-parser');
-var expressSession = require('express-session');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var passport = require('passport');
-var util = require('util');
-var bunyan = require('bunyan');
-var config = require('./config');
-var connect = require('connect');
-const path = require('path');
-var http = require('http');
-
-// set up database for express session
-var MongoStore = require('connect-mongo')(expressSession);
-var mongoose = require('mongoose');
-
-import latex from 'node-latex';
-
-import ical from 'node-ical';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import expressSession from 'express-session';
+import bodyParser from 'body-parser';
+import methodOverride from 'method-override';
+import passport from 'passport';
+import bunyan from 'bunyan';
+import config from './config';
+import connect from 'connect';
+import path from 'path';
+import chalk from 'chalk';
+require('dotenv').config();
 
 // GraphQL
 import { GraphQLServer } from 'graphql-yoga';
 import { default as resolvers } from './resolvers';
 import { default as typeDefs } from './typeDefs';
 
+// PostgreSQL
+import { Client } from 'pg';
+const client = new Client();
+
+console.log(process.env);
+
+client.connect();
+
+// GraphQL Options
 const opts = {
   port: 30662,
   endpoint: '/graphql',
@@ -64,14 +38,14 @@ const opts = {
   }
 };
 
+// GraphQL Context
 const context = req => ({
   req: req.request
 });
 
 const server = new GraphQLServer({ typeDefs, resolvers, context });
 
-// Start QuickStart here
-
+// Azure
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
 var log = bunyan.createLogger({
@@ -104,7 +78,7 @@ var users = [];
 var findByOid = function(oid, fn) {
   for (var i = 0, len = users.length; i < len; i++) {
     var user = users[i];
-    log.info('we are using user: ', user);
+    // log.info("we are using user: ", user);
     if (user.oid === oid) {
       return fn(null, user);
     }
@@ -112,23 +86,6 @@ var findByOid = function(oid, fn) {
   return fn(null, null);
 };
 
-//-----------------------------------------------------------------------------
-// Use the OIDCStrategy within Passport.
-//
-// Strategies in passport require a `verify` function, which accepts credentials
-// (in this case, the `oid` claim in id_token), and invoke a callback to find
-// the corresponding user object.
-//
-// The following are the accepted prototypes for the `verify` function
-// (1) function(iss, sub, done)
-// (2) function(iss, sub, profile, done)
-// (3) function(iss, sub, profile, access_token, refresh_token, done)
-// (4) function(iss, sub, profile, access_token, refresh_token, params, done)
-// (5) function(iss, sub, profile, jwtClaims, access_token, refresh_token, params, done)
-// (6) prototype (1)-(5) with an additional `req` parameter as the first parameter
-//
-// To do prototype (6), passReqToCallback must be set to true in the config.
-//-----------------------------------------------------------------------------
 passport.use(
   new OIDCStrategy(
     {
@@ -173,9 +130,6 @@ passport.use(
   )
 );
 
-//-----------------------------------------------------------------------------
-// Config the app, include middlewares
-//-----------------------------------------------------------------------------
 var app = express();
 var proxy = require('http-proxy-middleware');
 
@@ -184,24 +138,13 @@ server.express.use(
   proxy({ target: 'http://localhost:3001', changeOrigin: true })
 );
 
+server.express.use(require('body-parser').text());
 server.express.set('views', __dirname + '/views');
 server.express.set('view engine', 'ejs');
 server.express.use(methodOverride());
 server.express.use(cookieParser());
 server.express.use(connect());
 
-// set up session middleware
-// if (config.useMongoDBSessionStore) {
-//   mongoose.connect(config.databaseUri);
-//   app.use(express.session({
-//     secret: 'secret',
-//     cookie: {maxAge: config.mongoDBSessionMaxAge * 1000},
-//     store: new MongoStore({
-//       mongooseConnection: mongoose.connection,
-//       clear_interval: config.mongoDBSessionMaxAge
-//     })
-//   }));
-// } else {
 server.express.use(
   expressSession({
     secret: 'keyboard cat',
@@ -209,13 +152,16 @@ server.express.use(
     saveUninitialized: false
   })
 );
-// }
 
 server.express.use(bodyParser.urlencoded({ extended: true }));
-// server.express.use(bodyParser.json())
+server.express.use(bodyParser.json({ limit: '50mb' })); // to support JSON-encoded bodies
+server.express.use(
+  bodyParser.urlencoded({
+    // to support URL-encoded bodies
+    extended: true
+  })
+);
 
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
 server.express.use(passport.initialize());
 server.express.use(passport.session());
 server.express.use(express.static(__dirname + '/../../public'));
@@ -235,14 +181,16 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/login');
+
+  res.redirect(`/login${res.locals.redirect}`);
 }
 
+// server.express.get('/', function(req, res) {
+//   console.log(req.user);
+//   res.render('index', { user: req.user });
+// });
+
 // '/account' is only available to logged in user
-server.express.get('/account', ensureAuthenticated, function(req, res) {
-  console.log(req.session);
-  res.render('account', { user: req.user });
-});
 
 server.express.get(
   '/login',
@@ -250,16 +198,24 @@ server.express.get(
     let redirect = req.query.redirect;
     passport.authenticate('azuread-openidconnect', {
       response: res, // required
+      // resourceURL: config.resourceURL, // optional. Provide a value if you want to specify the resource.
       customState: redirect, // optional. Provide a value if you want to provide custom state value.
-      // tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635',
+      tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635', // dynamically adjust this based on user
       failureRedirect: '/'
     })(req, res, next);
   },
   function(req, res) {
-    log.info('Login was called in the Sample');
     res.redirect('/');
   }
 );
+
+// server.express.get("/:any", function(req, res, next) {
+//     res.locals.redirect = `?redirect=/${req.params.any}`
+//     console.log(123,res.locals.redirect)
+//     return next();
+// }, ensureAuthenticated, function(req, res) {
+//     res.redirect(`/${req.params.any}`)
+// });
 
 // 'GET returnURL'
 // `passport.authenticate` will try to authenticate the content returned in
@@ -270,7 +226,8 @@ server.express.get(
   function(req, res, next) {
     passport.authenticate('azuread-openidconnect', {
       response: res, // required
-      failureRedirect: '/'
+      failureRedirect: '/',
+      tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635'
     })(req, res, next);
   },
   function(req, res) {
@@ -288,17 +245,31 @@ server.express.post(
   function(req, res, next) {
     passport.authenticate('azuread-openidconnect', {
       response: res, // required
-      failureRedirect: '/'
+      failureRedirect: '/',
+      tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635'
     })(req, res, next);
   },
-  function(req, res) {
-    log.info('We received a return from AzureAD.');
+  async function(req, res) {
+    console.log(chalk.bgGreen.bold('/LOGIN'), req.user.displayName);
+    await client.query(
+      `
+            INSERT INTO users (
+                id
+            ) VALUES (
+                $1
+            ) ON CONFLICT 
+                DO NOTHING
+        `,
+      [req.user.upn]
+    );
     res.redirect(req.body.state);
   }
 );
 
 // 'logout' route, logout from passport, and destroy the session with AAD.
 server.express.get('/logout', function(req, res) {
+  console.log(chalk.bgRed.bold('/LOGOUT'), req.user.displayName);
+
   req.session.destroy(function(err) {
     req.logOut();
     res.redirect(req.query.redirect);
