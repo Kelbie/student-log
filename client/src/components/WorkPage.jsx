@@ -13,7 +13,7 @@ import { faSearch, faBriefcase, faPlus } from '@fortawesome/free-solid-svg-icons
 // GraphQL
 import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo-hooks';
-
+import { Checkbox } from 'pretty-checkbox-react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import {
   setResults,
@@ -127,20 +127,20 @@ function Filter(props) {
         <legend>By Company:</legend>
         {companies.map(company => {
           return (
-            <label>
-              <input
-                type="checkbox"
-                onClick={e => {
-                  dispatch(
-                    updateFilterCompany({
-                      name: company,
-                      active: e.target.checked
-                    })
-                  );
-                }}
-              />
+            <Checkbox
+              shape="curve"
+              icon={<FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon>}
+              onChange={e => {
+                dispatch(
+                  updateFilterCompany({
+                    name: company,
+                    active: e.target.checked
+                  })
+                );
+              }}
+            >
               {company}
-            </label>
+            </Checkbox>
           );
         })}
       </fieldset>
@@ -148,20 +148,20 @@ function Filter(props) {
         <legend>By Employment Type:</legend>
         {types.map(type => {
           return (
-            <label>
-              <input
-                type="checkbox"
-                onClick={e => {
-                  dispatch(
-                    updateFilterType({
-                      name: type,
-                      active: e.target.checked
-                    })
-                  );
-                }}
-              />
+            <Checkbox
+              shape="curve"
+              icon={<FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon>}
+              onChange={e => {
+                dispatch(
+                  updateFilterType({
+                    name: type,
+                    active: e.target.checked
+                  })
+                );
+              }}
+            >
               {type}
-            </label>
+            </Checkbox>
           );
         })}
       </fieldset>
@@ -169,20 +169,20 @@ function Filter(props) {
         <legend>Related To:</legend>
         {categories.map(category => {
           return (
-            <label>
-              <input
-                type="checkbox"
-                onClick={e => {
-                  dispatch(
-                    updateFilterCategory({
-                      name: category,
-                      active: e.target.checked
-                    })
-                  );
-                }}
-              />
+            <Checkbox
+              shape="curve"
+              icon={<FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon>}
+              onChange={e => {
+                dispatch(
+                  updateFilterCategory({
+                    name: category,
+                    active: e.target.checked
+                  })
+                );
+              }}
+            >
               {category}
-            </label>
+            </Checkbox>
           );
         })}
       </fieldset>
