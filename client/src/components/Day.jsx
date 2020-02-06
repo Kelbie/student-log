@@ -27,52 +27,52 @@ function Day(props) {
 }
 
 export default styled(Day)`
-	button {
-		display: flex;
-		flex-direction: column;
-		appearance: none;
-		background: none;
-		border: none;
-		background: -webkit-linear-gradient(${props =>
+  button {
+    display: flex;
+    flex-direction: column;
+    appearance: none;
+    background: none;
+    border: none;
+    background: -webkit-linear-gradient(${props =>
       props.active
         ? props.theme.PRIMARY_COLOR
         : props.theme.is === 'dark'
         ? 'white'
         : '#22222B'}, ${props =>
   props.active ? props.theme.SECONDARY_COLOR : props.theme.is === 'dark' ? 'white' : '#22222B'});
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		font-size: 18px;
-		padding: 8px;
-		cursor: pointer;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 18px;
+    padding: 8px;
+    cursor: pointer;
 
-		position: relative;
-		text-decoration: none;
+    position: relative;
+    text-decoration: none;
 
-		/* &:after {
-			content: "";
-			transition: 0.3s ease 0s;
-			bottom: 0;
-			left: 0;
-			width: ${props => (props.active ? '100%' : '0%')};
-			position: absolute;
-			height: 1px;
-			background: -webkit-linear-gradient(${props =>
-        props.active ? props.theme.PRIMARY_COLOR : 'white'}, ${props =>
+    /* &:after {
+        content: "";
+        transition: 0.3s ease 0s;
+        bottom: 0;
+        left: 0;
+        width: ${props => (props.active ? '100%' : '0%')};
+        position: absolute;
+        height: 1px;
+        background: -webkit-linear-gradient(${props =>
+          props.active ? props.theme.PRIMARY_COLOR : 'white'}, ${props =>
   props.active ? props.theme.SECONDARY_COLOR : 'white'});
-		}
+    }
 
-		&:hover:after {
-			width: 100%;
-		} */
+    &:hover:after {
+        width: 100%;
+    } */
 
-		.day-of-the-week {
-		opacity: 0.5;
-		}
+    .day-of-the-week {
+      opacity: 0.5;
+    }
 
-		.day-of-the-month {
-		font-weight: bold;
-		/* text-decoration: ${props => (props.active ? 'underline' : 'none')}; */
-		}
-	}
+    .day-of-the-month {
+      font-weight: bold;
+      /* text-decoration: ${props => (props.active ? 'underline' : 'none')}; */
+    }
+  }
 `;
