@@ -39,6 +39,8 @@ import ResumePage from './components/ResumePage';
 import WorkPage from './components/WorkPage';
 import WorkPosting from './components/WorkPosting';
 import AboutPage from './components/AboutPage';
+import Login from './components/Login';
+import Modal from './components/common/Modal';
 
 const client = new ApolloClient({
   uri: 'http://localhost:30662/graphql'
@@ -61,6 +63,12 @@ function MyRouter(props) {
             <Route exact path="/job/new" />
             <Route path="/resume" component={ResumePage} />
             <Route path="/about" component={AboutPage} />
+            <Route exact path="/about" component={AboutPage} />
+            <Route exact path="/portal">
+              <Modal>
+                <Login></Login>
+              </Modal>
+            </Route>
           </Switch>
         </div>
       </Router>
