@@ -18,7 +18,7 @@ function calculateGaps(classes) {
   let gaps = [];
   let difference = 0; // Difference in time between classes
   for (let i = 1; i < classes.length; i++) {
-    difference = parseInt(classes[i].start) - parseInt(classes[i - 1].end);
+    difference = new Date(classes[i].start).getTime() - new Date(classes[i - 1].end).getTime();
     if (difference > 0) {
       gaps.push({
         type: 'gap',
@@ -33,11 +33,13 @@ function calculateGaps(classes) {
 
 function calculateDuration(classes) {
   return classes.map(class_ => {
+    console.log('class', class_);
+
     return {
       ...class_,
       duration: moment
-        .unix(parseInt(class_.end) / 1000)
-        .diff(moment.unix(parseInt(class_.start) / 1000), 'hour')
+        .unix(new Date(class_.end).getTime() / 1000)
+        .diff(moment.unix(new Date(class_.start).getTime() / 1000), 'hour')
     };
   });
 }
@@ -62,6 +64,8 @@ const GET_CLASSES = gql`
       rooms {
         id
         number
+        building
+        details
       }
     }
   }
@@ -77,6 +81,8 @@ function Timetable(props) {
       date: String(props.date.getTime())
     }
   });
+
+  console.log(321, data);
 
   useEffect(() => {
     if (data) {
@@ -100,7 +106,7 @@ function Timetable(props) {
             <Timelabel index={i}>
               {classes[0] &&
                 moment
-                  .unix(parseInt(classes[0].start) / 1000)
+                  .unix(new Date(classes[0].start).getTime() / 1000)
                   .add(i, 'hours')
                   .format('HH:mm')}
             </Timelabel>
@@ -129,8 +135,8 @@ function Timetable(props) {
                 type={class_.type}
                 index={class_.duration}
                 title={class_.module.title}
-                module={class_.module}
                 rooms={class_.rooms}
+                module={class_.module}
                 start={class_.start}
                 end={class_.end}
                 duration={class_.duration}

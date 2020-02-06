@@ -44,7 +44,7 @@ Timebar = styled(Timebar)`
   box-shadow: 0px 0px 4px 1px ${props => rgba(props.theme.SECONDARY_COLOR, 0.25)};
 
   width: 2px;
-  height: 100%;
+  height: calc(100% - 20px);
   margin: auto;
   background: -webkit-linear-gradient(
     ${props => props.theme.PRIMARY_COLOR},
