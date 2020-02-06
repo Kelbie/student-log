@@ -24,7 +24,6 @@ Placeholder = styled(Placeholder)`
 function Class(props) {
   return (
     <div {...props}>
-      <div className="gradient" />
       <div className="top">
         <div className="time raise">
           {date.format(new Date(parseInt(props.start)), 'HH:mm')} -{' '}
@@ -49,22 +48,6 @@ function Class(props) {
         <div className="duration-container">
           <div className="duration raise">{`${props.duration} hour`}</div>
         </div>
-        <div className="images">
-          {props.staff.map((staff_, i) => {
-            return (
-              <div className="image-container">
-                {/* If image has picture do this */}
-                {/* <div className="image raise">
-                                <ImageMask
-                                    mask={i === props.staff.length - 1 ? false : true}
-                                />
-                                </div> */}
-                {/* Otherwise do this */}
-                <Placeholder mask={i === props.staff.length - 1 ? false : true} />
-              </div>
-            );
-          })}
-        </div>
       </div>
     </div>
   );
@@ -84,7 +67,7 @@ Class = styled(Class)`
     border-radius: 4px;
     position: absolute;
     z-index: 1;
-    content: '';
+    content: "";
     display: block;
     height: calc(100% + 4px);
     width: calc(100% + 4px);
@@ -100,7 +83,7 @@ Class = styled(Class)`
   &::before {
     position: absolute;
     z-index: 0;
-    content: '';
+    content: "";
     display: block;
     height: 100%;
     top: 0;
@@ -121,11 +104,11 @@ Class = styled(Class)`
       props.theme.is === 'dark' ? props.theme.PALLET['700'] : props.theme.PALLET['100']};
     /* mix-blend-mode: ${props => (props.theme.is === 'dark' ? 'lighten' : 'darken')}; */
     /* &::before {
-        content: "";
-        width: 100%;
-        height: 100%;
-        background: black;
-        } */
+      content: "";
+      width: 100%;
+      height: 100%;
+      background: black;
+    } */
   }
 
   .time {
@@ -141,7 +124,7 @@ Class = styled(Class)`
   props.theme.SECONDARY_COLOR});
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 20px;
+    font-size: 20px;    
   }
 
   .module {
@@ -149,11 +132,11 @@ Class = styled(Class)`
     font-size: 16px;
   }
 
-  .raise {
+  /* .raise {
     position: relative;
     z-index: 2;
     isolation: isolate;
-  }
+  } */
 
   .drop {
     position: initial;
@@ -176,6 +159,7 @@ Class = styled(Class)`
       props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['200']};
     bottom: 0;
     left: 24px;
+    z-index: 1;
   }
 
   .duration {
@@ -195,11 +179,10 @@ Class = styled(Class)`
     right: 24px;
   }
 
-  .image,
-  ${Placeholder} {
+  .image, ${Placeholder} {
     width: 100%;
     height: 100%;
-    mix-blend-mode: lighten;
+    /* mix-blend-mode: lighten; */
   }
 
   img {
