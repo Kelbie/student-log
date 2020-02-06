@@ -88,11 +88,7 @@ function ProfileForm(props) {
   // Dispatch on save
   const dispatch = useDispatch();
   const onSubmit = data => {
-    dispatch(
-      saveResume({
-        profile: data
-      })
-    );
+    dispatch(saveResume(data));
   };
 
   return (
