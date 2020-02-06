@@ -15,6 +15,7 @@ input JobInput {
 
 type Job {
   id: String
+  job_id: String
   job_title: String
   category: String
   job_type: String

@@ -8,6 +8,7 @@ const queries = gql`
     getResume: Resume
     getProfile: Profile
     getWork(first: Int, offset: Int): [Job]
+    getJob(id: String): Job
   }
 `;
 
