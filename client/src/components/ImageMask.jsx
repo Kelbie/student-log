@@ -2,8 +2,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import image1 from '../media/1.jpg';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 

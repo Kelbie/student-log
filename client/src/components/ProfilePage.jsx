@@ -2,15 +2,6 @@ import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-// import {
-//     AzureAD,
-//     AuthenticationStatus,
-//     withAuthentication,
-//     AuthenticationState
-// } from "react-aad-msal";
-
-// import { authProvider } from "../authProvider";
-
 // GraphQL
 import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo-hooks';

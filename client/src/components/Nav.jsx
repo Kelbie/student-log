@@ -3,21 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import styled, { withTheme } from 'styled-components';
-import { rgba } from 'polished';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCalendar,
   faBriefcase,
-  faComments,
   faBell,
   faCog,
-  faUserCircle,
-  faBook,
   faBus,
   faUser,
-  faSignOutAlt,
-  faSignInAlt,
   faGraduationCap,
+  faSignInAlt,
+  faSignOutAlt,
+  faCalendarDay,
+  faDollarSign,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 

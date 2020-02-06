@@ -6,14 +6,7 @@ import { useDispatch } from 'redux-react-hook';
 import { setColorTheme } from '../actions/actions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCheckCircle,
-  faCircle,
-  faSun,
-  faStarAndCrescent,
-  faMoon
-} from '@fortawesome/free-solid-svg-icons';
-// import { toggleTheme } from "../actions/actions";
+import { faCheckCircle, faCircle, faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 
 import Switch from 'react-switch';
 

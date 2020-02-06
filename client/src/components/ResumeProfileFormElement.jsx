@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { faEllipsisV, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { rgba } from 'polished';
 import styled from 'styled-components';
 
 import Button, { Button2 } from './Button';

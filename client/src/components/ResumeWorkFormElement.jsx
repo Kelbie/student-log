@@ -2,16 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { rgba } from 'polished';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEllipsisV,
-  faGripVertical,
-  faTrash,
-  faPlus,
-  faSave
-} from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
 
 import EditDropdown from './EditDropdown';
 import Button, { Button2 } from './Button';

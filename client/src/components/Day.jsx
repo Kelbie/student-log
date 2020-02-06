@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import styled, { withTheme } from 'styled-components';
-import { desaturate } from 'polished';
+import styled from 'styled-components';
 
-import date from 'date-and-time';
-
-import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 

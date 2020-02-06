@@ -6,16 +6,8 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import styled from 'styled-components';
 
-import { rgba } from 'polished';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEllipsisV,
-  faGripVertical,
-  faPlus,
-  faTrash,
-  faSave
-} from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faPlus, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
 
 import DraggableForm from './DraggableForm';
 import EditDropdown from './EditDropdown';

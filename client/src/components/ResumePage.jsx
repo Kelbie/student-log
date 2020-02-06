@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
-import { faGripVertical, faFilePdf } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 
 import _ from 'lodash';
 
@@ -15,7 +14,7 @@ import { useMappedState } from 'redux-react-hook';
 
 import styled from 'styled-components';
 
-import Button, { Button2 } from './Button';
+import Button from './Button';
 import ResumeAwardsForm from './ResumeAwardsForm';
 import ResumeEducationFrom from './ResumeEducationForm';
 import ResumeProfileForm from './ResumeProfileForm';
@@ -23,7 +22,6 @@ import ResumeProjectsForm from './ResumeProjectsForm';
 import ResumeWorkFrom from './ResumeWorkForm';
 import ResumeTemplatesForm from './ResumeTemplatesForm';
 import ResumeSkillsForm from './ResumeSkillsForm';
-import Input from './Input';
 
 // fake data generator
 const getItems = count =>

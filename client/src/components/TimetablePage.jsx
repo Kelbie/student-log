@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
-// import {Button} from "./Button";
-
 import moment from 'moment';
 
 import StepWizard from 'react-step-wizard';
@@ -11,8 +9,6 @@ import StepWizard from 'react-step-wizard';
 import Timetable from './Timetable';
 
 import DayPicker from './DayPicker';
-
-import date from 'date-and-time';
 
 import * as Yup from 'yup';
 

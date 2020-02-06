@@ -4,15 +4,11 @@ import styled, { withTheme } from 'styled-components';
 
 import getSlug from 'speakingurl';
 
-import date from 'date-and-time';
-
 import ImageMask from './ImageMask';
-import { darken, opacify, rgba } from 'polished';
-
 import A from './A';
 
 import moment from 'moment';
-import Button, { ButtonLink2, Button2, ButtonExternal } from './Button';
+import { ButtonExternal } from './Button';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Placeholder(props) {

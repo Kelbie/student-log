@@ -8,7 +8,13 @@ import A from './A';
 import WorkElement2 from './WorkElement';
 import Button, { Button2 } from './Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faBriefcase, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSearch,
+  faBriefcase,
+  faPlus,
+  faCheckSquare,
+  faCheck
+} from '@fortawesome/free-solid-svg-icons';
 
 // GraphQL
 import gql from 'graphql-tag';
@@ -22,6 +28,8 @@ import {
   updateFilterCategory
 } from '../actions/actions';
 import _ from 'lodash';
+
+import './style.scss';
 
 function WorkElement(props) {
   return (

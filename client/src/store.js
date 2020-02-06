@@ -1,7 +1,6 @@
 import { createStore } from 'redux';
 
 import reducer from './reducers/index';
-import actions from './actions/actions';
 
 export const store = createStore(
   reducer,

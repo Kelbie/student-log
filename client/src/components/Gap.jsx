@@ -2,10 +2,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import date from 'date-and-time';
-
-import ImageMask from './ImageMask';
-
 function Gap(props) {
   return (
     <div {...props}>

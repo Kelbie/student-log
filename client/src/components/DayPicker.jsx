@@ -7,17 +7,14 @@ import date from 'date-and-time';
 
 import Button from './Button';
 
-import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
+import { DateRangePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
-
-import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
 
 import moment from 'moment';
 
 import Day from './Day';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
 
 function DayPicker(props) {
   const [date_, setDate] = useState(moment(props.date).startOf('week'));

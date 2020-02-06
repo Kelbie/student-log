@@ -1,43 +1,28 @@
 import React, { useCallback } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
-import ReactDOM from 'react-dom';
-
 import styled, { ThemeProvider } from 'styled-components';
 
 import './styles.css';
 
-import moment from 'moment';
-
-import StepWizard from 'react-step-wizard';
-
-import Timetable from './components/Timetable';
 import TimetablePage from './components/TimetablePage';
 
 import './styles.css';
-import DayPicker from './components/DayPicker';
 
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo-hooks';
 
-import date from 'date-and-time';
-
 import { StoreContext, useMappedState } from 'redux-react-hook';
 import { store } from './store';
 
-import Search from './components/Search';
-
-import ical from 'ical';
+import { rgba } from 'polished';
 
 import Header from './components/Header';
 import Nav from './components/Nav';
-
-import { AzureAD, AuthenticationStatus } from 'react-aad-msal';
-
-import { setDarkTheme, setLightTheme } from './actions/actions';
-import ResumePage from './components/ResumePage';
 import WorkPage from './components/WorkPage';
+
 import WorkPosting from './components/WorkPosting';
+import ResumePage from './components/ResumePage';
 import AboutPage from './components/AboutPage';
 import Login from './components/Login';
 import Modal from './components/common/Modal';

@@ -5,7 +5,7 @@ import styled, { withTheme } from 'styled-components';
 import date from 'date-and-time';
 
 import ImageMask from './ImageMask';
-import { darken, opacify, rgba } from 'polished';
+import { rgba } from 'polished';
 
 import A from './A';
 

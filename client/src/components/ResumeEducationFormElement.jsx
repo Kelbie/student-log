@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { faEllipsisV, faGripVertical, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { rgba } from 'polished';
