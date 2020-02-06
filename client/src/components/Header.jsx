@@ -147,6 +147,8 @@ function Header(props) {
   const dispatch = useDispatch();
   const toggleTheme = useCallback(() => dispatch({ type: 'TOGGLE_THEME' }), []);
 
+  const [checked, setChecked] = useState(false);
+
   return (
     <div {...props}>
       <h1>
@@ -182,9 +184,27 @@ Header = styled(Header)`
   max-width: 800px;
   margin: auto;
   padding: 24px 0px 8px 12px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  ${Switch} {
+    cursor: pointer;
+
+    .react-switch-bg > div {
+      display: flex;
+      align-items: center;
+    }
+
+    svg {
+      width: 90%;
+      height: 90%;
+      margin: auto;
+    }
+  }
 
   h1 {
-    padding: 0px 12px 4px 12px;
+    /* padding: 0px 12px 4px 12px; */
     font-size: 20px;
     color: ${props =>
       props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['600']};
