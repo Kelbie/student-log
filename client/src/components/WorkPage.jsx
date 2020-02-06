@@ -191,29 +191,76 @@ function Filter(props) {
 }
 
 Filter = styled(Filter)`
-  background: ${props => (props.theme.is === 'dark' ? '#24252D' : 'white')};
-  box-shadow: 0px 0px 16px 0px
-    ${props => (props.theme.is === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(192, 192, 192, 0.3)')};
-  border-radius: 4px;
-  padding: 16px;
-  color: ${props => (props.theme.is === 'dark' ? '#CBCBCB' : 'black')};
-  grid-area: filter;
-  fieldset {
-    border: none;
-    legend {
-      font-weight: bold;
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['700'] : props.theme.PALLET['100']};
+    box-shadow: 0px 0px 16px 0px
+        ${props => (props.theme.is === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(192, 192, 192, 0.3)')};
+    border-radius: 4px;
+    padding: 16px;
+
+    color: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['500']};
+    font-weight: bold;
+    grid-area: filter;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+
+    fieldset {
+        border: none;
+
+        div {
+            font-size: 12px;
+            margin: 4px 0px;
+        }
+
+        svg {
+            transform: scale(1.2);
+        }
+
+        label::before {
+            border: 1px solid ${props => props.theme.PALLET['500']} !important;
+        }
+
+        legend {
+            font-weight: bold;
+        }
+
+        /* label {
+            cursor: pointer;
+            display: inline-block;
+            font-size: 12px;
+            color: ${props =>
+              props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['500']};
+            font-weight: normal;
+            padding-left: 4px;
+
+        } */
+
+        /* input {
+            cursor: pointer;
+            display: inline-block;
+
+            &:checked + label {
+                color: ${props => props.theme.PRIMARY_COLOR};
+                text-shadow: 0.5px 0 0 ${props => props.theme.PRIMARY_COLOR};
+            }
+        } */
+
+
+
+        > * {
+            display: block;
+        }
+
+
+        margin-bottom: 8px;
     }
-    label {
-      font-size: 12px;
-    }
-    > * {
-      display: block;
-    }
-    input {
-      margin-right: 4px;
-    }
-    margin-bottom: 8px;
-  }
 `;
 
 function Search(props) {

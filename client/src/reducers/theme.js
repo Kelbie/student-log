@@ -1,17 +1,36 @@
 import * as ACTION_TYPES from '../actions/action_types';
 
-const PRIMARY_COLOR = '#E87BBE';
-const SECONDARY_COLOR = '#8E9DEF';
+// const PRIMARY_COLOR = "#E360B1";
+// const SECONDARY_COLOR = "#C3327A";
+
+// const PRIMARY_COLOR = "#F6AD55";
+// const SECONDARY_COLOR = "#ED8936";
+
+const PRIMARY_COLOR = '#63B3ED';
+const SECONDARY_COLOR = '#4299E1';
+
+const PALLET = {
+  // Gray
+  '100': '#F7FAFC',
+  '200': '#EDF2F7',
+  '300': '#E2E8F0',
+  '400': '#CBD5E0',
+  '500': '#A0AEC0',
+  '600': '#718096',
+  '700': '#4A5568',
+  '800': '#2D3748',
+  '900': '#1A202C'
+};
 
 const initialState = {
   PRIMARY_COLOR,
   SECONDARY_COLOR,
+  PALLET,
   is: 'dark'
 };
 
 // Reducer
 export default function reducer(state = initialState, action) {
-  console.log(123, state);
   switch (action.type) {
     case ACTION_TYPES.TOGGLE_THEME:
       return {

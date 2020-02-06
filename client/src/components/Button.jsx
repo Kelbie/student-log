@@ -64,11 +64,11 @@ Button = styled(Button)`
         color: ${props =>
           props.active
             ? props.theme.PRIMARY_COLOR
+            : props.variant === 'fill'
+            ? props.theme.PALLET['100']
             : props.theme.is === 'dark'
-            ? 'white'
-            : '#939399'};
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+            ? props.theme.PALLET['400']
+            : props.theme.PALLET['600']};
       }
     }
     .text {
@@ -130,7 +130,7 @@ Button2Component = styled(Button2Component)`
   );
   border: none;
   padding: 12px;
-  color: ${props => (props.theme.is === 'dark' ? 'white' : 'white')};
+  color: ${props => props.theme.PALLET['100']};
   font-weight: bold;
   cursor: pointer;
   border-radius: 9999999px;
@@ -154,7 +154,7 @@ Button2LinkComponent = styled(Button2LinkComponent)`
     );
     border: none;
     padding: 12px;
-    color: ${props => (props.theme.is === 'dark' ? 'white' : 'white')};
+    color: ${props => props.theme.PALLET['100']};
     font-weight: bold;
     cursor: pointer;
     border-radius: 4px;

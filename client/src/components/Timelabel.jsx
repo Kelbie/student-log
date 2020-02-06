@@ -22,7 +22,7 @@ Timelabel = styled(Timelabel)`
     font-size: 10px;
     position: relative;
     transform: translateY(-50%);
-    background: ${props => (props.theme.is === 'dark' ? '#17171c' : 'rgb(248, 247, 247)')};
+    /* background: ${props => (props.theme.is === 'dark' ? '#17171c' : 'rgb(248, 247, 247)')}; */
     padding: 4px;
     z-index: 100;
   }

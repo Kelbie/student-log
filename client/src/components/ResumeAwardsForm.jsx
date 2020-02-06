@@ -171,5 +171,6 @@ function AwardsForm(props) {
 }
 
 export default styled(AwardsForm)`
-  color: ${props => (props.theme.is === 'dark' ? 'white' : 'black')};
+  color: ${props =>
+    props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};
 `;

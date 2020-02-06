@@ -147,14 +147,16 @@ DayPicker = styled(DayPicker)`
     display: flex;
     justify-content: space-between;
   }
-  background: ${props => (props.theme.is === 'dark' ? '#24252d' : 'white')};
+  background: ${props =>
+    props.theme.is === 'dark' ? props.theme.PALLET['700'] : props.theme.PALLET['100']};
   /* border: 2px #3d3f52 solid; */
   margin: 8px;
   padding: 12px;
   border-radius: 4px;
   box-shadow: 0px 0px 16px 0px
     ${props => (props.theme.is === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(192, 192, 192, 0.3)')};
-  border-left: 16px solid ${props => (props.theme.is === 'dark' ? '#31323d' : '#F3F3F3')};
+  border-left: 16px solid
+    ${props => (props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['200'])};
 
   .DateRangePickerInput > * {
     display: none;

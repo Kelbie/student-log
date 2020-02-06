@@ -1,13 +1,21 @@
 import React, { useCallback, useState, useEffect } from 'react';
 
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 import { useDispatch } from 'redux-react-hook';
 import { setColorTheme } from '../actions/actions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheckCircle,
+  faCircle,
+  faSun,
+  faStarAndCrescent,
+  faMoon
+} from '@fortawesome/free-solid-svg-icons';
 // import { toggleTheme } from "../actions/actions";
+
+import Switch from 'react-switch';
 
 function ThemePicker(props) {
   const [picked, setPicked] = useState('blue');
@@ -17,16 +25,36 @@ function ThemePicker(props) {
   useEffect(() => {
     switch (picked) {
       case 'pink':
-        dispatch(setColorTheme({ PRIMARY_COLOR: '#E87BBE', SECONDARY_COLOR: '#8E9DEF' }));
+        dispatch(
+          setColorTheme({
+            PRIMARY_COLOR: '#FC8181',
+            SECONDARY_COLOR: '#F56565'
+          })
+        );
         break;
       case 'blue':
-        dispatch(setColorTheme({ PRIMARY_COLOR: '#59A2EC', SECONDARY_COLOR: '#434DC3' }));
+        dispatch(
+          setColorTheme({
+            PRIMARY_COLOR: '#63B3ED',
+            SECONDARY_COLOR: '#4299E1'
+          })
+        );
         break;
       case 'orange':
-        dispatch(setColorTheme({ PRIMARY_COLOR: '#E87A40', SECONDARY_COLOR: '#EF6A6A' }));
+        dispatch(
+          setColorTheme({
+            PRIMARY_COLOR: '#F6AD55',
+            SECONDARY_COLOR: '#ED8936'
+          })
+        );
         break;
       case 'green':
-        dispatch(setColorTheme({ PRIMARY_COLOR: '#40E853', SECONDARY_COLOR: '#16A72D' }));
+        dispatch(
+          setColorTheme({
+            PRIMARY_COLOR: '#68D391',
+            SECONDARY_COLOR: '#48BB78'
+          })
+        );
         break;
     }
   }, [picked]);
@@ -86,25 +114,25 @@ ThemePicker = styled(ThemePicker)`
   }
   #orange {
     & + div > svg {
-      color: #e87a40;
+      color: #f6ad55;
     }
   }
 
   #blue {
     & + div > svg {
-      color: #59a2ec;
+      color: #63b3ed;
     }
   }
 
   #pink {
     & + div > svg {
-      color: #e87bbe;
+      color: #fc8181;
     }
   }
 
   #green {
     & + div > svg {
-      color: #40e853;
+      color: #68d391;
     }
   }
 
@@ -132,8 +160,22 @@ function Header(props) {
         <span className="student">STUDENT</span>
         <span className="log">LOG</span>
       </h1>
-      {/* <input type="checkbox" value={true} onClick={toggleTheme} /> */}
-      {/* <ThemePicker /> */}
+      <div>
+        <Switch
+          height={20}
+          width={40}
+          offColor={props.theme.SECONDARY_COLOR}
+          onColor={props.theme.PRIMARY_COLOR}
+          onChange={() => {
+            toggleTheme();
+            setChecked(!checked);
+          }}
+          checked={checked}
+          checkedIcon={<FontAwesomeIcon icon={faMoon} />}
+          uncheckedIcon={<FontAwesomeIcon icon={faSun} />}
+        />
+        <ThemePicker />
+      </div>
     </div>
   );
 }
@@ -151,7 +193,13 @@ Header = styled(Header)`
   h1 {
     padding: 0px 12px 4px 12px;
     font-size: 20px;
-    color: ${props => (props.theme.is === 'dark' ? 'white' : '#939399')};
+    color: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['600']};
+
+    /* @media only screen and (max-width: 480px) {
+            display: ;
+        } */
+
     span.log {
       font-weight: 600;
       position: sticky;
@@ -165,4 +213,4 @@ Header = styled(Header)`
   }
 `;
 
-export default Header;
+export default withTheme(Header);

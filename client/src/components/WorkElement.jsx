@@ -77,74 +77,65 @@ function Class(props) {
 
 Class = styled(Class)`
   grid-column: 2;
-  border: 2px solid ${props => (props.theme.is === 'dark' ? 'white' : 'black')};
   position: relative;
   border-radius: 4px;
-  box-shadow: 0px 0px 16px 0px
-    ${props => (props.featured ? rgba(props.theme.SECONDARY_COLOR, 0.3) : 'rgba(0,0,0,0.1)')};
-  .gradient {
-    border-radius: 4px;
-    position: absolute;
-    z-index: 1;
-    content: '';
-    display: block;
-    height: calc(100% + 4px);
-    width: calc(100% + 4px);
-    top: -2px;
-    left: -2px;
-    background: linear-gradient(
-      to bottom right,
-      ${props =>
-        props.featured
-          ? props.theme.PRIMARY_COLOR
-          : props.theme.is === 'dark'
-          ? '#24252d'
-          : 'white'},
-      ${props =>
-        props.featured
-          ? props.theme.SECONDARY_COLOR
-          : props.theme.is === 'dark'
-          ? '#24252d'
-          : 'white'}
-    );
-    mix-blend-mode: ${props => (props.theme.is === 'dark' ? 'multiply' : 'lighten')};
-  }
-  /* Styling for main section */
-  &::before {
-    position: absolute;
-    z-index: 0;
-    content: '';
-    display: block;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    background: ${props => (props.theme.is === 'dark' ? 'black' : 'white')};
-    border-radius: 4px;
-  }
+
   .top {
     display: flex;
     position: relative;
     z-index: 1;
     padding: 16px;
-    border-radius: 0px 0px 0px 0px;
-    background: ${props => (props.theme.is === 'dark' ? '#24252d' : '#fff')};
-    mix-blend-mode: ${props => (props.theme.is === 'dark' ? 'lighten' : 'darken')};
-    /* &::before {
-            content: "";
-            width: 100%;
-            height: 100%;
-            background: black;
-        } */
+    margin-left: 22px;
+    border-radius: 4px;
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['700'] : props.theme.PALLET['100']};
   }
-  .photo-container {
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    width: 8px;
+    height: 75%;
+    background: -webkit-linear-gradient(
+      ${props => (props.featured ? props.theme.PRIMARY_COLOR : 'transparent')},
+      ${props => (props.featured ? props.theme.SECONDARY_COLOR : 'transparent')}
+    );
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 8px;
+  }
+
+  .photo-container-highlight {
+    margin-left: -38px;
     width: 48px;
     height: 48px;
     margin-right: 8px;
     flex-shrink: 0;
-    background: ${props => (props.theme.is === 'dark' ? '#17171C' : '#F8F7F7')};
+    border-radius: 100%;
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['900'] : props.theme.PALLET['300']};
+    border: 1px solid ${props => props.theme.PRIMARY_COLOR};
+  }
+
+  .photo-container {
+    margin-left: -38px;
+    width: 48px;
+    height: 48px;
+    margin-right: 8px;
+    flex-shrink: 0;
+    border-radius: 100%;
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['900'] : props.theme.PALLET['300']};
+    border: 2px solid
+      ${props =>
+        props.theme.is === 'dark' ? props.theme.PALLET['700'] : props.theme.PALLET['100']};
+
+    img {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
   }
   .text {
     display: grid;
@@ -154,8 +145,13 @@ Class = styled(Class)`
       margin-right: 8px;
       border-right: 1px solid
         ${props =>
-          !props.apply_link ? (props.theme.is === 'dark' ? '#494a55' : '#d9d9d9') : 'none'};
+          !props.apply_link
+            ? props.theme.is === 'dark'
+              ? props.theme.PALLET['800']
+              : props.theme.PALLET['300']
+            : 'none'};
     }
+
     .right {
       text-align: right;
       color: ${props => (props.theme.is === 'dark' ? '#cbcbcb' : '#848484')};
@@ -163,6 +159,7 @@ Class = styled(Class)`
       flex-direction: column;
       justify-content: space-between;
       margin-left: 8px;
+
       .new {
         position: sticky;
         font-weight: 600;
@@ -176,11 +173,13 @@ Class = styled(Class)`
       }
     }
   }
+
   .time {
     color: ${props => (props.theme.is === 'dark' ? '#cbcbcb' : '#848484')};
     font-size: 12px;
     font-weight: 600;
   }
+
   .title {
     position: sticky;
     font-weight: 600;
@@ -190,26 +189,38 @@ Class = styled(Class)`
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 20px;
-  }
-  .module {
-    color: ${props => (props.theme.is === 'dark' ? '#cbcbcb' : '#848484')};
     font-size: 16px;
+    margin-right: 4px;
   }
+
+  .company {
+    color: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['300'] : props.theme.PALLET['600']};
+  }
+
+  .module {
+    color: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['500'] : props.theme.PALLET['500']};
+    font-size: 12px;
+  }
+
   .raise {
     position: relative;
     z-index: 2;
     isolation: isolate;
   }
+
   .drop {
     position: initial;
   }
+
   .bottom {
     position: relative;
     height: 24px;
     width: 100%;
     background: ${props => (props.theme.is === 'dark' ? 'white' : 'black')};
   }
+
   .duration-container {
     position: absolute;
     display: inline-block;
@@ -218,6 +229,7 @@ Class = styled(Class)`
     bottom: 0;
     left: 24px;
   }
+
   .duration {
     background: ${props => (props.theme.is === 'dark' ? '#24252d' : '#fff')};
     padding: 8px;
@@ -226,22 +238,26 @@ Class = styled(Class)`
     font-weight: 600;
     text-transform: uppercase;
   }
+
   .images {
     display: flex;
     position: absolute;
     bottom: 0;
     right: 24px;
   }
+
   .image,
   ${Placeholder} {
     width: 100%;
     height: 100%;
     mix-blend-mode: lighten;
   }
+
   img {
     width: 100%;
     height: 100%;
   }
+
   .image-container {
     width: 32px;
     height: 32px;
@@ -252,6 +268,7 @@ Class = styled(Class)`
     overflow: hidden;
     background: gray;
   }
+
   grid-row: span ${props => props.index};
 `;
 

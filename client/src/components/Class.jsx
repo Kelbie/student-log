@@ -72,10 +72,13 @@ function Class(props) {
 
 Class = styled(Class)`
   grid-column: 2;
-  border: 2px solid ${props => (props.theme.is === 'dark' ? 'white' : 'black')};
+  /* border: 2px solid ${props =>
+    props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['200']}; */
   position: relative;
   border-radius: 4px;
-  box-shadow: 0px 0px 16px 0px ${props => rgba(props.theme.SECONDARY_COLOR, 0.3)};
+  /* box-shadow: 0px 0px 16px 0px ${props => rgba(props.theme.SECONDARY_COLOR, 0.3)}; */
+  box-shadow: 0px 0px 16px 0px
+        ${props => (props.theme.is === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(192, 192, 192, 0.3)')};
 
   .gradient {
     border-radius: 4px;
@@ -87,13 +90,11 @@ Class = styled(Class)`
     width: calc(100% + 4px);
     top: -2px;
     left: -2px;
-    background: linear-gradient(
-      to bottom right,
-      ${props => props.theme.PRIMARY_COLOR},
-      ${props => props.theme.SECONDARY_COLOR}
-    );
-    mix-blend-mode: ${props => (props.theme.is === 'dark' ? 'multiply' : 'lighten')};
-  }
+    background: linear-gradient(to bottom right, ${props => props.theme.PRIMARY_COLOR}, ${props =>
+  props.theme.SECONDARY_COLOR});
+    /* mix-blend-mode: ${props => (props.theme.is === 'dark' ? 'multiply' : 'lighten')}; */
+}
+
 
   /* Styling for main section */
   &::before {
@@ -116,8 +117,9 @@ Class = styled(Class)`
     z-index: 1;
     padding: 24px;
     border-radius: 4px 4px 0px 0px;
-    background: ${props => (props.theme.is === 'dark' ? '#24252d' : '#fff')};
-    mix-blend-mode: ${props => (props.theme.is === 'dark' ? 'lighten' : 'darken')};
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['700'] : props.theme.PALLET['100']};
+    /* mix-blend-mode: ${props => (props.theme.is === 'dark' ? 'lighten' : 'darken')}; */
     /* &::before {
         content: "";
         width: 100%;
@@ -135,10 +137,8 @@ Class = styled(Class)`
   .title {
     position: sticky;
     font-weight: 600;
-    background: -webkit-linear-gradient(
-      ${props => props.theme.PRIMARY_COLOR},
-      ${props => props.theme.SECONDARY_COLOR}
-    );
+    background: -webkit-linear-gradient(${props => props.theme.PRIMARY_COLOR}, ${props =>
+  props.theme.SECONDARY_COLOR});
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 20px;
@@ -163,20 +163,24 @@ Class = styled(Class)`
     position: relative;
     height: 24px;
     width: 100%;
-    background: ${props => (props.theme.is === 'dark' ? 'white' : 'black')};
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['200']};
+    border-radius: 0px 0px 4px 4px;
   }
 
   .duration-container {
     position: absolute;
     display: inline-block;
     background: ${props => (props.theme.is === 'dark' ? '#24252d' : '#fff')};
-    border: 2px solid ${props => (props.theme.is === 'dark' ? 'white' : 'black')};
+    border: 2px solid ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['200']};
     bottom: 0;
     left: 24px;
   }
 
   .duration {
-    background: ${props => (props.theme.is === 'dark' ? '#24252d' : '#fff')};
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['700'] : props.theme.PALLET['100']};
     padding: 8px;
     color: ${props => (props.theme.is === 'dark' ? '#cbcbcb' : '#919191')};
     font-size: 10px;
@@ -207,7 +211,8 @@ Class = styled(Class)`
     width: 32px;
     height: 32px;
     border-radius: 100%;
-    border: 2px solid ${props => (props.theme.is === 'dark' ? 'white' : 'black')};
+    border: 2px solid ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['200']};
     background: ${props => (props.theme.is === 'dark' ? 'black' : 'white')};
     margin-left: -8px;
     overflow: hidden;

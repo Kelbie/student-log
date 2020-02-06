@@ -98,7 +98,8 @@ ResumeNavElement = styled(withRouter(ResumeNavElement))`
     transition: 0.1s ease 0s;
     text-decoration: none;
     position: relative;
-    color: ${props => (props.theme.is === 'dark' ? 'white' : 'black')};
+    color: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[600]};
 
     &.active {
       color: ${props => props.theme.PRIMARY_COLOR};

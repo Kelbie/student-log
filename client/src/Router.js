@@ -95,7 +95,8 @@ function MyTheme(props) {
       theme={{
         is: theme.is,
         PRIMARY_COLOR: theme.PRIMARY_COLOR,
-        SECONDARY_COLOR: theme.SECONDARY_COLOR
+        SECONDARY_COLOR: theme.SECONDARY_COLOR,
+        PALLET: theme.PALLET
       }}
     >
       {props.children}
