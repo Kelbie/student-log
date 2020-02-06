@@ -24,24 +24,27 @@ Placeholder = styled(Placeholder)`
 `;
 
 function Class(props) {
-  console.log(props.date.toString());
+  console.log(782323, props);
   return (
     <div {...props}>
       <div className="gradient" />
       <div className="top">
-        <div className="photo-container"></div>
+        <div className="photo-container">
+          <img src={''} />
+        </div>
         <div className="text">
           <div className="left">
             <A
-              to={`/work/${props.id}/${getSlug(props.title + ' ' + props.company)}`}
+              to={`/work/${props.job_id}/${getSlug(props.title + ' ' + props.company)}`}
               className="title"
             >
               {props.title}
             </A>
+            <div className="company">{props.company}</div>
             <div className="module raise">
-              {props.company}
+              {props.date.format('MMM DD')}
               {` • `}
-              {props.type}
+              {props.job_type}
             </div>
           </div>
           {props.apply_link ? (
@@ -50,7 +53,7 @@ function Class(props) {
             </ButtonExternal>
           ) : (
             <div className="right">
-              <div>{props.date.format('MMM DD')}</div>
+              <div>Aberdeen</div>
               <div className="new">
                 {props.date.add(3, 'days').isAfter(moment(new Date())) ? 'NEW' : ''}
               </div>
@@ -58,15 +61,6 @@ function Class(props) {
           )}
         </div>
       </div>
-      {props.featured ? (
-        <div className="bottom">
-          <div className="duration-container">
-            <div className="duration raise">FEATURED</div>
-          </div>
-        </div>
-      ) : (
-        ''
-      )}
     </div>
   );
 }
@@ -133,12 +127,14 @@ Class = styled(Class)`
       overflow: hidden;
     }
   }
+
   .text {
     display: grid;
     grid-template-columns: 1fr max-content;
     flex-grow: 1;
+
     .left {
-      margin-right: 8px;
+      padding-right: 8px;
       border-right: 1px solid
         ${props =>
           !props.apply_link

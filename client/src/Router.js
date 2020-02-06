@@ -44,7 +44,7 @@ function MyRouter(props) {
             <Route exact path="/profile" />
             <Route exact path="/settings" />
             <Route exact path="/work" component={WorkPage} />
-            <Route exact path="/work/:id" component={WorkPosting} />
+            <Route exact path="/work/:id/:string" component={WorkPosting} />
             <Route exact path="/job/new" />
             <Route path="/resume" component={ResumePage} />
             <Route path="/about" component={AboutPage} />

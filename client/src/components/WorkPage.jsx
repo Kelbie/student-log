@@ -38,7 +38,7 @@ function WorkElement(props) {
       <div className="text">
         <A className="title">{props.title}</A>
         <div className="details">
-          <span className="company-name">{props.company}</span>
+          <span className="company-name">{props.name}</span>
           <span>•</span>
           <span className="type">{props.type}</span>
         </div>
@@ -54,6 +54,7 @@ WorkElement = styled(WorkElement)`
   padding: 16px;
   box-shadow: 0px 0px 16px 0px
     ${props => (props.theme.is === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(192, 192, 192, 0.3)')};
+
   .photo-container {
     width: 48px;
     height: 48px;
@@ -61,6 +62,7 @@ WorkElement = styled(WorkElement)`
     background: ${props => (props.theme.is === 'dark' ? '#17171C' : '#F8F7F7')};
     margin-right: 8px;
   }
+
   .title {
     position: sticky;
     font-weight: 600;
@@ -72,9 +74,11 @@ WorkElement = styled(WorkElement)`
     -webkit-text-fill-color: transparent;
     font-size: 20px;
   }
+
   .text {
     color: ${props => (props.theme.is === 'dark' ? '#CBCBCB' : 'black')};
   }
+
   .details {
     > * {
       margin-right: 4px;
@@ -100,11 +104,11 @@ function Filter(props) {
       let c = []; // Companies
       let t = []; // Types
       results.map(r => {
-        if (!c.includes(r.company)) {
-          c.push(r.company);
+        if (!c.includes(r.name)) {
+          c.push(r.name);
         }
-        if (!t.includes(r.type)) {
-          t.push(r.type);
+        if (!t.includes(r.job_type)) {
+          t.push(r.job_type);
         }
       });
       setCompanies(c);
@@ -287,11 +291,13 @@ Search = styled(Search)`
   display: flex;
   flex-direction: row;
   grid-area: search;
+
   svg {
     align-self: center;
     color: white;
     margin: 8px;
   }
+
   .search {
     background: -webkit-linear-gradient(
       ${props => props.theme.PRIMARY_COLOR},
@@ -302,6 +308,7 @@ Search = styled(Search)`
     display: flex;
     margin-right: 4px;
   }
+
   input {
     border: none;
     margin: 2px;
@@ -319,6 +326,7 @@ const GET_JOBS = gql`
   query getWork($first: Int, $offset: Int) {
     getWork(first: $first, offset: $offset) {
       id
+      job_id
       job_title
       category
       job_type
@@ -425,9 +433,11 @@ function WorkPage(props) {
             return passCompanies && passType && passCategories;
           })
           .map((w, i) => {
+            console.log(333, w);
             return (
               <WorkElement2
-                id={w.id}
+                job_id={w.job_id}
+                logo={w.logo}
                 title={w.job_title}
                 company={w.name}
                 job_type={w.job_type}
@@ -449,6 +459,7 @@ WorkPage = styled(WorkPage)`
   grid-template-columns: max-content 1fr;
   grid-template-rows: max-content 1fr;
   grid-gap: 8px;
+
   @media only screen and (max-width: 700px) {
     grid-template-areas:
       'search'
@@ -456,9 +467,11 @@ WorkPage = styled(WorkPage)`
       'results';
     grid-template-columns: 1fr;
   }
+
   .search-results {
     color: ${props => (props.theme.is === 'dark' ? '#CBCBCB' : 'black')};
   }
+
   .list {
     grid-area: results;
     flex-grow: 1;
