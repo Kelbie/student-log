@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
-import { faEllipsisV, faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faGripVertical, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { rgba } from 'polished';
 import styled from 'styled-components';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import EditDropdown from './EditDropdown';
+import Input from './Input';
+import Label from './common/Label';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -30,8 +32,8 @@ function FormElement({ handle, register, editable, errors, ...props }) {
       </div>
       <div className="content">
         <div className={`form ${!isEditable ? 'hidden' : ''}`}>
-          <label>Project Name*</label>
-          <input
+          <Label required>Project Name</Label>
+          <Input
             type="text"
             name={`projects[${props.index}].name`}
             ref={register({ required: true })}
@@ -43,16 +45,16 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               )
             : null}
 
-          <label>Project Description</label>
-          <input
+          <Label>Project Description</Label>
+          <Input
             type="text"
             name={`projects[${props.index}].description`}
             ref={register}
             placeholder="A video chat app with great picture quality"
           />
 
-          <label>Link to Project</label>
-          <input
+          <Label>Link to Project</Label>
+          <Input
             type="text"
             name={`projects[${props.index}].link`}
             ref={register}
@@ -60,15 +62,18 @@ function FormElement({ handle, register, editable, errors, ...props }) {
           />
 
           <div className="buttons">
-            <Button2
+            <Button
+              icon={faTrash}
               onClick={async () => {
                 props.delete();
               }}
             >
               Delete
-            </Button2>
+            </Button>
 
-            <Button2
+            <Button
+              icon={faSave}
+              variant={'fill'}
               onClick={async () => {
                 console.log(props.watch());
                 const errors = await props.triggerValidation();
@@ -79,7 +84,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               }}
             >
               Save
-            </Button2>
+            </Button>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -125,10 +130,6 @@ export default styled(FormElement)`
     flex-grow: 1;
 
     .form {
-      * {
-        display: block;
-      }
-
       input {
         width: 100%;
         background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.1)};

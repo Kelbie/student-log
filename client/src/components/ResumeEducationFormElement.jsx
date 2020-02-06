@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-import { faEllipsisV, faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faGripVertical, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { rgba } from 'polished';
 import styled from 'styled-components';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import EditDropdown from './EditDropdown';
 
 function FormElement({ handle, content, register, editable, errors, ...props }) {
@@ -84,15 +84,18 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
           />
 
           <div className="buttons">
-            <Button2
+            <Button
+              icon={faTrash}
               onClick={async () => {
                 props.delete();
               }}
             >
               Delete
-            </Button2>
+            </Button>
 
-            <Button2
+            <Button
+              icon={faSave}
+              variant={'fill'}
               type="submit"
               onClick={async () => {
                 const errors = await props.triggerValidation();
@@ -102,7 +105,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
               }}
             >
               Save
-            </Button2>
+            </Button>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -166,10 +169,6 @@ export default styled(FormElement)`
     flex-grow: 1;
 
     .form {
-      * {
-        display: block;
-      }
-
       input {
         width: 100%;
         background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.1)};

@@ -9,22 +9,35 @@ import { Link } from 'react-router-dom';
 import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
 
 function Button({ type, ...props }) {
+  console.log(999, type, props);
   // const width = useWindowWidth();
 
-  return (
-    <Link to={props.to} {...props}>
-      <button type={`button`} className={`${props.variant}`}>
-        <span className="icon">
-          <FontAwesomeIcon icon={props.icon} />
-        </span>
-        <span className="text">{props.children}</span>
-      </button>
-    </Link>
-  );
+  if (props.to) {
+    return (
+      <Link to={props.to} {...props}>
+        <button type={'button'} className={props.variant}>
+          <span className="icon">
+            <FontAwesomeIcon icon={props.icon} />
+          </span>
+          <span className="text">{props.children}</span>
+        </button>
+      </Link>
+    );
+  } else {
+    return (
+      <div to={props.to} {...props}>
+        <button type={props.type} className={props.variant}>
+          <span className="icon">
+            <FontAwesomeIcon icon={props.icon} />
+          </span>
+          <span className="text">{props.children}</span>
+        </button>
+      </div>
+    );
+  }
 }
 
 Button = styled(Button)`
-  width: 100%;
   cursor: pointer;
   text-decoration: none;
 
@@ -35,20 +48,25 @@ Button = styled(Button)`
   }
 
   button {
+    white-space: nowrap;
     cursor: pointer;
     appearance: none;
     border: none;
     font-size: 16px;
-    background: transparent;
     padding: 12px;
     border-radius: 999999px;
     display: flex;
+    background: transparent;
 
     &.fill {
       background: -webkit-linear-gradient(
         ${props => props.theme.PRIMARY_COLOR},
         ${props => darken(0.1, props.theme.PRIMARY_COLOR)}
       );
+    }
+
+    &.outline {
+      border: 1px solid props.theme.PRIMARY_COLOR;
     }
 
     transition: 0.15s ease 0s;
@@ -60,7 +78,6 @@ Button = styled(Button)`
       position: relative;
       svg,
       path {
-        position: sticky;
         color: ${props =>
           props.active
             ? props.theme.PRIMARY_COLOR
@@ -72,25 +89,14 @@ Button = styled(Button)`
       }
     }
     .text {
-      white-space: nowrap;
-      position: sticky;
-      background: -webkit-linear-gradient(
-        ${props =>
-          props.active
-            ? props.theme.PRIMARY_COLOR
-            : props.theme.is === 'dark'
-            ? 'white'
-            : '#939399'},
-        ${props =>
-          props.active
-            ? props.theme.SECONDARY_COLOR
-            : props.theme.is === 'dark'
-            ? 'white'
-            : '#939399'}
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: ${props =>
-        props.active ? 'transparent' : props.theme.is === 'dark' ? 'white' : '#939399'};
+      color: ${props =>
+        props.active
+          ? props.theme.PRIMARY_COLOR
+          : props.variant === 'fill'
+          ? props.theme.PALLET['100']
+          : props.theme.is === 'dark'
+          ? props.theme.PALLET['400']
+          : props.theme.PALLET['600']};
       margin-left: ${props => (props.children ? '8px' : '0px')};
     }
   }
@@ -167,7 +173,7 @@ Button2LinkComponent = styled(Button2LinkComponent)`
 function ButtonExternalComponent(props) {
   return (
     <a href={props.href} {...props}>
-      <div type={`button`} className={`${props.variant}`}>
+      <div type={`button`} className={props.variant}>
         <span className="icon">
           <FontAwesomeIcon icon={props.icon} />
         </span>
@@ -181,6 +187,7 @@ ButtonExternalComponent = styled(ButtonExternalComponent)`
   width: 100%;
   cursor: pointer;
   text-decoration: none;
+
   @media only screen and (max-width: 480px) {
     .text {
       display: none;
@@ -196,12 +203,18 @@ ButtonExternalComponent = styled(ButtonExternalComponent)`
     border-radius: 999999px;
     display: flex;
     background: transparent;
+
     &.fill {
       background: -webkit-linear-gradient(
         ${props => props.theme.PRIMARY_COLOR},
         ${props => darken(0.1, props.theme.PRIMARY_COLOR)}
       );
     }
+
+    &.outline {
+      border: 1px solid props.theme.PRIMARY_COLOR;
+    }
+
     transition: 0.15s ease 0s;
     * {
       transition: 0.15s ease 0s;
@@ -247,6 +260,7 @@ ButtonExternalComponent = styled(ButtonExternalComponent)`
   }
   &:hover > div {
     background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.05)};
+
     .icon {
       svg,
       path {
@@ -256,6 +270,7 @@ ButtonExternalComponent = styled(ButtonExternalComponent)`
         -webkit-text-fill-color: transparent;
       }
     }
+
     .text {
       position: sticky;
       background: -webkit-linear-gradient(

@@ -5,10 +5,18 @@ import styled from 'styled-components';
 import { rgba } from 'polished';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEllipsisV,
+  faGripVertical,
+  faTrash,
+  faPlus,
+  faSave
+} from '@fortawesome/free-solid-svg-icons';
 
 import EditDropdown from './EditDropdown';
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
+import Input from './Input';
+import Label from './common/Label';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -31,8 +39,8 @@ function FormElement({ handle, register, editable, errors, ...props }) {
       </div>
       <div className="content">
         <div className={`form ${!isEditable ? 'hidden' : ''}`}>
-          <label>Company Name*</label>
-          <input
+          <Label required>Company Name</Label>
+          <Input
             type="text"
             name={`work[${props.index}].name`}
             ref={register({ required: true })}
@@ -44,32 +52,32 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               )
             : null}
 
-          <label>Job Title</label>
-          <input
+          <Label>Job Title</Label>
+          <Input
             type="text"
             name={`work[${props.index}].title`}
             ref={register}
             placeholder="Software Engineer"
           />
 
-          <label>Job Location</label>
-          <input
+          <Label>Job Location</Label>
+          <Input
             type="text"
             name={`work[${props.index}].location`}
             ref={register}
             placeholder="Mountain View, CA"
           />
 
-          <label>Start Date</label>
-          <input
+          <Label>Start Date</Label>
+          <Input
             type="text"
             name={`work[${props.index}].start`}
             ref={register}
             placeholder="Sep 2015"
           />
 
-          <label>End Date</label>
-          <input
+          <Label>End Date</Label>
+          <Input
             type="text"
             name={`work[${props.index}].end`}
             ref={register}
@@ -77,27 +85,28 @@ function FormElement({ handle, register, editable, errors, ...props }) {
           />
 
           <div className="buttons">
-            <Button2
+            <Button
+              icon={faTrash}
               onClick={async () => {
                 props.delete();
               }}
             >
               Delete
-            </Button2>
+            </Button>
 
-            <Button2
+            <Button
+              icon={faSave}
+              variant={'fill'}
               type="submit"
               onClick={async () => {
-                console.log(props.watch());
                 const errors = await props.triggerValidation();
-                console.log(923, errors);
                 if (errors) {
                   setIsEditable(false);
                 }
               }}
             >
               Save
-            </Button2>
+            </Button>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -149,21 +158,7 @@ export default styled(FormElement)`
   .content {
     padding: 8px;
     flex-grow: 1;
-
     .form {
-      * {
-        display: block;
-      }
-
-      input {
-        width: 100%;
-        background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.1)};
-        padding: 4px;
-        border: 1px solid ${props => props.theme.PRIMARY_COLOR};
-        border-radius: 4px;
-        color: #e5e5e5;
-      }
-
       &.hidden {
         display: none;
       }

@@ -12,9 +12,10 @@ import styled from 'styled-components';
 
 import { saveResume } from '../actions/actions';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import DraggableForm from './DraggableForm';
 import ResumeWorkFormElement from './ResumeWorkFormElement';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -154,7 +155,9 @@ function WorkForm(props) {
           );
         })}
       </DraggableForm>
-      <Button2
+      <Button
+        icon={faPlus}
+        variant={'fill'}
         onClick={() => {
           setItems([
             ...items,
@@ -167,7 +170,7 @@ function WorkForm(props) {
         }}
       >
         Add Job
-      </Button2>
+      </Button>
     </form>
   );
 }

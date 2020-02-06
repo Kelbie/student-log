@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faGripVertical, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import _ from 'lodash';
@@ -15,7 +15,7 @@ import { useMappedState } from 'redux-react-hook';
 
 import styled from 'styled-components';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import ResumeAwardsForm from './ResumeAwardsForm';
 import ResumeEducationFrom from './ResumeEducationForm';
 import ResumeProfileForm from './ResumeProfileForm';
@@ -23,6 +23,7 @@ import ResumeProjectsForm from './ResumeProjectsForm';
 import ResumeWorkFrom from './ResumeWorkForm';
 import ResumeTemplatesForm from './ResumeTemplatesForm';
 import ResumeSkillsForm from './ResumeSkillsForm';
+import Input from './Input';
 
 // fake data generator
 const getItems = count =>
@@ -355,7 +356,9 @@ function ResumeNav(props) {
           )}
         </Droppable>
       </DragDropContext>
-      <Button2 onClick={() => props.showPDF(true)}>Generate PDF</Button2>
+      <Button icon={faFilePdf} variant={'fill'} onClick={() => props.showPDF(true)}>
+        Generate PDF
+      </Button>
     </div>
   );
 }

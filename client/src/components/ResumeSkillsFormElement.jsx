@@ -9,11 +9,19 @@ import styled from 'styled-components';
 import { rgba } from 'polished';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEllipsisV,
+  faGripVertical,
+  faPlus,
+  faTrash,
+  faSave
+} from '@fortawesome/free-solid-svg-icons';
 
 import DraggableForm from './DraggableForm';
 import EditDropdown from './EditDropdown';
-import { Button2 } from './Button';
+import Input from './Input';
+import Button, { Button2 } from './Button';
+import Label from './common/Label';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -48,7 +56,7 @@ function Skill({ handle, register, ...props }) {
       <div {...handle} className="handle">
         ::
       </div>
-      <input
+      <Input
         type="text"
         name={`skills[${props.parentIndex}].keywords[${props.index}]`}
         ref={register}
@@ -86,14 +94,14 @@ function FormElement({ handle, register, editable, errors, ...props }) {
       </div>
       <div className="content">
         <div className={`form ${!isEditable ? 'hidden' : ''}`}>
-          <label>Skill Name*</label>
-          <input
+          <Label required>Skill Name</Label>
+          <Input
             type="text"
             name={`skills[${props.index}].name`}
             ref={register({ required: true })}
             placeholder="Supreme Hacker"
           />
-          <label>Skill Details</label>
+          <Label>Skill Details</Label>
           <div className="skill-container">
             <DraggableForm
               items={items}
@@ -128,7 +136,9 @@ function FormElement({ handle, register, editable, errors, ...props }) {
                 );
               })}
             </DraggableForm>
-            <Button2
+            <Button
+              icon={faPlus}
+              variant={'outline'}
               onClick={() => {
                 setItems([
                   ...items,
@@ -139,21 +149,22 @@ function FormElement({ handle, register, editable, errors, ...props }) {
                   }
                 ]);
               }}
-            >
-              +
-            </Button2>
+            ></Button>
           </div>
 
           <div className="buttons">
-            <Button2
+            <Button
+              icon={faTrash}
               onClick={async () => {
                 props.delete();
               }}
             >
               Delete
-            </Button2>
+            </Button>
 
-            <Button2
+            <Button
+              icon={faSave}
+              variant={'fill'}
               type="submit"
               onClick={async () => {
                 const errors = await props.triggerValidation();
@@ -163,7 +174,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               }}
             >
               Save
-            </Button2>
+            </Button>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -204,15 +215,6 @@ export default styled(FormElement)`
     flex-grow: 1;
 
     .form {
-      input {
-        width: 100%;
-        background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.1)};
-        padding: 4px;
-        border: 1px solid ${props => props.theme.PRIMARY_COLOR};
-        border-radius: 4px;
-        color: #e5e5e5;
-      }
-
       &.hidden {
         display: none;
       }

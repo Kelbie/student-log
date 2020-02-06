@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
-import { faEllipsisV, faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faGripVertical, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { rgba } from 'polished';
 import styled from 'styled-components';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import EditDropdown from './EditDropdown';
+import { useDispatch } from 'redux-react-hook';
+import { saveResume } from '../actions/actions';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -22,6 +24,9 @@ function isEmpty(obj) {
 function FormElement({ handle, content, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
   const [editDropdownActive, setEditDropdownActive] = useState(false);
+
+  // Dispatch on save
+  const dispatch = useDispatch();
 
   console.log(222, props.watch(`name[${props.index}]`));
 
@@ -70,16 +75,19 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
           />
 
           <div type="submit" className="buttons">
-            <Button2
+            <Button
+              icon={faTrash}
               onClick={async () => {
                 props.delete();
               }}
             >
               Delete
-            </Button2>
+            </Button>
 
-            <Button2
+            <Button
               type="submit"
+              icon={faSave}
+              variant={'fill'}
               onClick={async () => {
                 const errors = await props.triggerValidation();
                 if (errors) {
@@ -88,7 +96,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
               }}
             >
               Save
-            </Button2>
+            </Button>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -139,10 +147,6 @@ export default styled(FormElement)`
     flex-grow: 1;
 
     .form {
-      * {
-        display: block;
-      }
-
       input {
         width: 100%;
         background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.1)};

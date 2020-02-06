@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { rgba } from 'polished';
 import styled from 'styled-components';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import EditDropdown from './EditDropdown';
+import Input from './Input';
+import Label from './common/Label';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -27,25 +29,25 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
     <div {...props}>
       <div className="content">
         <div className={`form ${!isEditable ? 'hidden' : ''}`}>
-          <label>Full Name</label>
-          <input type="text" name={`profile.name`} ref={register} placeholder="John Smith" />
+          <Label>Full Name</Label>
+          <Input type="text" name={`profile.name`} ref={register} placeholder="John Smith" />
 
-          <label>Email</label>
-          <input
+          <Label>Email</Label>
+          <Input
             type="text"
             name={`profile.email`}
             ref={register}
             placeholder="johnsmith@gmail.com"
           />
 
-          <label>Phone Number</label>
-          <input type="text" name={`profile.number`} ref={register} placeholder="(555) 123-4567" />
+          <Label>Phone Number</Label>
+          <Input type="text" name={`profile.number`} ref={register} placeholder="(555) 123-4567" />
 
-          <label>Location</label>
-          <input type="text" name={`profile.location`} ref={register} placeholder="New York, NY" />
+          <Label>Location</Label>
+          <Input type="text" name={`profile.location`} ref={register} placeholder="New York, NY" />
 
-          <label>Link</label>
-          <input
+          <Label>Link</Label>
+          <Input
             type="text"
             name={`profile.link`}
             ref={register}
@@ -53,13 +55,15 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
           />
 
           <div type="submit" className="buttons">
-            <Button2
+            <Button
+              icon={faSave}
+              variant={'fill'}
               onClick={async () => {
                 const errors = await props.triggerValidation();
               }}
             >
               Save
-            </Button2>
+            </Button>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -109,19 +113,6 @@ export default styled(FormElement)`
     flex-grow: 1;
 
     .form {
-      * {
-        display: block;
-      }
-
-      input {
-        width: 100%;
-        background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.1)};
-        padding: 4px;
-        border: 1px solid ${props => props.theme.PRIMARY_COLOR};
-        border-radius: 4px;
-        color: #e5e5e5;
-      }
-
       &.hidden {
         display: none;
       }

@@ -12,9 +12,10 @@ import styled from 'styled-components';
 
 import { saveResume } from '../actions/actions';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import DraggableForm from './DraggableForm';
 import ResumeProjectsFormElement from './ResumeProjectsFormElement';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // fake data generator
 const getItems = count =>
@@ -152,7 +153,9 @@ function ProjectsForm(props) {
           );
         })}
       </DraggableForm>
-      <Button2
+      <Button
+        icon={faPlus}
+        variant={'fill'}
         onClick={() => {
           setItems([
             ...items,
@@ -166,7 +169,7 @@ function ProjectsForm(props) {
         }}
       >
         Add Project
-      </Button2>
+      </Button>
     </form>
   );
 }

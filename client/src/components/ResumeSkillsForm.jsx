@@ -12,9 +12,10 @@ import styled from 'styled-components';
 
 import { saveResume } from '../actions/actions';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import DraggableForm from './DraggableForm';
 import ResumeSkillsFormElement from './ResumeSkillsFormElement';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -155,7 +156,9 @@ function SkillsForm(props) {
           );
         })}
       </DraggableForm>
-      <Button2
+      <Button
+        variant={'fill'}
+        icon={faPlus}
         onClick={() => {
           setItems([
             ...items,
@@ -168,7 +171,7 @@ function SkillsForm(props) {
         }}
       >
         Add Skill
-      </Button2>
+      </Button>
     </form>
   );
 }

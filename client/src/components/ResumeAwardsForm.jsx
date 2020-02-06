@@ -11,9 +11,10 @@ import styled from 'styled-components';
 
 import { saveResume } from '../actions/actions';
 
-import { Button2 } from './Button';
+import Button, { Button2 } from './Button';
 import DraggableForm from './DraggableForm';
 import ResumeAwardsFormElement from './ResumeAwardsFormElement';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // fake data generator
 const getItems = count =>
@@ -151,7 +152,9 @@ function AwardsForm(props) {
           );
         })}
       </DraggableForm>
-      <Button2
+      <Button
+        icon={faPlus}
+        variant={'fill'}
         onClick={() => {
           setItems([
             ...items,
@@ -165,7 +168,7 @@ function AwardsForm(props) {
         }}
       >
         Add Award
-      </Button2>
+      </Button>
     </form>
   );
 }
