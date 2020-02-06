@@ -12,6 +12,7 @@ import {
   faGraduationCap,
   faSignInAlt,
   faSignOutAlt,
+  faCalendar,
   faCalendarDay,
   faDollarSign,
   faInfoCircle
@@ -42,29 +43,7 @@ function Nav(props) {
   const [active, setActive] = useState(-1);
 
   useEffect(() => {
-    switch (props.location.pathname) {
-      case '/profile':
-        setActive('profile');
-        break;
-      case '/timetable':
-        setActive('timetable');
-        break;
-      case '/work':
-        setActive('work');
-        break;
-      case '/notifications':
-        setActive('notifications');
-        break;
-      case '/settings':
-        setActive('settings');
-        break;
-      case '/transport':
-        setActive('transport');
-        break;
-      case '/library':
-        setActive('library');
-        break;
-    }
+    setActive(props.location.pathname.replace('/', ''));
   }, []);
 
   return (
@@ -90,18 +69,21 @@ function Nav(props) {
       >
         About
       </Button>
-      {data && data.getProfile && data.getProfile.name ? (
+      <Button
+        to="/work"
+        active={active === 'discounts' ? 1 : 0}
+        icon={faDollarSign}
+        onClick={() => {
+          setActive('work');
+        }}
+      >
+        Student Discounts
+      </Button>
+      {data?.getProfile?.name ? (
         <>
-          <Button
-            to="/profile"
-            active={active === 'profile' ? 1 : 0}
-            icon={faUserCircle}
-            onClick={() => {
-              setActive('profile');
-            }}
-          >
-            Profile
-          </Button>
+          {/* <Button to="/profile" active={active === "profile" ? 1 : 0} icon={faUserCircle} onClick={() => {
+                    setActive("profile")
+                }}>Profile</Button> */}
           <Button
             to="/timetable"
             active={active === 'timetable' ? 1 : 0}
@@ -127,15 +109,19 @@ function Nav(props) {
         Work
       </Button>
       <Button
-        to="/resume"
-        active={active === 'resume' ? 1 : 0}
-        icon={faUser}
+        to="/events"
+        active={active === 'events' ? 1 : 0}
+        icon={faCalendarDay}
         onClick={() => {
-          setActive('resume');
+          setActive('events');
         }}
       >
-        Résumé
+        Events
       </Button>
+
+      {/* <Button to="/forum" active={active === "forum" ? 1 : 0} icon={faComments} onClick={() => {
+            setActive("forum")
+        }}>Forum</Button> */}
       <Button
         to="/transport"
         active={active === 'transport' ? 1 : 0}
@@ -147,15 +133,30 @@ function Nav(props) {
         Transport
       </Button>
       <Button
-        to="/library"
-        active={active === 'library' ? 1 : 0}
-        icon={faBook}
+        to="resume"
+        active={active === 'resume' ? 1 : 0}
+        icon={faUser}
         onClick={() => {
-          setActive('library');
+          setActive('resume');
         }}
       >
-        Library
+        Résumé
       </Button>
+      {/* <Button to="/library" active={active === "library" ? 1 : 0} icon={faBook} onClick={() => {
+            setActive("library")
+        }}>Library</Button> */}
+      {/* <Button to="/societies" active={active === "societies" ? 1 : 0} icon={faUserFriends} onClick={() => {
+            setActive("societies")
+        }}>Societies</Button> */}
+      {/* <Button to="/accommodation" active={active === "accommodation" ? 1 : 0} icon={faHome} onClick={() => {
+            setActive("accommodation")
+        }}>Accommodation</Button> */}
+      {/* <Button to="/eat" active={active === "eat" ? 1 : 0} icon={faUtensils} onClick={() => {
+            setActive("eats")
+        }}>Eat</Button> */}
+      {/* <Button to="/parking" active={active === "parking" ? 1 : 0} icon={faCar} onClick={() => {
+            setActive("parking")
+        }}>Parking</Button> */}
       {data?.getProfile?.name ? (
         <>
           <Button
@@ -182,7 +183,6 @@ function Nav(props) {
       ) : (
         ''
       )}
-
       {data?.getProfile?.name ? (
         <Button
           icon={faSignOutAlt}
@@ -192,14 +192,11 @@ function Nav(props) {
           Logout
         </Button>
       ) : (
-        <Button
-          icon={faSignInAlt}
-          variant={'fill'}
-          onClick={() => (window.location.href = `/login?redirect=${props.location.pathname}`)}
-        >
+        <Button to={'/portal'} icon={faSignInAlt} variant={'fill'}>
           Student Login
         </Button>
       )}
+      {/* <p>created by Kevin Kelbie</p> */}
     </div>
   );
 }
@@ -216,7 +213,6 @@ Nav = styled(Nav)`
   }
 
   ${Button2} {
-    width: 100%;
     white-space: normal;
     min-width: 100%;
   }
