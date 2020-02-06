@@ -6,7 +6,11 @@ import chalk from 'chalk';
 
 const { Client } = require('pg');
 const client = new Client({
-  database: 'student-log'
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDB,
+  password: process.env.PGPASS,
+  port: process.env.PGPORT
 });
 
 client.connect();

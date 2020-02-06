@@ -3,7 +3,13 @@ require('dotenv').config();
 import chalk from 'chalk';
 
 const { Client } = require('pg');
-const client = new Client();
+const client = new Client({
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDB,
+  password: process.env.PGPASS,
+  port: process.env.PGPORT
+});
 
 client.connect();
 
