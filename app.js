@@ -20,6 +20,7 @@ import { default as typeDefs } from './typeDefs';
 
 // PostgreSQL
 import { Client } from 'pg';
+import institutions from './institutions';
 const client = new Client({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
@@ -202,11 +203,12 @@ server.express.get(
   '/login',
   function(req, res, next) {
     let redirect = req.query.redirect;
+    let uni = req.query.uni;
     passport.authenticate('azuread-openidconnect', {
       response: res, // required
       // resourceURL: config.resourceURL, // optional. Provide a value if you want to specify the resource.
       customState: redirect, // optional. Provide a value if you want to provide custom state value.
-      tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635', // dynamically adjust this based on user
+      tenantIdOrName: institutions[uni].id,
       failureRedirect: '/'
     })(req, res, next);
   },

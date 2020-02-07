@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Dropdown from './common/Dropdown';
 import Label from './common/Label';
@@ -7,17 +7,20 @@ import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { withRouter } from 'react-router-dom';
 
 function Login(props) {
+  const [uni, setUni] = useState('');
   return (
     <fieldset {...props}>
       <legend>Verify your student status</legend>
       <Label required>Educational Institution</Label>
       <Dropdown
         options={[
-          { label: 'Robert Gordon University', value: 'rgu' },
+          { label: 'Robert Gordon University', value: 'RGU' },
           { label: 'University of Aberdeen', value: 'UoA' }
         ]}
-        onChange={e => {}}
-        value={''}
+        onChange={({ value }) => {
+          setUni(value);
+        }}
+        value={uni}
         placeholder="Select an university"
       />
       {/* <Label required>Year of study</Label>
@@ -46,7 +49,7 @@ function Login(props) {
       <Button
         icon={faSignInAlt}
         variant={'fill'}
-        onClick={() => (window.location.href = `/login?redirect=/`)}
+        onClick={() => (window.location.href = `/login?uni=${uni}&redirect=/`)}
       >
         Student Login
       </Button>
