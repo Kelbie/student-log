@@ -4,7 +4,7 @@ const PRIMARY_COLOR = '#E87BBE';
 const SECONDARY_COLOR = '#8E9DEF';
 
 const initialState = {
-  sections: ['TEMPLATE', 'PROFILE', 'EDUCATION', 'PROJECTS', 'WORK', 'SKILLS', 'AWARDS'],
+  sections: ['TEMPLATE', 'PROFILE', 'EDUCATION', 'WORK', 'PROJECTS', 'SKILLS', 'AWARDS'],
   template: 1,
   profile: {
     name: 'John Smith',
@@ -13,6 +13,17 @@ const initialState = {
     location: 'New York, NY',
     link: 'mycoolportfolio.com/myname'
   },
+  education: [
+    {
+      name: 'Stanford University',
+      location: 'Stanford, CA',
+      degree: 'BS',
+      major: 'Computer Science',
+      gpa: '3.6',
+      start: 'Sep 2015',
+      end: 'Jun 2019'
+    }
+  ],
   work: [
     {
       name: 'Google',
@@ -30,29 +41,18 @@ const initialState = {
       keywords: ['NodeJS', 'ExpressJS', 'PostgreSQL', 'GraphQL', 'ReactJS', 'Stripe API']
     }
   ],
+  skills: [
+    {
+      name: 'Programming Languages',
+      keywords: ['Java']
+    }
+  ],
   awards: [
     {
       name: 'Supreme Hacker',
       date: 'May 2015',
       awarder: 'HackNY',
       summary: 'Recognized for creating the most awesome project at a hackathon'
-    }
-  ],
-  education: [
-    {
-      name: 'Stanford University',
-      location: 'Stanford, CA',
-      degree: 'BS',
-      major: 'Computer Science',
-      gpa: '3.6',
-      start: 'Sep 2015',
-      end: 'Jun 2019'
-    }
-  ],
-  skills: [
-    {
-      name: 'Programming Languages',
-      keywords: ['Java']
     }
   ]
 };
