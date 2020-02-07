@@ -37,16 +37,16 @@ export default {
     updateResume: async (_, resume, { req }) => {
       logger('>', 'updateResume', { resume }, req, 'green');
 
-      // if (!req.isAuthenticated()) {
-      //   return {};
-      // }
+      if (!req.isAuthenticated()) {
+        return {};
+      }
 
       const query = `
         INSERT INTO resume (
           user_id, 
           json
         ) VALUES (
-            '${res.user.upn}', 
+            '${req.user.upn}', 
             '${JSON.stringify(resume)}'
           ) ON CONFLICT (user_id) 
               DO UPDATE 
