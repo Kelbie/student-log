@@ -15,6 +15,7 @@
     "dotenv": "^8.2.0",
     "ejs": ">= 0.0.0",
     "ejs-locals": ">= 0.0.0",
+    "eslint-config-airbnb": "^18.0.1",
     "express": "^4.17.1",
     "express-session": "^1.14.1",
     "graphql-tag": "^2.10.1",
@@ -40,9 +41,12 @@
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.8.3",
-    "eslint": "^6.8.0",
+    "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-sql": "^1.1.1",
     "prettier": "^1.19.1"
   }
 }
