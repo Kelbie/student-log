@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 import styled, { ThemeProvider } from 'styled-components';
@@ -8,12 +8,12 @@ import './styles.css';
 import TimetablePage from './components/TimetablePage';
 
 import './styles.css';
-
+import { PersistGate } from 'redux-persist/lib/integration/react';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo-hooks';
 
 import { StoreContext, useMappedState } from 'redux-react-hook';
-import { store } from './store';
+import { store, persistor } from './store';
 
 import { rgba } from 'polished';
 
@@ -168,11 +168,13 @@ function App(props) {
     <div {...props}>
       {/* <AzureAD provider={authProvider} forceLogin={true}> */}
       <StoreContext.Provider value={store}>
-        <ApolloProvider client={client}>
-          <MyTheme>
-            <MyRouter></MyRouter>
-          </MyTheme>
-        </ApolloProvider>
+        <PersistGate loading={<></>} persistor={persistor}>
+          <ApolloProvider client={client}>
+            <MyTheme>
+              <MyRouter></MyRouter>
+            </MyTheme>
+          </ApolloProvider>
+        </PersistGate>
       </StoreContext.Provider>
       {/* </AzureAD> */}
     </div>
