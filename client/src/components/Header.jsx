@@ -11,13 +11,13 @@ import { faCheckCircle, faCircle, faSun, faMoon } from '@fortawesome/free-solid-
 import Switch from 'react-switch';
 
 function ThemePicker(props) {
-  const [picked, setPicked] = useState('blue');
+  const [picked, setPicked] = useState(props.theme.PRIMARY_COLOR);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     switch (picked) {
-      case 'pink':
+      case '#FC8181':
         dispatch(
           setColorTheme({
             PRIMARY_COLOR: '#FC8181',
@@ -25,7 +25,7 @@ function ThemePicker(props) {
           })
         );
         break;
-      case 'blue':
+      case '#63B3ED':
         dispatch(
           setColorTheme({
             PRIMARY_COLOR: '#63B3ED',
@@ -33,7 +33,7 @@ function ThemePicker(props) {
           })
         );
         break;
-      case 'orange':
+      case '#F6AD55':
         dispatch(
           setColorTheme({
             PRIMARY_COLOR: '#F6AD55',
@@ -41,7 +41,7 @@ function ThemePicker(props) {
           })
         );
         break;
-      case 'green':
+      case '#68D391':
         dispatch(
           setColorTheme({
             PRIMARY_COLOR: '#68D391',
@@ -55,40 +55,40 @@ function ThemePicker(props) {
   return (
     <div {...props}>
       <fieldset>
-        <label onClick={() => setPicked('blue')}>
-          <input type="radio" name="color" id="blue" defaultChecked />
+        <label onClick={() => setPicked('#FC8181')}>
+          <input type="radio" name="color" id="_FC8181" defaultChecked />
           <div className="color">
-            {picked === 'blue' ? (
+            {picked === '#FC8181' ? (
               <FontAwesomeIcon icon={faCheckCircle} />
             ) : (
               <FontAwesomeIcon icon={faCircle} />
             )}
           </div>
         </label>
-        <label onClick={() => setPicked('pink')}>
-          <input type="radio" name="color" id="pink" />
+        <label onClick={() => setPicked('#63B3ED')}>
+          <input type="radio" name="color" id="_63B3ED" />
           <div className="color">
-            {picked === 'pink' ? (
+            {picked === '#63B3ED' ? (
               <FontAwesomeIcon icon={faCheckCircle} />
             ) : (
               <FontAwesomeIcon icon={faCircle} />
             )}
           </div>
         </label>
-        <label onClick={() => setPicked('orange')}>
-          <input type="radio" name="color" id="orange" />
+        <label onClick={() => setPicked('#F6AD55')}>
+          <input type="radio" name="color" id="_F6AD55" />
           <div className="color">
-            {picked === 'orange' ? (
+            {picked === '#F6AD55' ? (
               <FontAwesomeIcon icon={faCheckCircle} />
             ) : (
               <FontAwesomeIcon icon={faCircle} />
             )}
           </div>
         </label>
-        <label onClick={() => setPicked('green')}>
-          <input type="radio" name="color" id="green" />
+        <label onClick={() => setPicked('#68D391')}>
+          <input type="radio" name="color" id="_68D391" />
           <div className="color">
-            {picked === 'green' ? (
+            {picked === '#68D391' ? (
               <FontAwesomeIcon icon={faCheckCircle} />
             ) : (
               <FontAwesomeIcon icon={faCircle} />
@@ -100,30 +100,30 @@ function ThemePicker(props) {
   );
 }
 
-ThemePicker = styled(ThemePicker)`
+ThemePicker = styled(withTheme(ThemePicker))`
   fieldset {
     display: flex;
     border: none;
   }
-  #orange {
+  #_F6AD55 {
     & + div > svg {
       color: #f6ad55;
     }
   }
 
-  #blue {
+  #_63B3ED {
     & + div > svg {
       color: #63b3ed;
     }
   }
 
-  #pink {
+  #_FC8181 {
     & + div > svg {
       color: #fc8181;
     }
   }
 
-  #green {
+  #_68D391 {
     & + div > svg {
       color: #68d391;
     }
@@ -147,7 +147,7 @@ function Header(props) {
   const dispatch = useDispatch();
   const toggleTheme = useCallback(() => dispatch({ type: 'TOGGLE_THEME' }), []);
 
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(props.theme.is === 'dark');
 
   return (
     <div {...props}>
