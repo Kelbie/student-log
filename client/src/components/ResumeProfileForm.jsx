@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 
 import { Draggable } from 'react-beautiful-dnd';
 
@@ -10,6 +10,8 @@ import styled from 'styled-components';
 
 import { saveResume } from '../actions/actions';
 
+import { useQuery, useMutation } from 'react-apollo-hooks';
+import gql from 'graphql-tag';
 import DraggableForm from './DraggableForm';
 import ResumeProfileFormElement from './ResumeProfileFormElement';
 

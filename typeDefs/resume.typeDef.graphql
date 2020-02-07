@@ -14,7 +14,6 @@ type ResumeProfile {
   number: String
   location: String
   link: String
-  position: Int!
 }
 
 type ResumeJob {
@@ -24,7 +23,6 @@ type ResumeJob {
   location: String
   start: String
   end: String
-  position: Int!
 }
 
 type ResumeSchool {
@@ -36,13 +34,11 @@ type ResumeSchool {
   gpa: String
   start: String
   end: String
-  position: Int!
 }
 
 type ResumeSkill {
   id: String
   name: String
-  position: Int!
 }
 
 type ResumeProject {
@@ -50,7 +46,6 @@ type ResumeProject {
   name: String
   description: String
   link: String
-  position: Int!
 }
 
 type ResumeAward {
@@ -59,7 +54,6 @@ type ResumeAward {
   date: String
   awarder: String
   summary: String
-  position: Int!
 }
 
 enum ResumeSectionsInput {
@@ -78,7 +72,6 @@ input ResumeProfileInput {
   number: String
   location: String
   link: String
-  position: Int!
 }
 
 input ResumeJobInput {
@@ -87,7 +80,6 @@ input ResumeJobInput {
   location: String
   start: String
   end: String
-  position: Int!
 }
 
 input ResumeSchoolInput {
@@ -98,19 +90,18 @@ input ResumeSchoolInput {
   gpa: String
   start: String
   end: String
-  position: Int!
 }
 
 input ResumeSkillInput {
   name: String
-  position: Int!
+  keywords: [String]
 }
 
 input ResumeProjectInput {
   name: String
   description: String
   link: String
-  position: Int!
+  keywords: [String]
 }
 
 input ResumeAwardInput {
@@ -118,15 +109,14 @@ input ResumeAwardInput {
   date: String
   awarder: String
   summary: String
-  position: Int!
 }
 
 input ResumeInput {
   sections: [ResumeSectionsInput!]!
   template: Int
   profile: ResumeProfileInput
-  jobs: [ResumeJobInput]
-  schools: [ResumeSchoolInput]
+  work: [ResumeJobInput]
+  education: [ResumeSchoolInput]
   skills: [ResumeSkillInput]
   projects: [ResumeProjectInput]
   awards: [ResumeAwardInput]
@@ -136,8 +126,8 @@ type Resume {
   sections: [ResumeSectionsInput]
   template: Int
   profile: ResumeProfile
-  jobs: [ResumeJob]
-  schools: [ResumeSchool]
+  work: [ResumeJob]
+  education: [ResumeSchool]
   skills: [ResumeSkill]
   projects: [ResumeProject]
   awards: [ResumeAward]

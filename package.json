@@ -32,7 +32,8 @@
     "passport": "*",
     "passport-azure-ad": "^4.2.1",
     "pg": "^7.18.1",
-    "short-uuid": "^3.1.1"
+    "short-uuid": "^3.1.1",
+    "sql-template-strings": "^2.2.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.0",

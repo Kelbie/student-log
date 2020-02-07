@@ -14,6 +14,8 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import { Link, Route, Switch, useRouteMatch, withRouter } from 'react-router-dom';
 
 import styled from 'styled-components';
+import { useMutation } from 'react-apollo-hooks';
+import gql from 'graphql-tag';
 
 import Button from './Button';
 import ResumeAwardsForm from './ResumeAwardsForm';
@@ -369,9 +371,40 @@ ResumeNav = styled(ResumeNav)`
   margin-right: 8px;
 `;
 
+const POST_RESUME = gql`
+  mutation updateResume($resume: ResumeInput) {
+    updateResume(resume: $resume) {
+      profile {
+        name
+      }
+    }
+  }
+`;
+
 function ResumePage(props) {
+  const [updateResume] = useMutation(POST_RESUME);
   const [showPDF, setShowPDF] = useState(false);
   let { path, url } = useRouteMatch();
+
+  // Get profile resume from store
+  const mapState = useCallback(
+    state => ({
+      resume: state.resume
+    }),
+    []
+  );
+
+  const { resume } = useMappedState(mapState);
+
+  useEffect(() => {
+    updateResume({
+      variables: {
+        resume: {
+          ...resume
+        }
+      }
+    });
+  }, [resume]);
 
   return (
     <div {...props}>
