@@ -2,7 +2,9 @@
 <p>
 </p>
 
-> Student Portal
+> Student Portal which allows users to build their CV, find jobs, find accommodation, view their timetable, and so much more!
+
+### 🏠 [Homepage](studentlog.io)
 
 ### ✨ [Demo](studentlog.io)
 
