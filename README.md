@@ -1,31 +1,62 @@
-# StudentLog
+<h1 align="center">Welcome to StudentLog 👋</h1>
+<p>
+</p>
 
-This is my application to be submitted in Clément Mihailescu competition: https://www.youtube.com/watch?v=KVyMIEwI7uw
+> Student Portal
 
-## Installation Instructions
+### ✨ [Demo](studentlog.io)
 
-### Install Resumake
+## Prerequisites
 
-```
-https://github.com/KevinKelbie/resumake.io # Use my forked version because we can't count on the authors to maintain compatibility
-cd resumake.io/app/server/
-yarn
-yarn run start
-```
+1. Node.js
+2. Yarn
+3. [XeTeX](https://tex.stackexchange.com/questions/179778/xelatex-under-ubuntu/179811#179811)
 
-> Available on port 3001
+## Install
 
-### Build Client
-
-```
-cd client
-yarn
-yarn run build
+```sh
+# /student-log
+yarn install
 ```
 
-### Start Server
+```sh
+# /student-log/client
+yarn install
+yarn build
+```
 
+```sh
+# /student-log
+git clone https://github.com/KevinKelbie/resumake.io
+cd resumake.io/app/server
+yarn install
 ```
-yarn
-yarn run start
+
+## Usage
+
+```sh
+# /student-log
+yarn start
 ```
+
+```sh
+# /student-log/resumake.io/app/server
+yarn start
+```
+
+<!-- ## Run tests
+
+```sh
+yarn run test
+``` -->
+
+## Author
+
+👤 **Kevin Kelbie**
+
+- Github: [@KevinKelbie](https://github.com/KevinKelbie)
+- LinkedIn: [@kelbie](https://linkedin.com/in/kelbie/)
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
