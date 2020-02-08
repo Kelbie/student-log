@@ -295,30 +295,34 @@ function ResumeNav(props) {
 
   console.log(sections, 109283);
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
+
   const [items, setItems] = useState([
     {
       id: 'item-3',
-      content: 'Education',
+      content: capitalizeFirstLetter(sections[2]),
       isFixed: false
     },
     {
       id: 'item-2',
-      content: 'Work',
+      content: capitalizeFirstLetter(sections[3]),
       isFixed: false
     },
     {
       id: 'item-5',
-      content: 'Projects',
+      content: capitalizeFirstLetter(sections[4]),
       isFixed: false
     },
     {
       id: 'item-4',
-      content: 'Skills',
+      content: capitalizeFirstLetter(sections[5]),
       isFixed: false
     },
     {
       id: 'item-6',
-      content: 'Awards',
+      content: capitalizeFirstLetter(sections[6]),
       isFixed: false
     }
   ]);
