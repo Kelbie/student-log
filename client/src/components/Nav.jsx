@@ -80,7 +80,7 @@ function Nav(props) {
         Work
       </Button>
       <Button
-        to="resume"
+        to="/resume"
         active={active === 'resume' ? 1 : 0}
         icon={faUser}
         onClick={() => {
