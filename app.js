@@ -204,6 +204,7 @@ server.express.get(
   function(req, res, next) {
     let redirect = req.query.redirect;
     let uni = req.query.uni;
+    console.log(uni);
     passport.authenticate('azuread-openidconnect', {
       response: res, // required
       // resourceURL: config.resourceURL, // optional. Provide a value if you want to specify the resource.
@@ -234,8 +235,7 @@ server.express.get(
   function(req, res, next) {
     passport.authenticate('azuread-openidconnect', {
       response: res, // required
-      failureRedirect: '/',
-      tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635'
+      failureRedirect: '/'
     })(req, res, next);
   },
   function(req, res) {
@@ -253,8 +253,7 @@ server.express.post(
   function(req, res, next) {
     passport.authenticate('azuread-openidconnect', {
       response: res, // required
-      failureRedirect: '/',
-      tenantIdOrName: '51a0a69c-0e4f-4b3d-b642-12e013198635'
+      failureRedirect: '/'
     })(req, res, next);
   },
   async function(req, res) {
