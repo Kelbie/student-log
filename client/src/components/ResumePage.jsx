@@ -26,6 +26,7 @@ import ResumeWorkFrom from './ResumeWorkForm';
 import ResumeTemplatesForm from './ResumeTemplatesForm';
 import ResumeSkillsForm from './ResumeSkillsForm';
 import DraggableForm from './DraggableForm';
+import Modal from './common/Modal';
 
 // fake data generator
 const getItems = count =>
@@ -249,20 +250,22 @@ function ResumePDF(props) {
   }, []);
 
   return (
-    <div
-      {...props}
-      onClick={() => {
-        props.showPDF(false);
-      }}
-    >
+    <div {...props}>
       <Document file={url}>
         <Page pageNumber={1} renderAnnotations={false} renderTextLayer={false} />
       </Document>
+      <div className="close" onClick={() => props.close()}></div>
     </div>
   );
 }
 
 ResumePDF = styled(ResumePDF)`
+  .close {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.75);
+    width: 100%;
+    height: 100%;
+  }
   position: fixed;
   z-index: 1;
   left: 0;
@@ -270,7 +273,6 @@ ResumePDF = styled(ResumePDF)`
   width: 100%;
   height: 100%;
   overflow: auto;
-  background: rgba(0, 0, 0, 0.75);
 
   canvas {
     max-width: 95vw;
@@ -413,7 +415,11 @@ function ResumePage(props) {
   return (
     <div {...props}>
       <ResumeNav showPDF={b => setShowPDF(b)} />
-      {showPDF ? <ResumePDF showPDF={b => setShowPDF(b)} /> : ''}
+      {showPDF ? (
+        <Modal handleClose={() => setShowPDF(false)}>
+          <ResumePDF close={() => setShowPDF(false)} />
+        </Modal>
+      ) : null}
       <Switch>
         <Route path={`${path}/templates`}>
           <ResumeTemplatesForm />

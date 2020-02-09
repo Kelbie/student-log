@@ -18,6 +18,7 @@ const mutations = gql`
     login: Profile
     setICSLink(ics_link: String): String
     updateResume(resume: ResumeInput): Resume
+    postJob(job: JobInput): Job
   }
 `;
 

@@ -25,7 +25,9 @@ const GET_JOB = gql`
       website
       email
       company_desc
-      bundle
+      company_id
+      location
+      created_at
     }
   }
 `;
@@ -46,14 +48,15 @@ function WorkPosting(props) {
     <div {...props}>
       <WorkElement
         id={'Company'.replace(' ', '-') + 'Title'.replace(' ', '-')}
-        logo={data.getJob.logo}
+        logo={data.getJob.company_id}
         job_type={data.getJob.job_type}
         title={data.getJob.job_title}
         company={data.getJob.name}
         type={data.getJob.job_type}
         featured={false}
         apply_link={data.getJob.apply_link}
-        date={moment(new Date()).add(1, 'days')}
+        location={data.getJob.location}
+        date={moment(new Date(parseInt(data.getJob.created_at)))}
       />
       <div className="job-desc">
         <Markdown source={data.getJob.job_desc} />
@@ -64,11 +67,17 @@ function WorkPosting(props) {
 
 WorkPosting = styled(WorkPosting)`
   ${Markdown} {
+    margin-left: 22px;
     * {
       color: ${props => (props.theme.is === 'dark' ? '#E0E0E0' : '#17171C')};
       font-family: Montserrat;
     }
-    ul {
+
+    > * {
+      margin-bottom: 8px;
+    }
+    ul,
+    ol {
       margin-left: 20px;
     }
   }

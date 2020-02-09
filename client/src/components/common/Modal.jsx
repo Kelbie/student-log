@@ -7,8 +7,8 @@ function Modal({ children, ...props }) {
   return (
     <div {...props}>
       {children}
-      <div className="gradient"></div>
-      <div className="pattern"></div>
+      <div className="gradient" onClick={() => props.handleClose()}></div>
+      <div className="pattern" onClick={() => props.handleClose()}></div>
     </div>
   );
 }

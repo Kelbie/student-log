@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 import styled, { ThemeProvider } from 'styled-components';
 
+import PostJobPage from './components/PostJobPage';
+
 import './styles.css';
 
 import TimetablePage from './components/TimetablePage';
@@ -45,9 +47,8 @@ function MyRouter(props) {
             <Route exact path="/settings" />
             <Route exact path="/work" component={WorkPage} />
             <Route exact path="/work/:id/:string" component={WorkPosting} />
-            <Route exact path="/job/new" />
+            <Route exact path="/job/new" component={PostJobPage} />
             <Route path="/resume" component={ResumePage} />
-            <Route path="/about" component={AboutPage} />
             <Route exact path="/about" component={AboutPage} />
             <Route exact path="/portal">
               <Modal>

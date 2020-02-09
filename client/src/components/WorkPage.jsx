@@ -8,13 +8,7 @@ import A from './A';
 import WorkElement2 from './WorkElement';
 import Button, { Button2 } from './Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearch,
-  faBriefcase,
-  faPlus,
-  faCheckSquare,
-  faCheck
-} from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlus, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 
 // GraphQL
 import gql from 'graphql-tag';
@@ -338,7 +332,9 @@ const GET_JOBS = gql`
       website
       email
       company_desc
-      bundle
+      company_id
+      location
+      created_at
     }
   }
 `;
@@ -350,7 +346,7 @@ function WorkPage(props) {
 
   const { data, error, loading } = useQuery(GET_JOBS, {
     variables: {
-      first: 20,
+      first: 100,
       offset: 0
     }
   });
@@ -433,16 +429,16 @@ function WorkPage(props) {
             return passCompanies && passType && passCategories;
           })
           .map((w, i) => {
-            console.log(333, w);
+            console.log(333, new Date(parseInt(w.created_at)));
             return (
               <WorkElement2
                 job_id={w.job_id}
-                logo={w.logo}
+                logo={w.company_id}
                 title={w.job_title}
                 company={w.name}
                 job_type={w.job_type}
-                featured={['good', 'better', 'best'].includes(w.bundle) ? true : false}
-                date={moment(new Date()).add(-i, 'days')}
+                location={w.location}
+                date={moment(new Date(parseInt(w.created_at)))}
               />
             );
           })}

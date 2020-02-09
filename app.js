@@ -171,7 +171,7 @@ server.express.use(
 
 server.express.use(passport.initialize());
 server.express.use(passport.session());
-server.express.use(express.static(__dirname + '/../../public'));
+server.express.use(express.static('public'));
 
 //-----------------------------------------------------------------------------
 // Set up the route controller
@@ -292,6 +292,13 @@ server.express.get('*', (req, res, next) => {
     // Return next() so that the GraphQLServer will handle it
     return next();
   }
+
+  console.log(req.url);
+  if (req.url.match(/\/logos\/([1-9A-HJ-NP-Za-km-z]{22}).[a-z]{3}/g)) {
+    console.log(123, path.join(__dirname + req.url));
+    res.sendFile(path.join(__dirname + req.url));
+  }
+
   res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 

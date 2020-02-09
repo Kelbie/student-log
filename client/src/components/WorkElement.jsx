@@ -30,7 +30,7 @@ function Class(props) {
       <div className="gradient" />
       <div className="top">
         <div className="photo-container">
-          <img src={''} />
+          <img src={`/logos/${props.logo}.png`} />
         </div>
         <div className="text">
           <div className="left">
@@ -42,6 +42,7 @@ function Class(props) {
             </A>
             <div className="company">{props.company}</div>
             <div className="module raise">
+              {props.apply_link ? `${props.location} • ` : null}
               {props.date.format('MMM DD')}
               {` • `}
               {props.job_type}
@@ -53,7 +54,7 @@ function Class(props) {
             </ButtonExternal>
           ) : (
             <div className="right">
-              <div>Aberdeen</div>
+              <div>{props.location}</div>
               <div className="new">
                 {props.date.add(3, 'days').isAfter(moment(new Date())) ? 'NEW' : ''}
               </div>
@@ -109,6 +110,7 @@ Class = styled(Class)`
   }
 
   .photo-container {
+    overflow: hidden;
     margin-left: -38px;
     width: 48px;
     height: 48px;
@@ -135,13 +137,6 @@ Class = styled(Class)`
 
     .left {
       padding-right: 8px;
-      border-right: 1px solid
-        ${props =>
-          !props.apply_link
-            ? props.theme.is === 'dark'
-              ? props.theme.PALLET['800']
-              : props.theme.PALLET['300']
-            : 'none'};
     }
 
     .right {

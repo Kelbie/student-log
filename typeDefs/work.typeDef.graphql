@@ -10,7 +10,7 @@ input JobInput {
   website: String
   email: String
   company_desc: String
-  bundle: String
+  location: String
 }
 
 type Job {
@@ -27,5 +27,7 @@ type Job {
   website: String
   email: String
   company_desc: String
-  bundle: String
+  company_id: String
+  location: String
+  created_at: String
 }

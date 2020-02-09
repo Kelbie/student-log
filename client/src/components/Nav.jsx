@@ -49,7 +49,7 @@ function Nav(props) {
   return (
     <div {...props}>
       <Button
-        to="/student-log"
+        to="/"
         number={1}
         active={active === 'student-log' ? 1 : 0}
         icon={faGraduationCap}
@@ -71,35 +71,6 @@ function Nav(props) {
       </Button>
       <Button
         to="/work"
-        active={active === 'discounts' ? 1 : 0}
-        icon={faDollarSign}
-        onClick={() => {
-          setActive('work');
-        }}
-      >
-        Student Discounts
-      </Button>
-      {data?.getProfile?.name ? (
-        <>
-          {/* <Button to="/profile" active={active === "profile" ? 1 : 0} icon={faUserCircle} onClick={() => {
-                    setActive("profile")
-                }}>Profile</Button> */}
-          <Button
-            to="/timetable"
-            active={active === 'timetable' ? 1 : 0}
-            icon={faCalendar}
-            onClick={() => {
-              setActive('timetable');
-            }}
-          >
-            Timetable
-          </Button>
-        </>
-      ) : (
-        ''
-      )}
-      <Button
-        to="/work"
         active={active === 'work' ? 1 : 0}
         icon={faBriefcase}
         onClick={() => {
@@ -107,30 +78,6 @@ function Nav(props) {
         }}
       >
         Work
-      </Button>
-      <Button
-        to="/events"
-        active={active === 'events' ? 1 : 0}
-        icon={faCalendarDay}
-        onClick={() => {
-          setActive('events');
-        }}
-      >
-        Events
-      </Button>
-
-      {/* <Button to="/forum" active={active === "forum" ? 1 : 0} icon={faComments} onClick={() => {
-            setActive("forum")
-        }}>Forum</Button> */}
-      <Button
-        to="/transport"
-        active={active === 'transport' ? 1 : 0}
-        icon={faBus}
-        onClick={() => {
-          setActive('transport');
-        }}
-      >
-        Transport
       </Button>
       <Button
         to="resume"
@@ -142,47 +89,6 @@ function Nav(props) {
       >
         Résumé
       </Button>
-      {/* <Button to="/library" active={active === "library" ? 1 : 0} icon={faBook} onClick={() => {
-            setActive("library")
-        }}>Library</Button> */}
-      {/* <Button to="/societies" active={active === "societies" ? 1 : 0} icon={faUserFriends} onClick={() => {
-            setActive("societies")
-        }}>Societies</Button> */}
-      {/* <Button to="/accommodation" active={active === "accommodation" ? 1 : 0} icon={faHome} onClick={() => {
-            setActive("accommodation")
-        }}>Accommodation</Button> */}
-      {/* <Button to="/eat" active={active === "eat" ? 1 : 0} icon={faUtensils} onClick={() => {
-            setActive("eats")
-        }}>Eat</Button> */}
-      {/* <Button to="/parking" active={active === "parking" ? 1 : 0} icon={faCar} onClick={() => {
-            setActive("parking")
-        }}>Parking</Button> */}
-      {data?.getProfile?.name ? (
-        <>
-          <Button
-            to="/notifications"
-            active={active === 'notifications' ? 1 : 0}
-            icon={faBell}
-            onClick={() => {
-              setActive('notifications');
-            }}
-          >
-            Notifications
-          </Button>
-          <Button
-            to="/settings"
-            active={active === 'settings' ? 1 : 0}
-            icon={faCog}
-            onClick={() => {
-              setActive('settings');
-            }}
-          >
-            Settings
-          </Button>
-        </>
-      ) : (
-        ''
-      )}
       {data?.getProfile?.name ? (
         <Button
           icon={faSignOutAlt}

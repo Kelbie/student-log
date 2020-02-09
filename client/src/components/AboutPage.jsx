@@ -49,6 +49,7 @@ function AboutPage(props) {
         <li>React</li>
         <li>Redux</li>
         <li>Styled Components</li>
+        <li>Font Awesome</li>
         <li>
           <A to="https://tailwindcss.com/docs/customizing-colors/">Tailwind.css Colour Guide</A>
         </li>
