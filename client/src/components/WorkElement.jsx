@@ -35,7 +35,11 @@ function Class(props) {
         <div className="text">
           <div className="left">
             <A
-              to={`/work/${props.job_id}/${getSlug(props.title + ' ' + props.company)}`}
+              to={
+                props.apply_link
+                  ? null
+                  : `/work/${props.job_id}/${getSlug(props.title + ' ' + props.company)}`
+              }
               className="title"
             >
               {props.title}
