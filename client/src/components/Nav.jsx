@@ -49,7 +49,7 @@ function Nav(props) {
   return (
     <div {...props}>
       <Button
-        to="/"
+        to="/work"
         number={1}
         active={active === 'student-log' ? 1 : 0}
         icon={faGraduationCap}
