@@ -26,7 +26,7 @@ import ResumeWorkFrom from './ResumeWorkForm';
 import ResumeTemplatesForm from './ResumeTemplatesForm';
 import ResumeSkillsForm from './ResumeSkillsForm';
 import DraggableForm from './DraggableForm';
-import Modal from './common/Modal';
+import Modal from 'react-modal';
 
 // fake data generator
 const getItems = count =>
@@ -137,116 +137,120 @@ function ResumePDF(props) {
 
   const [url, setUrl] = useState('');
 
-  useEffect(async () => {
-    let data = resume;
+  useEffect(() => {
+    async function hydrate() {
+      let data = resume;
 
-    // Profile Map
-    data = _.mapKeys(data, function(value, key) {
-      switch (key) {
-        case 'profile':
-          return 'basics';
-        case 'template':
-          return 'selectedTemplate';
-        default:
-          return key;
-      }
-    });
-
-    // Awards Map
-    data.awards = data.awards.map(award => {
-      return _.mapKeys(award, function(value, key) {
+      // Profile Map
+      data = _.mapKeys(data, function(value, key) {
         switch (key) {
-          case 'name':
-            return 'title';
+          case 'profile':
+            return 'basics';
+          case 'template':
+            return 'selectedTemplate';
           default:
             return key;
         }
       });
-    });
 
-    // Education Map
-    data.education = data.education.map(education => {
-      return _.mapKeys(education, function(value, key) {
-        switch (key) {
-          case 'name':
-            return 'institution';
-          case 'degree':
-            return 'studyType';
-          case 'major':
-            return 'area';
-          case 'start':
-            return 'startDate';
-          case 'end':
-            return 'endDate';
-          default:
-            return key;
-        }
+      // Awards Map
+      data.awards = data.awards.map(award => {
+        return _.mapKeys(award, function(value, key) {
+          switch (key) {
+            case 'name':
+              return 'title';
+            default:
+              return key;
+          }
+        });
       });
-    });
 
-    // Projects Map
-    data.projects = data.projects.map(project => {
-      return _.mapKeys(project, function(value, key) {
+      // Education Map
+      data.education = data.education.map(education => {
+        return _.mapKeys(education, function(value, key) {
+          switch (key) {
+            case 'name':
+              return 'institution';
+            case 'degree':
+              return 'studyType';
+            case 'major':
+              return 'area';
+            case 'start':
+              return 'startDate';
+            case 'end':
+              return 'endDate';
+            default:
+              return key;
+          }
+        });
+      });
+
+      // Projects Map
+      data.projects = data.projects.map(project => {
+        return _.mapKeys(project, function(value, key) {
+          switch (key) {
+            case 'link':
+              return 'url';
+            default:
+              return key;
+          }
+        });
+      });
+
+      // Work Map
+      data.work = data.work.map(work => {
+        return _.mapKeys(work, function(value, key) {
+          switch (key) {
+            case 'name':
+              return 'company';
+            case 'end':
+              return 'endDate';
+            case 'start':
+              return 'startDate';
+            case 'title':
+              return 'position';
+            default:
+              return key;
+          }
+        });
+      });
+
+      // Profile Map
+      data.basics = _.mapKeys(data.basics, function(value, key) {
         switch (key) {
+          case 'number':
+            return 'phone';
           case 'link':
-            return 'url';
+            return 'website';
           default:
             return key;
         }
       });
-    });
 
-    // Work Map
-    data.work = data.work.map(work => {
-      return _.mapKeys(work, function(value, key) {
-        switch (key) {
-          case 'name':
-            return 'company';
-          case 'end':
-            return 'endDate';
-          case 'start':
-            return 'startDate';
-          case 'title':
-            return 'position';
-          default:
-            return key;
-        }
+      data.basics.location = {
+        address: data.basics.location
+      };
+
+      data.sections = data.sections.map(section => {
+        return section.toLowerCase();
       });
-    });
 
-    // Profile Map
-    data.basics = _.mapKeys(data.basics, function(value, key) {
-      switch (key) {
-        case 'number':
-          return 'phone';
-        case 'link':
-          return 'website';
-        default:
-          return key;
-      }
-    });
+      const request = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/pdf',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      };
 
-    data.basics.location = {
-      address: data.basics.location
-    };
+      const response = await fetch('/api/generate/resume', request);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setUrl(url);
+    }
 
-    data.sections = data.sections.map(section => {
-      return section.toLowerCase();
-    });
-
-    const request = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/pdf',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    };
-
-    const response = await fetch('/api/generate/resume', request);
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    setUrl(url);
+    hydrate();
   }, []);
 
   return (
@@ -254,23 +258,12 @@ function ResumePDF(props) {
       <Document file={url}>
         <Page pageNumber={1} renderAnnotations={false} renderTextLayer={false} />
       </Document>
-      <div className="close" onClick={() => props.close()}></div>
     </div>
   );
 }
 
 ResumePDF = styled(ResumePDF)`
-  .close {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.75);
-    width: 100%;
-    height: 100%;
-  }
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
+  /* width: 100%;
   height: 100%;
   overflow: auto;
 
@@ -280,7 +273,7 @@ ResumePDF = styled(ResumePDF)`
     margin: auto;
     margin-top: 64px;
     box-shadow: 0px 0px 25px 1px rgba(0, 0, 0, 0.1);
-  }
+  } */
 `;
 
 function ResumeNav(props) {
@@ -387,6 +380,8 @@ const POST_RESUME = gql`
   }
 `;
 
+const customStyles = {};
+
 function ResumePage(props) {
   const [updateResume] = useMutation(POST_RESUME);
   const [showPDF, setShowPDF] = useState(false);
@@ -412,14 +407,14 @@ function ResumePage(props) {
     });
   }, [resume]);
 
+  const [modelIsOpen, setModelIsOpen] = useState(false);
+
   return (
     <div {...props}>
       <ResumeNav showPDF={b => setShowPDF(b)} />
-      {showPDF ? (
-        <Modal handleClose={() => setShowPDF(false)}>
-          <ResumePDF close={() => setShowPDF(false)} />
-        </Modal>
-      ) : null}
+      <Modal contentLabel="Example Modal" isOpen={showPDF} onRequestClose={() => setShowPDF(false)}>
+        <ResumePDF />
+      </Modal>
       <Switch>
         <Route path={`${path}/templates`}>
           <ResumeTemplatesForm />

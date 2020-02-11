@@ -33,6 +33,7 @@
     "react-geosuggest": "^2.12.1",
     "react-hook-form": "^4.4.6",
     "react-markdown": "^4.3.1",
+    "react-modal": "^3.11.1",
     "react-pdf": "^5.0.0-beta",
     "react-router-dom": "^5.1.2",
     "react-rte": "^0.16.1",

@@ -140,6 +140,7 @@ ThemePicker = styled(withTheme(ThemePicker))`
   input {
     visibility: hidden;
     position: absolute;
+    display: inline-block;
   }
 `;
 
