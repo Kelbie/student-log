@@ -14,8 +14,27 @@ function Login(props) {
       <Label required>Educational Institution</Label>
       <Dropdown
         options={[
-          { label: 'Robert Gordon University', value: 'RGU' },
-          { label: 'University of Aberdeen', value: 'UoA' }
+          { label: 'Robert Gordon University', value: 'rgu.ac.uk' },
+          { label: 'University of Aberdeen', value: 'abdn.ac.uk' },
+          { label: 'The University of Edinburgh', value: 'ed.ac.uk' },
+          { label: 'North East Scotland College', value: 'nescol.ac.uk' },
+          { label: 'University of Glasgow', value: 'gla.ac.uk' },
+          { label: 'University of Strathclyde', value: 'strath.ac.uk' },
+          { label: 'Harvard University', value: 'harvard.edu' },
+          { label: 'University of Oxford', value: 'ox.ac.uk' },
+          { label: 'University of Cambridge', value: 'cam.ac.uk' },
+          { label: 'University of St Andrews', value: 'st-andrews.ac.uk' },
+          { label: 'University of the West of Scotland', value: 'uws.ac.uk' },
+          { label: 'Heriot Watt University', value: 'hw.ac.uk' },
+          { label: 'University of Pennsylvania', value: 'upenn.edu' },
+          { label: 'Cornell University', value: 'cornell.edu' },
+          { label: 'McGill University', value: 'mcgill.ca' },
+          { label: 'Glasgow Caledonian University', value: 'gcu.ac.uk' },
+          { label: 'University of Stirling', value: 'stir.ac.uk' },
+          { label: 'University of Dundee', value: 'dundee.ac.uk' },
+          { label: 'Edinburgh Napier University', value: 'napier.ac.uk' },
+          { label: 'Glasgow School of Art', value: 'gsa.ac.uk' },
+          { label: '', value: 'rcs.ac.uk' }
         ]}
         onChange={({ value }) => {
           setUni(value);
