@@ -85,7 +85,7 @@ function EducationForm(props) {
   );
 
   // Form config
-  const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
+  const { register, handleSubmit, watch, errors, triggerValidation, reset } = useForm({
     defaultValues: {
       education
     }
@@ -144,6 +144,7 @@ function EducationForm(props) {
                     triggerValidation={triggerValidation}
                     delete={() => {
                       del(item.id);
+                      reset();
                     }}
                     errors={errors}
                   />

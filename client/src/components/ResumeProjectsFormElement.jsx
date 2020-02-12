@@ -110,7 +110,9 @@ function FormElement({ handle, register, editable, errors, ...props }) {
           <EditDropdownButton icon={faEdit} onClick={() => setIsEditable(!isEditable)}>
             Edit
           </EditDropdownButton>
-          <EditDropdownButton icon={faTrash}>Delete</EditDropdownButton>
+          <EditDropdownButton icon={faTrash} onClick={() => props.delete()}>
+            Delete
+          </EditDropdownButton>
         </EditDropdown>
       ) : null}
     </div>

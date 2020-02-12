@@ -84,7 +84,7 @@ function AwardsForm(props) {
   );
 
   // Form config
-  const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
+  const { register, handleSubmit, watch, errors, triggerValidation, reset } = useForm({
     defaultValues: {
       awards
     }
@@ -143,6 +143,7 @@ function AwardsForm(props) {
                     triggerValidation={triggerValidation}
                     delete={() => {
                       del(item.id);
+                      reset();
                     }}
                     errors={errors}
                   />

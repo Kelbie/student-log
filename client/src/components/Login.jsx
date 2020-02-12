@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Dropdown from './common/Dropdown';
 import Label from './common/Label';
-import Button from './Button';
+import Button from './common/Button';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { withRouter } from 'react-router-dom';
 

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import A from './common/A';
 import WorkElement2 from './WorkElement';
-import Button, { Button2 } from './Button';
+import Button, { Button2 } from './common/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 
