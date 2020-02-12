@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
-import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { faFilePdf, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import move from 'lodash-move';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { saveResume } from '../actions/actions';
@@ -27,6 +27,7 @@ import ResumeTemplatesForm from './ResumeTemplatesForm';
 import ResumeSkillsForm from './ResumeSkillsForm';
 import DraggableForm from './DraggableForm';
 import Modal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // fake data generator
 const getItems = count =>
@@ -135,6 +136,8 @@ function ResumePDF(props) {
 
   const { resume } = useMappedState(mapState);
 
+  const [pages, setPages] = useState(null);
+  const [page, setPage] = useState(1);
   const [url, setUrl] = useState('');
 
   useEffect(() => {
@@ -255,25 +258,35 @@ function ResumePDF(props) {
 
   return (
     <div {...props}>
-      <Document file={url}>
-        <Page pageNumber={1} renderAnnotations={false} renderTextLayer={false} />
+      <ResumePDFNav></ResumePDFNav>
+      <Document file={url} onLoadSuccess={e => setPages(e.numPages)}>
+        <Page pageNumber={page} renderAnnotations={false} renderTextLayer={false} />
       </Document>
     </div>
   );
 }
 
 ResumePDF = styled(ResumePDF)`
-  /* width: 100%;
+  width: 100%;
   height: 100%;
   overflow: auto;
 
+  .react-pdf__Document,
+  .react-pdf__Page {
+    height: 100%;
+  }
+
   canvas {
-    max-width: 95vw;
-    height: auto !important;
+    height: 100% !important;
+    width: auto !important;
+    max-width: 100%;
     margin: auto;
-    margin-top: 64px;
-    box-shadow: 0px 0px 25px 1px rgba(0, 0, 0, 0.1);
-  } */
+  }
+
+  canvas + div {
+    height: auto;
+    width: auto;
+  }
 `;
 
 function ResumeNav(props) {
@@ -370,6 +383,17 @@ ResumeNav = styled(ResumeNav)`
   margin-right: 8px;
 `;
 
+function ResumePDFNav(props) {
+  return (
+    <div {...props}>
+      <div>
+        <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
+        Page 1<FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
+      </div>
+    </div>
+  );
+}
+
 const POST_RESUME = gql`
   mutation updateResume($resume: ResumeInput) {
     updateResume(resume: $resume) {
@@ -443,6 +467,11 @@ function ResumePage(props) {
 }
 
 export default styled(withRouter(ResumePage))`
+  .ReactModal__Content,
+  .ReactModal__Content--after-open {
+    padding: 0px !important;
+  }
+
   display: flex;
 
   > *:last-child {
