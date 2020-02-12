@@ -34,7 +34,7 @@ function Login(props) {
           { label: 'University of Dundee', value: 'dundee.ac.uk' },
           { label: 'Edinburgh Napier University', value: 'napier.ac.uk' },
           { label: 'Glasgow School of Art', value: 'gsa.ac.uk' },
-          { label: '', value: 'rcs.ac.uk' }
+          { label: 'Royal Conservatoire of Scotland', value: 'rcs.ac.uk' }
         ]}
         onChange={({ value }) => {
           setUni(value);
