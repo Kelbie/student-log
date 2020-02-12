@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 
-import EditDropdown from './EditDropdown';
+import EditDropdown, { EditDropdownButton } from './EditDropdown';
 import Button, { Button2 } from './Button';
 import Input from './Input';
 import Label from './common/Label';
@@ -122,15 +122,12 @@ function FormElement({ handle, register, editable, errors, ...props }) {
         </div>
       </div>
       {!isEditable ? (
-        <div
-          className="edit"
-          onClick={() => {
-            setEditDropdownActive(!editDropdownActive);
-          }}
-        >
-          <FontAwesomeIcon icon={faEllipsisV} />
-          {editDropdownActive ? <EditDropdown setIsEditable={setIsEditable}></EditDropdown> : null}
-        </div>
+        <EditDropdown>
+          <EditDropdownButton icon={faEdit} onClick={() => setIsEditable(!isEditable)}>
+            Edit
+          </EditDropdownButton>
+          <EditDropdownButton icon={faTrash}>Delete</EditDropdownButton>
+        </EditDropdown>
       ) : null}
     </div>
   );

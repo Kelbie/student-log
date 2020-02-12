@@ -55,56 +55,56 @@ function TemplatesForm(props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} {...props}>
       <div>
-        <img src={template1} alt="" />
         <input ref={register} type="radio" name="template" id="template1" value="1" />
+        <img src={template1} alt="" />
         <label htmlFor="template1"></label>
       </div>
 
       <div>
-        <img src={template2} alt="" />
         <input ref={register} type="radio" name="template" id="template2" value="2" />
+        <img src={template2} alt="" />
         <label htmlFor="template2"></label>
       </div>
 
       <div>
-        <img src={template3} alt="" />
         <input ref={register} type="radio" name="template" id="template3" value="3" />
+        <img src={template3} alt="" />
         <label htmlFor="template3"></label>
       </div>
 
       <div>
-        <img src={template4} alt="" />
         <input ref={register} type="radio" name="template" id="template4" value="4" />
+        <img src={template4} alt="" />
         <label htmlFor="template4"></label>
       </div>
 
       <div>
-        <img src={template5} alt="" />
         <input ref={register} type="radio" name="template" id="template5" value="5" />
+        <img src={template5} alt="" />
         <label htmlFor="template5"></label>
       </div>
 
       <div>
-        <img src={template6} alt="" />
         <input ref={register} type="radio" name="template" id="template6" value="6" />
+        <img src={template6} alt="" />
         <label htmlFor="template6"></label>
       </div>
 
       <div>
-        <img src={template7} alt="" />
         <input ref={register} type="radio" name="template" id="template7" value="7" />
+        <img src={template7} alt="" />
         <label htmlFor="template7"></label>
       </div>
 
       <div>
-        <img src={template8} alt="" />
         <input ref={register} type="radio" name="template" id="template8" value="8" />
+        <img src={template8} alt="" />
         <label htmlFor="template8"></label>
       </div>
 
       <div>
-        <img src={template9} alt="" />
         <input ref={register} type="radio" name="template" id="template9" value="9" />
+        <img src={template9} alt="" />
         <label htmlFor="template9"></label>
       </div>
     </form>
@@ -131,6 +131,7 @@ export default styled(TemplatesForm)`
   img {
     width: 100%;
     border-radius: 4px;
+    opacity: 0.5;
   }
 
   div {
@@ -145,5 +146,9 @@ export default styled(TemplatesForm)`
     height: 100%;
 
     cursor: pointer;
+  }
+
+  input:checked ~ img {
+    opacity: 1;
   }
 `;
