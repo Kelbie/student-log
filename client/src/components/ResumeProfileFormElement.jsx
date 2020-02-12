@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styled from 'styled-components';
 
-import Button, { Button2 } from './Button';
+import Button, { Button2 } from './common/Button';
 import EditDropdown from './EditDropdown';
-import Input from './Input';
+import Input from './common/Input';
 import Label from './common/Label';
 
 function isEmpty(obj) {

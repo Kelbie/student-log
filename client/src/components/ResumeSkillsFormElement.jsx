@@ -11,8 +11,8 @@ import { faEllipsisV, faPlus, faTrash, faSave, faEdit } from '@fortawesome/free-
 
 import DraggableForm from './DraggableForm';
 import EditDropdown, { EditDropdownButton } from './EditDropdown';
-import Input from './Input';
-import Button, { Button2 } from './Button';
+import Input from './common/Input';
+import Button, { Button2 } from './common/Button';
 import Label from './common/Label';
 
 function isEmpty(obj) {

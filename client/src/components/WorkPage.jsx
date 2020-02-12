@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import styled from 'styled-components';
 
-import A from './A';
+import A from './common/A';
 import WorkElement2 from './WorkElement';
 import Button, { Button2 } from './Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

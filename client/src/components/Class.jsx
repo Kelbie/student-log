@@ -7,7 +7,7 @@ import date from 'date-and-time';
 import ImageMask from './ImageMask';
 import { rgba } from 'polished';
 
-import A from './A';
+import A from './common/A';
 
 function Placeholder(props) {
   return (

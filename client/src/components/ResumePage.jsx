@@ -17,7 +17,7 @@ import styled from 'styled-components';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 
-import Button from './Button';
+import Button from './common/Button';
 import ResumeAwardsForm from './ResumeAwardsForm';
 import ResumeEducationFrom from './ResumeEducationForm';
 import ResumeProfileForm from './ResumeProfileForm';

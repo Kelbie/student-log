@@ -20,7 +20,7 @@ import {
 
 import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
 
-import Button, { Button2, ButtonLink2 } from './Button';
+import Button, { Button2, ButtonLink2 } from './common/Button';
 
 // GraphQL
 import gql from 'graphql-tag';

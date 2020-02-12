@@ -15,7 +15,7 @@ import { rgba } from 'polished';
 
 import moment from 'moment';
 
-import { Button2 } from './Button';
+import { Button2 } from './common/Button';
 
 import Geosuggest from 'react-geosuggest';
 import gql from 'graphql-tag';

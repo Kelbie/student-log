@@ -5,7 +5,7 @@ import { desaturate } from 'polished';
 
 import date from 'date-and-time';
 
-import Button from './Button';
+import Button from './common/Button';
 
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/initialize';

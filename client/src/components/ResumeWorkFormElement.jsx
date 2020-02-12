@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import EditDropdown, { EditDropdownButton } from './EditDropdown';
-import Button, { Button2 } from './Button';
-import Input from './Input';
+import Button, { Button2 } from './common/Button';
+import Input from './common/Input';
 import Label from './common/Label';
 
 function isEmpty(obj) {

@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { rgba } from 'polished';
 import styled from 'styled-components';
 
-import Button, { Button2 } from './Button';
+import Button, { Button2 } from './common/Button';
 import EditDropdown, { EditDropdownButton } from './EditDropdown';
 import { useDispatch } from 'redux-react-hook';
 import { saveResume } from '../actions/actions';

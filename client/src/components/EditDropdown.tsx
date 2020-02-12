@@ -3,7 +3,7 @@ import React, { useState, ReactElement, ReactNode } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import Button from './Button';
+import Button from './common/Button';
 
 interface IProps {
   children: ReactNode;

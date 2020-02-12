@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import A from './A';
+import A from './common/A';
 
 function AboutPage(props) {
   return (

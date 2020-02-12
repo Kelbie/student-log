@@ -11,7 +11,7 @@ import styled from 'styled-components';
 
 import { saveResume } from '../actions/actions';
 
-import Button from './Button';
+import Button from './common/Button';
 import DraggableForm from './DraggableForm';
 import ResumeAwardsFormElement from './ResumeAwardsFormElement';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';

@@ -12,7 +12,7 @@ import styled from 'styled-components';
 
 import { saveResume } from '../actions/actions';
 
-import Button, { Button2 } from './Button';
+import Button, { Button2 } from './common/Button';
 import DraggableForm from './DraggableForm';
 import ResumeEducationFormElement from './ResumeEducationFormElement';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';

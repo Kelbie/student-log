@@ -5,10 +5,10 @@ import styled, { withTheme } from 'styled-components';
 import getSlug from 'speakingurl';
 
 import ImageMask from './ImageMask';
-import A from './A';
+import A from './common/A';
 
 import moment from 'moment';
-import { ButtonExternal } from './Button';
+import { ButtonExternal } from './common/Button';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Placeholder(props) {
