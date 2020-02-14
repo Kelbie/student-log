@@ -477,11 +477,6 @@ function ResumePage(props) {
 }
 
 export default styled(withRouter(ResumePage))`
-  .ReactModal__Content,
-  .ReactModal__Content--after-open {
-    padding: 0px !important;
-  }
-
   display: flex;
 
   > *:last-child {

@@ -24,6 +24,7 @@ import {
 import _ from 'lodash';
 
 import './style.scss';
+import LinkRefactor from './common/LinkRefactor';
 
 function WorkElement(props) {
   return (
@@ -377,10 +378,10 @@ function WorkPage(props) {
     <div {...props}>
       <Filter />
       {/* <Search /> */}
-      <Button variant={'fill'} to="/job/new" icon={faPlus}>
-        Post Job
-      </Button>
       <div className="list">
+        <LinkRefactor variant={'fill'} to="/job/new" icon={faPlus}>
+          Post Job
+        </LinkRefactor>
         <div className="search-results">{data.getWork.length} results</div>
         {data.getWork
           .filter(function(w) {

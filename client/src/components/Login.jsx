@@ -5,6 +5,7 @@ import Label from './common/Label';
 import Button from './common/Button';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { withRouter } from 'react-router-dom';
+import ButtonRefactor from './common/ButtonRefactor';
 
 function Login(props) {
   const [uni, setUni] = useState('');
@@ -65,13 +66,13 @@ function Login(props) {
         value={''}
         placeholder=""
       /> */}
-      <Button
+      <ButtonRefactor
         icon={faSignInAlt}
         variant={'fill'}
         onClick={() => (window.location.href = `/login?uni=${uni}&redirect=/`)}
       >
         Student Login
-      </Button>
+      </ButtonRefactor>
     </fieldset>
   );
 }
@@ -81,8 +82,6 @@ export default styled(withRouter(Login))`
 
   padding: 16px;
   border-radius: 4px;
-  display: flex;
-  flex-direction: column;
   border: none;
   margin-bottom: 16px;
 

@@ -25,6 +25,8 @@ import Button, { Button2, ButtonLink2 } from './common/Button';
 // GraphQL
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from 'react-apollo-hooks';
+import LinkRefactor from './common/LinkRefactor';
+import ButtonRefactor from './common/ButtonRefactor';
 
 const GET_PROFILE = gql`
   query {
@@ -48,17 +50,15 @@ function Nav(props) {
 
   return (
     <div {...props}>
-      <Button
+      <LinkRefactor
         to="/work"
-        number={1}
-        active={active === 'student-log' ? 1 : 0}
         icon={faGraduationCap}
         onClick={() => {
-          setActive('student-log');
+          setActive('work');
         }}
       >
         {/* <span className="student">STUDENT</span><span className="log">LOG</span> */}
-      </Button>
+      </LinkRefactor>
       {/* <Button
         to="/about"
         active={active === 'about' ? 1 : 0}
@@ -69,7 +69,7 @@ function Nav(props) {
       >
         About
       </Button> */}
-      <Button
+      <LinkRefactor
         to="/work"
         active={active === 'work' ? 1 : 0}
         icon={faBriefcase}
@@ -78,8 +78,8 @@ function Nav(props) {
         }}
       >
         Work
-      </Button>
-      <Button
+      </LinkRefactor>
+      <LinkRefactor
         to="/resume"
         active={active === 'resume' ? 1 : 0}
         icon={faUser}
@@ -88,19 +88,19 @@ function Nav(props) {
         }}
       >
         Résumé
-      </Button>
+      </LinkRefactor>
       {data?.getProfile?.name ? (
-        <Button
+        <ButtonRefactor
           icon={faSignOutAlt}
           variant={'fill'}
           onClick={() => (window.location.href = `/logout?redirect=${props.location.pathname}`)}
         >
           Logout
-        </Button>
+        </ButtonRefactor>
       ) : (
-        <Button to={'/portal'} icon={faSignInAlt} variant={'fill'}>
+        <LinkRefactor to={'/portal'} icon={faSignInAlt} variant={'fill'}>
           Student Login
-        </Button>
+        </LinkRefactor>
       )}
       {/* <p>created by Kevin Kelbie</p> */}
     </div>
