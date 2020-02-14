@@ -16,6 +16,7 @@ import Button, { Button2 } from './common/Button';
 import DraggableForm from './DraggableForm';
 import ResumeEducationFormElement from './ResumeEducationFormElement';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import ButtonRefactor from './common/ButtonRefactor';
 
 // fake data generator
 const getItems = count =>
@@ -154,9 +155,9 @@ function EducationForm(props) {
           );
         })}
       </DraggableForm>
-      <Button
+      <ButtonRefactor
         icon={faPlus}
-        variant={'fill'}
+        variant={'border'}
         onClick={() => {
           setItems([
             ...items,
@@ -170,7 +171,7 @@ function EducationForm(props) {
         }}
       >
         Add School
-      </Button>
+      </ButtonRefactor>
     </form>
   );
 }

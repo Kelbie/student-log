@@ -157,7 +157,7 @@ function Header(props) {
         <span className="log">LOG</span>
       </h1>
       <div>
-        <Switch
+        {/* <Switch
           height={20}
           width={40}
           offColor={props.theme.SECONDARY_COLOR}
@@ -169,7 +169,7 @@ function Header(props) {
           checked={checked}
           checkedIcon={<FontAwesomeIcon icon={faMoon} />}
           uncheckedIcon={<FontAwesomeIcon icon={faSun} />}
-        />
+        /> */}
         <ThemePicker />
       </div>
     </div>
@@ -188,6 +188,7 @@ Header = styled(Header)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: auto !important;
 
   ${Switch} {
     cursor: pointer;

@@ -9,6 +9,7 @@ import Button, { Button2 } from './common/Button';
 import EditDropdown from './EditDropdown';
 import Input from './common/Input';
 import Label from './common/Label';
+import ButtonRefactor from './common/ButtonRefactor';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -54,7 +55,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
           />
 
           <div type="submit" className="buttons">
-            <Button
+            <ButtonRefactor
               icon={faSave}
               variant={'fill'}
               onClick={async () => {
@@ -62,7 +63,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
               }}
             >
               Save
-            </Button>
+            </ButtonRefactor>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -118,6 +119,7 @@ export default styled(FormElement)`
 
       .buttons {
         display: flex;
+        justify-content: flex-end;
         margin-top: 8px;
 
         ${Button2}:first-child {

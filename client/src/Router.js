@@ -28,6 +28,8 @@ import ResumePage from './components/ResumePage';
 import AboutPage from './components/AboutPage';
 import Login from './components/Login';
 import Modal from './components/common/Modal';
+import ButtonRefactor from './components/common/ButtonRefactor';
+import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
 
 const client = new ApolloClient({
   uri: 'http://localhost:30662/graphql'
@@ -52,7 +54,15 @@ function MyRouter(props) {
             <Route exact path="/about" component={AboutPage} />
             <Route exact path="/portal">
               <Modal>
-                <Login></Login>
+                <div>
+                  <ButtonRefactor icon={faUserEdit}>Refactor</ButtonRefactor>
+                  <ButtonRefactor variant="fill" icon={faUserEdit}>
+                    Refactor
+                  </ButtonRefactor>
+                  <ButtonRefactor variant="border" icon={faUserEdit}>
+                    Refactor
+                  </ButtonRefactor>
+                </div>
               </Modal>
             </Route>
           </Switch>

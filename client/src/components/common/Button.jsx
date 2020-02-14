@@ -65,10 +65,6 @@ Button = styled(Button)`
       );
     }
 
-    &.outline {
-      border: 1px solid props.theme.PRIMARY_COLOR;
-    }
-
     transition: 0.15s ease 0s;
     * {
       transition: 0.15s ease 0s;
@@ -209,10 +205,6 @@ ButtonExternalComponent = styled(ButtonExternalComponent)`
         ${props => props.theme.PRIMARY_COLOR},
         ${props => darken(0.1, props.theme.PRIMARY_COLOR)}
       );
-    }
-
-    &.outline {
-      border: 1px solid props.theme.PRIMARY_COLOR;
     }
 
     transition: 0.15s ease 0s;

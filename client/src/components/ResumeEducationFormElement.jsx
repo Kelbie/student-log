@@ -8,6 +8,7 @@ import styled from 'styled-components';
 
 import Button, { Button2 } from './common/Button';
 import EditDropdown, { EditDropdownButton } from './EditDropdown';
+import ButtonRefactor from './common/ButtonRefactor';
 
 function FormElement({ handle, content, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
@@ -84,16 +85,16 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
           />
 
           <div className="buttons">
-            <Button
+            <ButtonRefactor
               icon={faTrash}
               onClick={async () => {
                 props.delete();
               }}
             >
               Delete
-            </Button>
+            </ButtonRefactor>
 
-            <Button
+            <ButtonRefactor
               icon={faSave}
               variant={'fill'}
               type="submit"
@@ -105,7 +106,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
               }}
             >
               Save
-            </Button>
+            </ButtonRefactor>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -183,6 +184,7 @@ export default styled(FormElement)`
 
       .buttons {
         display: flex;
+        justify-content: flex-end;
         margin-top: 8px;
 
         ${Button2}:first-child {

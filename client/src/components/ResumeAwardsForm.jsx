@@ -15,6 +15,7 @@ import Button from './common/Button';
 import DraggableForm from './DraggableForm';
 import ResumeAwardsFormElement from './ResumeAwardsFormElement';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import ButtonRefactor from './common/ButtonRefactor';
 
 // fake data generator
 const getItems = count =>
@@ -153,9 +154,9 @@ function AwardsForm(props) {
           );
         })}
       </DraggableForm>
-      <Button
+      <ButtonRefactor
+        variant="border"
         icon={faPlus}
-        variant={'fill'}
         onClick={() => {
           setItems([
             ...items,
@@ -169,7 +170,7 @@ function AwardsForm(props) {
         }}
       >
         Add Award
-      </Button>
+      </ButtonRefactor>
     </form>
   );
 }

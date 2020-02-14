@@ -59,7 +59,7 @@ function Nav(props) {
       >
         {/* <span className="student">STUDENT</span><span className="log">LOG</span> */}
       </Button>
-      <Button
+      {/* <Button
         to="/about"
         active={active === 'about' ? 1 : 0}
         icon={faInfoCircle}
@@ -68,7 +68,7 @@ function Nav(props) {
         }}
       >
         About
-      </Button>
+      </Button> */}
       <Button
         to="/work"
         active={active === 'work' ? 1 : 0}

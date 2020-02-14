@@ -14,6 +14,7 @@ import EditDropdown, { EditDropdownButton } from './EditDropdown';
 import Input from './common/Input';
 import Button, { Button2 } from './common/Button';
 import Label from './common/Label';
+import ButtonRefactor from './common/ButtonRefactor';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -128,9 +129,9 @@ function FormElement({ handle, register, editable, errors, ...props }) {
                 );
               })}
             </DraggableForm>
-            <Button
+            <ButtonRefactor
               icon={faPlus}
-              variant={'outline'}
+              variant={'border'}
               onClick={() => {
                 setItems([
                   ...items,
@@ -141,20 +142,20 @@ function FormElement({ handle, register, editable, errors, ...props }) {
                   }
                 ]);
               }}
-            ></Button>
+            ></ButtonRefactor>
           </div>
 
           <div className="buttons">
-            <Button
+            <ButtonRefactor
               icon={faTrash}
               onClick={async () => {
                 props.delete();
               }}
             >
               Delete
-            </Button>
+            </ButtonRefactor>
 
-            <Button
+            <ButtonRefactor
               icon={faSave}
               variant={'fill'}
               type="submit"
@@ -166,7 +167,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               }}
             >
               Save
-            </Button>
+            </ButtonRefactor>
           </div>
         </div>
         <div className={`render ${isEditable ? 'hidden' : ''}`}>
@@ -212,6 +213,7 @@ export default styled(FormElement)`
 
       .buttons {
         display: flex;
+        justify-content: flex-end;
         margin-top: 8px;
 
         ${Button2}:first-child {
@@ -249,10 +251,20 @@ export default styled(FormElement)`
       margin-bottom: 4px;
     }
 
+    ${ButtonRefactor} {
+      padding: 6px;
+      margin-left: 8px;
+      margin-bottom: 8px;
+
+      .icon {
+        margin: 0px 2px;
+      }
+    }
+
     > div {
       flex-grow: 1;
       > div {
-        margin-bottom: 4px;
+        padding: 8px 0px;
       }
     }
   }

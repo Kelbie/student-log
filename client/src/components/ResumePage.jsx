@@ -28,6 +28,7 @@ import ResumeSkillsForm from './ResumeSkillsForm';
 import DraggableForm from './DraggableForm';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ButtonRefactor from './common/ButtonRefactor';
 
 // fake data generator
 const getItems = count =>
@@ -372,15 +373,24 @@ function ResumeNav(props) {
           </Draggable>
         ))}
       </DraggableForm>
-      <Button icon={faFilePdf} variant={'fill'} onClick={() => props.showPDF(true)}>
+      <ButtonRefactor icon={faFilePdf} variant={'border'} onClick={() => props.showPDF(true)}>
         Generate PDF
-      </Button>
+      </ButtonRefactor>
     </div>
   );
 }
 
 ResumeNav = styled(ResumeNav)`
+  display: inline-block;
   margin-right: 8px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 16px;
+  height: 1vh;
+
+  ${ButtonRefactor} {
+    margin-top: 4px;
+  }
 `;
 
 function ResumePDFNav(props) {
