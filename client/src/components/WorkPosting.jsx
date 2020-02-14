@@ -66,11 +66,10 @@ function WorkPosting(props) {
 }
 
 WorkPosting = styled(WorkPosting)`
-  ${Markdown} {
+  .job-desc {
     margin-left: 22px;
     * {
-      color: ${props => (props.theme.is === 'dark' ? '#E0E0E0' : '#17171C')};
-      font-family: Montserrat;
+      color: ${props => (props.theme.is === 'dark' ? props.theme.PALLET['300'] : 'blue')};
     }
 
     > * {
