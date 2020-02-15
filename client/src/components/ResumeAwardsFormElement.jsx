@@ -32,11 +32,6 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
   const [isEditable, setIsEditable] = useState(editable);
   const [editDropdownActive, setEditDropdownActive] = useState(false);
 
-  // Dispatch on save
-  const dispatch = useDispatch();
-
-  console.log(222, props.watch(`name[${props.index}]`));
-
   return (
     <div {...props}>
       <div {...handle} className="handle">
@@ -137,7 +132,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
   );
 }
 
-export default styled(FormElement)`
+export default React.memo(styled(FormElement)`
   display: flex;
   align-items: center;
 
@@ -213,4 +208,4 @@ export default styled(FormElement)`
     margin-left: 8px;
     cursor: pointer;
   }
-`;
+`);

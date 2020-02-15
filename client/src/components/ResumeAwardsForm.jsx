@@ -6,7 +6,7 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import { useForm } from 'react-hook-form';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-
+import _ from 'lodash';
 import styled from 'styled-components';
 
 import { saveResume } from '../actions/actions';
@@ -63,6 +63,7 @@ function createArrayWithNumbers(length) {
 }
 
 function AwardsForm(props) {
+  const [numberOfDeletes, setNumberOfDeletes] = useState(1);
   // Get awards resume from store
   const mapState = useCallback(
     state => ({
@@ -94,21 +95,37 @@ function AwardsForm(props) {
   // Dispatch on save
   const dispatch = useDispatch();
   const onSubmit = data => {
-    dispatch(saveResume(data));
+    let sortedAwards = items.map(item => {
+      return data.awards[item.id.split('-')[1]];
+    });
+
+    dispatch(saveResume({ ...data, awards: sortedAwards }));
   };
 
   function del(id) {
+    setNumberOfDeletes(numberOfDeletes + 1);
+    let index = -1;
     setItems([
       ...items.filter(item_ => {
-        if (item_.id != id) {
+        if (item_.id !== id) {
           return true;
+        } else {
+          index = id;
         }
       })
     ]);
+
+    let absoluteIndex = -1;
+    items.map((item, i) => {
+      if (item.id === index) {
+        absoluteIndex = i;
+      }
+    });
+
     dispatch(
       saveResume({
         awards: awards.filter((award, i) => {
-          return i != id.split('-')[1];
+          return i !== absoluteIndex;
         })
       })
     );
@@ -144,7 +161,6 @@ function AwardsForm(props) {
                     triggerValidation={triggerValidation}
                     delete={() => {
                       del(item.id);
-                      reset();
                     }}
                     errors={errors}
                   />
@@ -161,12 +177,17 @@ function AwardsForm(props) {
           setItems([
             ...items,
             {
-              id: `item-${items.length}`,
+              id: `item-${items.length * 10 * numberOfDeletes}`,
               content: 'new item',
               isFixed: false,
               isEditable: true
             }
           ]);
+          dispatch(
+            saveResume({
+              awards: [...awards, { name: '', date: '', awarder: '', summary: '' }]
+            })
+          );
         }}
       >
         Add Award
@@ -175,7 +196,7 @@ function AwardsForm(props) {
   );
 }
 
-export default styled(AwardsForm)`
+export default React.memo(styled(AwardsForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};
-`;
+`);
