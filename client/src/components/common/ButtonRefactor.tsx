@@ -9,7 +9,7 @@ import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/wind
 import { FontawesomeObject, IconProp, IconName } from '@fortawesome/fontawesome-svg-core';
 
 interface IProps extends React.ComponentProps<'button'> {
-  variant: 'fill' | 'border';
+  variant: 'fill' | 'border' | 'default';
   icon: IconProp;
 }
 
