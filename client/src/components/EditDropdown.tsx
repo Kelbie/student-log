@@ -60,7 +60,7 @@ export default styled(EditDropdown)`
     border-radius: 21px;
     overflow: hidden;
     background: ${props =>
-      props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['100']};
+      props.theme.is === 'dark' ? props.theme.PALLET['900'] : props.theme.PALLET['100']};
     ${ButtonRefactor} {
       border-radius: 0px;
     }
