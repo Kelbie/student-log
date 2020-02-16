@@ -177,7 +177,7 @@ function AwardsForm(props) {
           setItems([
             ...items,
             {
-              id: `item-${items.length * 10 * numberOfDeletes}`,
+              id: `item-${items.length * numberOfDeletes}`,
               content: 'new item',
               isFixed: false,
               isEditable: true

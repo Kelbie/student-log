@@ -29,6 +29,7 @@ import DraggableForm from './DraggableForm';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ButtonRefactor from './common/ButtonRefactor';
+import ResumeSkills2Form from './ResumeSkills2Form';
 
 // fake data generator
 const getItems = count =>
@@ -442,7 +443,6 @@ function ResumePage(props) {
   }, [resume]);
 
   const [modelIsOpen, setModelIsOpen] = useState(false);
-
   return (
     <div {...props}>
       <ResumeNav showPDF={b => setShowPDF(b)} />

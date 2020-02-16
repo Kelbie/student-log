@@ -178,7 +178,7 @@ function EducationForm(props) {
           setItems([
             ...items,
             {
-              id: `item-${items.length}`,
+              id: `item-${items.length * numberOfDeletes}`,
               content: 'new item',
               isFixed: false,
               isEditable: true

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import move from 'lodash-move';
 
@@ -7,7 +7,14 @@ import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faPlus, faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEllipsisV,
+  faPlus,
+  faTrash,
+  faSave,
+  faEdit,
+  faMinus
+} from '@fortawesome/free-solid-svg-icons';
 
 import DraggableForm from './DraggableForm';
 import EditDropdown, { EditDropdownButton } from './EditDropdown';
@@ -15,6 +22,8 @@ import Input from './common/Input';
 import Button, { Button2 } from './common/Button';
 import Label from './common/Label';
 import ButtonRefactor from './common/ButtonRefactor';
+import { useMappedState, useDispatch } from 'redux-react-hook';
+import { saveResume } from '../actions/actions';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -44,6 +53,7 @@ const getItemStyle = (isDragging, draggableStyle) => {
 };
 
 function Skill({ handle, register, ...props }) {
+  const disabled = props.length > 1 ? false : true;
   return (
     <div {...props}>
       <div {...handle} className="handle">
@@ -55,6 +65,13 @@ function Skill({ handle, register, ...props }) {
         ref={register}
         placeholder="test"
       />
+      <ButtonRefactor
+        icon={faMinus}
+        disabled={disabled}
+        type={'button'}
+        variant={'border'}
+        onClick={() => props.delete(props.index)}
+      ></ButtonRefactor>
     </div>
   );
 }
@@ -66,19 +83,73 @@ Skill = styled(Skill)`
   .handle {
     margin-right: 8px;
   }
+
+  ${ButtonRefactor} {
+    margin-bottom: 0px !important;
+  }
 `;
 
 function FormElement({ handle, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
   const [editDropdownActive, setEditDropdownActive] = useState(false);
 
-  const [items, setItems] = useState([
-    {
-      id: `item-0`,
-      isFixed: false,
-      isEditable: false
-    }
-  ]);
+  const [numberOfDeletes, setNumberOfDeletes] = useState(1);
+
+  console.log(props.skills, props.index, 123);
+  // State for each item
+  const [items, setItems] = useState(
+    props.skills[props.parentIndex].keywords.map((keyword, i) => {
+      return {
+        id: `item-${i}`,
+        isFixed: false,
+        isEditable: false
+      };
+    })
+  );
+
+  // Dispatch on save
+  const dispatch = useDispatch();
+
+  function del(id) {
+    setNumberOfDeletes(numberOfDeletes + 1);
+    let index = -1;
+    setItems([
+      ...items.filter(item_ => {
+        console.log(9832, item_.id, id);
+        if (item_.id.split('-')[1] !== id) {
+          return true;
+        } else {
+          index = id;
+        }
+      })
+    ]);
+
+    let absoluteIndex = -1;
+    items.map((item, i) => {
+      if (item.id === index) {
+        absoluteIndex = i;
+      }
+    });
+
+    console.log(871927397, absoluteIndex, index, props.index, id);
+
+    dispatch(
+      saveResume({
+        skills: props.skills.map((skill, i) => {
+          if (props.index == i) {
+            return {
+              ...skill,
+              keywords: skill.keywords.filter((keyword, j) => {
+                return j != id;
+              })
+            };
+          } else {
+            return skill;
+          }
+        })
+      })
+    );
+  }
 
   return (
     <div {...props}>
@@ -101,6 +172,22 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               setItems={setItems}
               onDragEnd={(start, end) => {
                 setItems(move(items, start, end));
+                dispatch(
+                  saveResume({
+                    skills: [
+                      ...props.skills.map((skill, i) => {
+                        if (i != props.index) {
+                          return skill;
+                        } else {
+                          return {
+                            ...skill,
+                            keywords: move(skill.keywords, start, end)
+                          };
+                        }
+                      })
+                    ]
+                  })
+                );
               }}
             >
               {items.map((item, index) => {
@@ -118,6 +205,9 @@ function FormElement({ handle, register, editable, errors, ...props }) {
                         style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                       >
                         <Skill
+                          length={items.length}
+                          watch={props.watch}
+                          delete={id => del(id)}
                           register={register}
                           parentIndex={props.index}
                           index={item.id.split('-')[1]}
@@ -131,16 +221,50 @@ function FormElement({ handle, register, editable, errors, ...props }) {
             </DraggableForm>
             <ButtonRefactor
               icon={faPlus}
+              type={'button'}
               variant={'border'}
               onClick={() => {
+                // console.log(98172873, items);
                 setItems([
                   ...items,
                   {
-                    id: `item-${items.length}`,
+                    id: `item-${items.length * numberOfDeletes}`,
+                    content: 'new item',
                     isFixed: false,
                     isEditable: true
                   }
                 ]);
+                console.log(
+                  [
+                    ...props.skills.map((skill, i) => {
+                      if (i != props.index) {
+                        return skill;
+                      } else {
+                        return {
+                          ...skill,
+                          keywords: [...skill.keywords, '']
+                        };
+                      }
+                    })
+                  ],
+                  98172873
+                );
+                dispatch(
+                  saveResume({
+                    skills: [
+                      ...props.skills.map((skill, i) => {
+                        if (i != props.index) {
+                          return skill;
+                        } else {
+                          return {
+                            ...skill,
+                            keywords: [...skill.keywords, '']
+                          };
+                        }
+                      })
+                    ]
+                  })
+                );
               }}
             ></ButtonRefactor>
           </div>
@@ -158,7 +282,6 @@ function FormElement({ handle, register, editable, errors, ...props }) {
             <ButtonRefactor
               icon={faSave}
               variant={'fill'}
-              type="submit"
               onClick={async () => {
                 const errors = await props.triggerValidation();
                 if (errors) {
@@ -174,7 +297,14 @@ function FormElement({ handle, register, editable, errors, ...props }) {
           <div className="top">
             <div className="name">{props.watch(`skills[${props.index}].name`)}</div>
           </div>
-          <div className="bottom">{props.watch(`skills[${props.index}].keywords`)?.join(', ')}</div>
+          <div className="bottom">
+            {props
+              .watch(`skills[${props.index}].keywords`)
+              ?.filter(keyword => {
+                return keyword != undefined || keyword != null;
+              })
+              ?.join(', ')}
+          </div>
         </div>
       </div>
       {!isEditable ? (

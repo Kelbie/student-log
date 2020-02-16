@@ -8,14 +8,9 @@ import { faCalendar, faBriefcase, faComments } from '@fortawesome/free-solid-svg
 import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
 import { FontawesomeObject, IconProp, IconName } from '@fortawesome/fontawesome-svg-core';
 
-interface IProps extends React.ComponentProps<'button'> {
-  variant: 'fill' | 'border' | 'default';
-  icon: IconProp;
-}
-
-function Button({ type, variant, icon, children, className, onClick, ...props }: IProps) {
+function Button({ type, variant, icon, children, className, onClick, disabled, ...props }) {
   return (
-    <button type={type} className={className} onClick={onClick}>
+    <button type={type} className={className} onClick={onClick} disabled={disabled}>
       <span className="icon">
         <FontAwesomeIcon icon={icon} />
       </span>
@@ -26,7 +21,7 @@ function Button({ type, variant, icon, children, className, onClick, ...props }:
 
 export default styled(Button)`
   white-space: nowrap;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   appearance: none;
   border: none;
   font-size: 16px;
@@ -53,20 +48,23 @@ export default styled(Button)`
   }
 
   &:hover {
-    background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.05)};
+    background: ${props =>
+      props.disabled ? 'transparent' : rgba(props.theme.PRIMARY_COLOR, 0.05)};
 
     .icon {
       svg,
       path {
         position: sticky;
-        color: ${props => props.theme.PRIMARY_COLOR};
+        color: ${props =>
+          props.disabled ? rgba(props.theme.PRIMARY_COLOR, 0.5) : props.theme.PRIMARY_COLOR};
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
     }
 
     .text {
-      color: ${props => props.theme.PRIMARY_COLOR};
+      color: ${props =>
+        props.disabled ? rgba(props.theme.PRIMARY_COLOR, 0.5) : props.theme.PRIMARY_COLOR};
     }
   }
 
@@ -98,20 +96,26 @@ export default styled(Button)`
         svg,
         path {
           position: sticky;
-          color: ${props => props.theme.PRIMARY_COLOR};
+          color: ${props =>
+            props.disabled ? rgba(props.theme.PRIMARY_COLOR, 0.5) : props.theme.PRIMARY_COLOR};
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
       }
 
       .text {
-        color: ${props => props.theme.PRIMARY_COLOR};
+        color: ${props =>
+          props.disabled ? rgba(props.theme.PRIMARY_COLOR, 0.5) : props.theme.PRIMARY_COLOR};
       }
 
-      box-shadow: inset 0px 0px 0px 1px ${props => props.theme.PRIMARY_COLOR};
+      box-shadow: inset 0px 0px 0px 1px
+        ${props =>
+          props.disabled ? rgba(props.theme.PRIMARY_COLOR, 0.5) : props.theme.PRIMARY_COLOR};
 
       &:hover {
-        box-shadow: inset 0px 0px 0px 1.2px ${props => props.theme.PRIMARY_COLOR};
+        box-shadow: inset 0px 0px 0px 1.2px
+          ${props =>
+            props.disabled ? rgba(props.theme.PRIMARY_COLOR, 0.5) : props.theme.PRIMARY_COLOR};
       }
     `}
 `;

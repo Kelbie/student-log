@@ -181,7 +181,7 @@ function WorkForm(props) {
           setItems([
             ...items,
             {
-              id: `item-${items.length}`,
+              id: `item-${items.length * numberOfDeletes}`,
               isFixed: false,
               isEditable: true
             }

@@ -99,9 +99,23 @@ function SkillsForm(props) {
   // Dispatch on save
   const dispatch = useDispatch();
   const onSubmit = data => {
+    console.log(data, 98172873);
     let sortedSkills = items.map(item => {
       return data.skills[item.id.split('-')[1]];
     });
+
+    // filter undefined
+    sortedSkills = sortedSkills.map(skill => {
+      return {
+        ...skill,
+        keywords: skill.keywords.filter(keyword => {
+          return keyword != undefined || keyword != null;
+        })
+      };
+    });
+
+    console.log(sortedSkills, 98172873);
+
     dispatch(saveResume({ ...data, skills: sortedSkills }));
   };
 
@@ -156,8 +170,10 @@ function SkillsForm(props) {
                 >
                   {/* Use item id as index because it doesn't change when being swapped around in the UI */}
                   <ResumeSkillsFormElement
+                    skills={skills}
                     watch={watch}
                     index={item.id.split('-')[1]}
+                    parentIndex={index}
                     register={register}
                     handle={item.isFixed === false ? provided.dragHandleProps : false}
                     editable={item.isEditable}
@@ -175,12 +191,14 @@ function SkillsForm(props) {
       </DraggableForm>
       <ButtonRefactor
         variant={'border'}
+        type={'button'}
         icon={faPlus}
         onClick={() => {
           setItems([
             ...items,
             {
-              id: `item-${items.length}`,
+              id: `item-${items.length * numberOfDeletes}`,
+              content: 'new item',
               isFixed: false,
               isEditable: true
             }
