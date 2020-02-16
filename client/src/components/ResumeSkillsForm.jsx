@@ -67,6 +67,8 @@ function Skill(index, name, title, location, start, end) {
 }
 
 function SkillsForm(props) {
+  const [numberOfDeletes, setNumberOfDeletes] = useState(1);
+
   // Get skills resume from store
   const mapState = useCallback(
     state => ({
@@ -97,22 +99,36 @@ function SkillsForm(props) {
   // Dispatch on save
   const dispatch = useDispatch();
   const onSubmit = data => {
-    console.log(data);
-    dispatch(saveResume(data));
+    let sortedSkills = items.map(item => {
+      return data.skills[item.id.split('-')[1]];
+    });
+    dispatch(saveResume({ ...data, skills: sortedSkills }));
   };
 
   function del(id) {
+    setNumberOfDeletes(numberOfDeletes + 1);
+    let index = -1;
     setItems([
       ...items.filter(item_ => {
-        if (item_.id != id) {
+        if (item_.id !== id) {
           return true;
+        } else {
+          index = id;
         }
       })
     ]);
+
+    let absoluteIndex = -1;
+    items.map((item, i) => {
+      if (item.id === index) {
+        absoluteIndex = i;
+      }
+    });
+
     dispatch(
       saveResume({
         skills: skills.filter((skill, i) => {
-          return i != id.split('-')[1];
+          return i !== absoluteIndex;
         })
       })
     );
@@ -148,7 +164,6 @@ function SkillsForm(props) {
                     triggerValidation={triggerValidation}
                     delete={() => {
                       del(item.id);
-                      reset();
                     }}
                     errors={errors}
                   />
@@ -170,6 +185,11 @@ function SkillsForm(props) {
               isEditable: true
             }
           ]);
+          dispatch(
+            saveResume({
+              skills: [...skills, { name: '', keywords: [''] }]
+            })
+          );
         }}
       >
         Add Skill
@@ -178,7 +198,7 @@ function SkillsForm(props) {
   );
 }
 
-export default styled(SkillsForm)`
+export default React.memo(styled(SkillsForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};
-`;
+`);

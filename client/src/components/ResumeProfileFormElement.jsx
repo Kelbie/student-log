@@ -98,7 +98,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
   );
 }
 
-export default styled(FormElement)`
+export default React.memo(styled(FormElement)`
   display: flex;
   align-items: center;
 
@@ -164,4 +164,4 @@ export default styled(FormElement)`
     margin-left: 8px;
     cursor: pointer;
   }
-`;
+`);

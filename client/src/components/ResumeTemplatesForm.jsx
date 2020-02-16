@@ -111,7 +111,7 @@ function TemplatesForm(props) {
   );
 }
 
-export default styled(TemplatesForm)`
+export default React.memo(styled(TemplatesForm)`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 8px;
@@ -151,4 +151,4 @@ export default styled(TemplatesForm)`
   input:checked ~ img {
     opacity: 1;
   }
-`;
+`);

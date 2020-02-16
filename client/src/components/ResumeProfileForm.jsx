@@ -128,7 +128,7 @@ function ProfileForm(props) {
   );
 }
 
-export default styled(ProfileForm)`
+export default React.memo(styled(ProfileForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};
-`;
+`);

@@ -64,6 +64,7 @@ function createArrayWithNumbers(length) {
 }
 
 function EducationForm(props) {
+  const [numberOfDeletes, setNumberOfDeletes] = useState(1);
   // Get education resume from store
   const mapState = useCallback(
     state => ({
@@ -95,21 +96,37 @@ function EducationForm(props) {
   // Dispatch on save
   const dispatch = useDispatch();
   const onSubmit = data => {
-    dispatch(saveResume(data));
+    let sortedEducation = items.map(item => {
+      return data.education[item.id.split('-')[1]];
+    });
+
+    dispatch(saveResume({ ...data, education: sortedEducation }));
   };
 
   function del(id) {
+    setNumberOfDeletes(numberOfDeletes + 1);
+    let index = -1;
     setItems([
       ...items.filter(item_ => {
-        if (item_.id != id) {
+        if (item_.id !== id) {
           return true;
+        } else {
+          index = id;
         }
       })
     ]);
+
+    let absoluteIndex = -1;
+    items.map((item, i) => {
+      if (item.id === index) {
+        absoluteIndex = i;
+      }
+    });
+
     dispatch(
       saveResume({
-        education: education.filter((project, i) => {
-          return i != id.split('-')[1];
+        education: education.filter((e, i) => {
+          return i !== absoluteIndex;
         })
       })
     );
@@ -145,7 +162,6 @@ function EducationForm(props) {
                     triggerValidation={triggerValidation}
                     delete={() => {
                       del(item.id);
-                      reset();
                     }}
                     errors={errors}
                   />
@@ -168,6 +184,14 @@ function EducationForm(props) {
               isEditable: true
             }
           ]);
+          dispatch(
+            saveResume({
+              education: [
+                ...education,
+                { name: '', location: '', degree: '', major: '', gpa: '', start: '', end: '' }
+              ]
+            })
+          );
         }}
       >
         Add School
@@ -176,7 +200,7 @@ function EducationForm(props) {
   );
 }
 
-export default styled(EducationForm)`
+export default React.memo(styled(EducationForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};
-`;
+`);

@@ -64,6 +64,8 @@ function createArrayWithNumbers(length) {
 }
 
 function ProjectsForm(props) {
+  const [numberOfDeletes, setNumberOfDeletes] = useState(1);
+
   // Get projects resume from store
   const mapState = useCallback(
     state => ({
@@ -95,21 +97,37 @@ function ProjectsForm(props) {
   // Dispatch on save
   const dispatch = useDispatch();
   const onSubmit = data => {
-    dispatch(saveResume(data));
+    let sortedProjects = items.map(item => {
+      return data.projects[item.id.split('-')[1]];
+    });
+
+    dispatch(saveResume({ ...data, projects: sortedProjects }));
   };
 
   function del(id) {
+    setNumberOfDeletes(numberOfDeletes + 1);
+    let index = -1;
     setItems([
       ...items.filter(item_ => {
-        if (item_.id != id) {
+        if (item_.id !== id) {
           return true;
+        } else {
+          index = id;
         }
       })
     ]);
+
+    let absoluteIndex = -1;
+    items.map((item, i) => {
+      if (item.id === index) {
+        absoluteIndex = i;
+      }
+    });
+
     dispatch(
       saveResume({
         projects: projects.filter((project, i) => {
-          return i != id.split('-')[1];
+          return i !== absoluteIndex;
         })
       })
     );
@@ -145,7 +163,6 @@ function ProjectsForm(props) {
                     triggerValidation={triggerValidation}
                     delete={() => {
                       del(item.id);
-                      reset();
                     }}
                     errors={errors}
                   />
@@ -168,6 +185,11 @@ function ProjectsForm(props) {
               isEditable: true
             }
           ]);
+          dispatch(
+            saveResume({
+              projects: [...projects, { name: '', description: '', link: '' }]
+            })
+          );
         }}
       >
         Add Project
@@ -176,7 +198,7 @@ function ProjectsForm(props) {
   );
 }
 
-export default styled(ProjectsForm)`
+export default React.memo(styled(ProjectsForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};
-`;
+`);
