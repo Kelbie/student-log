@@ -84,7 +84,8 @@ function SkillsForm(props) {
       return {
         id: `item-${i}`,
         isFixed: false,
-        isEditable: false
+        isEditable: false,
+        keywords: []
       };
     })
   );
@@ -99,9 +100,14 @@ function SkillsForm(props) {
   // Dispatch on save
   const dispatch = useDispatch();
   const onSubmit = data => {
-    console.log(data, 98172873);
     let sortedSkills = items.map(item => {
-      return data.skills[item.id.split('-')[1]];
+      console.log(19283123, data.skills[item.id.split('-')[1]]);
+      return {
+        name: data.skills[item.id.split('-')[1]].name,
+        keywords: item.keywords.map(item2 => {
+          return data.skills[item.id.split('-')[1]].keywords[item2.id.split('-')[1]];
+        })
+      };
     });
 
     // filter undefined
@@ -170,6 +176,22 @@ function SkillsForm(props) {
                 >
                   {/* Use item id as index because it doesn't change when being swapped around in the UI */}
                   <ResumeSkillsFormElement
+                    item={item}
+                    setItems={keywords =>
+                      setItems(
+                        items.map(i => {
+                          console.log(98172873, i);
+                          if (item.id == i.id) {
+                            return {
+                              ...i,
+                              keywords
+                            };
+                          } else {
+                            return i;
+                          }
+                        })
+                      )
+                    }
                     skills={skills}
                     watch={watch}
                     index={item.id.split('-')[1]}

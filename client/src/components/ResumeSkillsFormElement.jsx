@@ -107,6 +107,11 @@ function FormElement({ handle, register, editable, errors, ...props }) {
     })
   );
 
+  useEffect(() => {
+    console.log('items', items);
+    props.setItems(items);
+  }, [items]);
+
   // Dispatch on save
   const dispatch = useDispatch();
 
@@ -281,6 +286,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
 
             <ButtonRefactor
               icon={faSave}
+              type="submit"
               variant={'fill'}
               onClick={async () => {
                 const errors = await props.triggerValidation();
