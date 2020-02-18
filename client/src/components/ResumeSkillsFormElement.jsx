@@ -303,14 +303,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
           <div className="top">
             <div className="name">{props.watch(`skills[${props.index}].name`)}</div>
           </div>
-          <div className="bottom">
-            {props
-              .watch(`skills[${props.index}].keywords`)
-              ?.filter(keyword => {
-                return keyword != undefined || keyword != null;
-              })
-              ?.join(', ')}
-          </div>
+          <div className="bottom">{props.skills[props.index].keywords.join(', ')}</div>
         </div>
       </div>
       {!isEditable ? (
