@@ -177,22 +177,22 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               setItems={setItems}
               onDragEnd={(start, end) => {
                 setItems(move(items, start, end));
-                dispatch(
-                  saveResume({
-                    skills: [
-                      ...props.skills.map((skill, i) => {
-                        if (i != props.index) {
-                          return skill;
-                        } else {
-                          return {
-                            ...skill,
-                            keywords: move(skill.keywords, start, end)
-                          };
-                        }
-                      })
-                    ]
-                  })
-                );
+                // dispatch(
+                //   saveResume({
+                //     skills: [
+                //       ...props.skills.map((skill, i) => {
+                //         if (i != props.index) {
+                //           return skill;
+                //         } else {
+                //           return {
+                //             ...skill,
+                //             keywords: move(skill.keywords, start, end)
+                //           };
+                //         }
+                //       })
+                //     ]
+                //   })
+                // );
               }}
             >
               {items.map((item, index) => {
