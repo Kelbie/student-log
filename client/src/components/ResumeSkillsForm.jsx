@@ -85,7 +85,13 @@ function SkillsForm(props) {
         id: `item-${i}`,
         isFixed: false,
         isEditable: false,
-        keywords: []
+        keywords: skill.keywords.map((keyword, j) => {
+          return {
+            id: `item-${j}`,
+            isFixed: false,
+            isEditable: false
+          };
+        })
       };
     })
   );
@@ -101,7 +107,6 @@ function SkillsForm(props) {
   const dispatch = useDispatch();
   const onSubmit = data => {
     let sortedSkills = items.map(item => {
-      console.log(19283123, data.skills[item.id.split('-')[1]]);
       return {
         name: data.skills[item.id.split('-')[1]].name,
         keywords: item.keywords.map(item2 => {
@@ -110,19 +115,19 @@ function SkillsForm(props) {
       };
     });
 
-    // filter undefined
-    sortedSkills = sortedSkills.map(skill => {
-      return {
-        ...skill,
-        keywords: skill.keywords.filter(keyword => {
-          return keyword != undefined || keyword != null;
-        })
-      };
-    });
+    // // filter undefined
+    // sortedSkills = sortedSkills.map(skill => {
+    //   return {
+    //     ...skill,
+    //     keywords: skill.keywords.filter(keyword => {
+    //       return keyword != undefined || keyword != null;
+    //     })
+    //   };
+    // });
 
-    console.log(sortedSkills, 98172873);
+    // console.log(sortedSkills, 98172873);
 
-    dispatch(saveResume({ ...data, skills: sortedSkills }));
+    dispatch(saveResume({ skills: sortedSkills }));
   };
 
   function del(id) {
