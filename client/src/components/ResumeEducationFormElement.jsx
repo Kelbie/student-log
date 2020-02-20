@@ -14,8 +14,6 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
   const [isEditable, setIsEditable] = useState(editable);
   const [editDropdownActive, setEditDropdownActive] = useState(false);
 
-  console.log(222, props.watch(`name[${props.index}]`));
-
   return (
     <div {...props}>
       <div {...handle} className="handle">

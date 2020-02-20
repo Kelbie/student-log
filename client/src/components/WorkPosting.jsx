@@ -33,7 +33,6 @@ const GET_JOB = gql`
 `;
 
 function WorkPosting(props) {
-  console.log(props.match.params.id);
   const { data, error, loading } = useQuery(GET_JOB, {
     variables: {
       id: props.match.params.id
@@ -69,7 +68,7 @@ WorkPosting = styled(WorkPosting)`
   .job-desc {
     margin-left: 22px;
     * {
-      color: ${props => (props.theme.is === 'dark' ? props.theme.PALLET['300'] : 'blue')};
+      color: ${props => (props.theme.is === 'dark' ? props.theme.PALLET['400'] : 'blue')};
     }
 
     > * {

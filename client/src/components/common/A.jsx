@@ -37,9 +37,9 @@ A = styled(A)`
     );
   }
 
-  &:hover:after {
+  /* &:hover:after {
     width: 100%;
-  }
+  } */
 `;
 
 export default A;

@@ -82,9 +82,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               icon={faSave}
               variant={'fill'}
               onClick={async () => {
-                console.log(props.watch());
                 const errors = await props.triggerValidation();
-                console.log(923, errors);
                 if (errors) {
                   setIsEditable(false);
                 }

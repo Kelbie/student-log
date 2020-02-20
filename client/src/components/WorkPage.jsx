@@ -382,11 +382,10 @@ function WorkPage(props) {
         <LinkRefactor variant={'fill'} to="/job/new" icon={faPlus}>
           Post Job
         </LinkRefactor>
-        <div className="search-results">{data.getWork.length} results</div>
+        {/* <div className="search-results">{data.getWork.length} results</div> */}
         {data.getWork
           .filter(function(w) {
             let passType = false;
-            console.log(w);
             for (let i = 0; i < filter.types.length; i++) {
               if (w.job_type === filter.types[i].name && filter.types[i].active) {
                 passType = true;
@@ -430,7 +429,6 @@ function WorkPage(props) {
             return passCompanies && passType && passCategories;
           })
           .map((w, i) => {
-            console.log(333, new Date(parseInt(w.created_at)));
             return (
               <WorkElement2
                 job_id={w.job_id}
@@ -473,7 +471,7 @@ WorkPage = styled(WorkPage)`
     grid-area: results;
     flex-grow: 1;
     > * {
-      margin-bottom: 8px;
+      margin-top: 8px;
     }
   }
 `;

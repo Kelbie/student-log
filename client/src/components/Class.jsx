@@ -26,7 +26,7 @@ function Class(props) {
     <div {...props}>
       <div className="top">
         <div className="time raise">
-          {date.format(new Date(parseInt(props.start)), 'HH:mm')} -{' '}
+          {date.format(new Date(parseInt(props.start)), 'YY HH:mm')} -{' '}
           {date.format(new Date(parseInt(props.end)), 'HH:mm')} • {props.type}
         </div>
         <A href={`/class/2`} className="title">
@@ -54,6 +54,11 @@ function Class(props) {
 }
 
 Class = styled(Class)`
+
+  ${A} {
+    cursor: auto;
+  }
+
   grid-column: 2;
   /* border: 2px solid ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['200']}; */
@@ -66,7 +71,6 @@ Class = styled(Class)`
   .gradient {
     border-radius: 4px;
     position: absolute;
-    z-index: 1;
     content: "";
     display: block;
     height: calc(100% + 4px);

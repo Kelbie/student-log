@@ -1,7 +1,8 @@
 require('dotenv').config();
 
 import chalk from 'chalk';
-
+import tweet from '../bot/twitter';
+import SQL from 'sql-template-strings';
 const uuidv4 = require('uuid/v4');
 const short = require('short-uuid');
 const fs = require('fs');
@@ -25,17 +26,26 @@ export default {
       );
 
       let jobs = await client.query(
-        `
+        SQL`
                 SELECT * FROM job 
                     JOIN job_company 
                         ON job_company.job_id = job.id 
                             JOIN company 
                                 ON company.id = job_company.company_id
-                                    ORDER BY job.created_at DESC
-                                        LIMIT $1
-                                            OFFSET $2
-            `,
-        [first, offset]
+                                    WHERE job.approved=${
+                                      req.user && req.user.upn === '1806579@rgu.ac.uk'
+                                        ? 'NULL'
+                                        : 'TRUE'
+                                    }
+                                    OR job.approved=${
+                                      req.user && req.user.upn === '1806579@rgu.ac.uk'
+                                        ? 'TRUE'
+                                        : 'TRUE'
+                                    } 
+                                      ORDER BY job.created_at DESC
+                                          LIMIT ${first}
+                                              OFFSET ${offset}
+            `
       );
 
       console.log(jobs.rows);
@@ -71,6 +81,26 @@ export default {
     }
   },
   Mutation: {
+    approveJob: async (_, { job_id }, { req }) => {
+      if (!req.isAuthenticated()) {
+        return {};
+      }
+
+      if (req.user.upn === '1806579@rgu.ac.uk') {
+        await client.query(
+          `
+          UPDATE job
+            set approved=TRUE
+              WHERE job.id = $1
+        `,
+          [job_id]
+        );
+
+        return true;
+      } else {
+        return false;
+      }
+    },
     postJob: async (_, { job: args }, { req }) => {
       console.log(
         chalk.green(`> postJob(${JSON.stringify({ job: args })})`),
@@ -150,6 +180,8 @@ export default {
       fs.writeFile(`public/logos/${company_id}.png`, imageBuffer.data, function(err) {
         console.log(123, err);
       });
+
+      tweet('url', args.name, args.job_title, args.job_type, args.category, args.location);
 
       return {
         id: job_id

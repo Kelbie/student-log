@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import { fromURL } from '../models/timetable';
 
 import moment from 'moment';

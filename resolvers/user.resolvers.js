@@ -59,7 +59,8 @@ export default {
     getProfile: async (_, {}, { req }) => {
       if (req.user) {
         return {
-          name: `${req.user.name.givenName} ${req.user.name.familyName}`
+          name: `${req.user.name.givenName} ${req.user.name.familyName}`,
+          email: req.user.upn
         };
       }
       return { name: null };

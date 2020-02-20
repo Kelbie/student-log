@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import sql from 'sql-template-strings';
 import logger from '../logger';
 
@@ -22,15 +24,16 @@ export default {
         return {};
       }
 
-      const resumeResponse = client.query(
+      const resumeResponse = await client.query(
         sql`
           SELECT json from resume
             WHERE user_id=${req.user.upn}
-        `,
-        []
+        `
       );
 
-      return JSON.parse(resumeResponse.rows[0].json);
+      console.log(JSON.parse(resumeResponse.rows[0].json));
+
+      return JSON.parse(resumeResponse.rows[0].json).resume;
     }
   },
   Mutation: {
@@ -53,8 +56,6 @@ export default {
                 SET 
                   json='${JSON.stringify(resume)}'
       `;
-
-      console.log(query);
 
       client.query(query);
 

@@ -9,9 +9,6 @@ import { Link } from 'react-router-dom';
 import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
 
 function Button({ type, ...props }) {
-  console.log(999, type, props);
-  // const width = useWindowWidth();
-
   if (props.to) {
     return (
       <Link to={props.to} {...props}>

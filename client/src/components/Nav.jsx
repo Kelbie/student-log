@@ -27,16 +27,19 @@ import gql from 'graphql-tag';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import LinkRefactor from './common/LinkRefactor';
 import ButtonRefactor from './common/ButtonRefactor';
-
+import Modal from 'styled-react-modal';
+import Login from './Login';
 const GET_PROFILE = gql`
   query {
     getProfile {
       name
+      email
     }
   }
 `;
 
 function Nav(props) {
+  const [modalOpen, setModalOpen] = useState(false);
   const { data } = useQuery(GET_PROFILE, {
     fetchPolicy: 'cache-first',
     variables: {}
@@ -50,26 +53,23 @@ function Nav(props) {
 
   return (
     <div {...props}>
+      <Modal
+        isOpen={modalOpen}
+        onEscapeKeydown={() => setModalOpen(false)}
+        onBackgroundClick={() => setModalOpen(false)}
+      >
+        <Login></Login>
+      </Modal>
       <LinkRefactor
+        responsive={true}
         to="/work"
         icon={faGraduationCap}
         onClick={() => {
           setActive('work');
         }}
-      >
-        {/* <span className="student">STUDENT</span><span className="log">LOG</span> */}
-      </LinkRefactor>
-      {/* <Button
-        to="/about"
-        active={active === 'about' ? 1 : 0}
-        icon={faInfoCircle}
-        onClick={() => {
-          setActive('about');
-        }}
-      >
-        About
-      </Button> */}
+      ></LinkRefactor>
       <LinkRefactor
+        responsive={true}
         to="/work"
         active={active === 'work' ? 1 : 0}
         icon={faBriefcase}
@@ -80,6 +80,7 @@ function Nav(props) {
         Work
       </LinkRefactor>
       <LinkRefactor
+        responsive={true}
         to="/resume"
         active={active === 'resume' ? 1 : 0}
         icon={faUser}
@@ -89,8 +90,22 @@ function Nav(props) {
       >
         Résumé
       </LinkRefactor>
+      {data?.getProfile?.email?.includes('rgu.ac.uk') ? (
+        <LinkRefactor
+          responsive={true}
+          to="/timetable"
+          active={active === 'timetable' ? 1 : 0}
+          icon={faCalendar}
+          onClick={() => {
+            setActive('timetable');
+          }}
+        >
+          Timetable
+        </LinkRefactor>
+      ) : null}
       {data?.getProfile?.name ? (
         <ButtonRefactor
+          responsive={true}
           icon={faSignOutAlt}
           variant={'fill'}
           onClick={() => (window.location.href = `/logout?redirect=${props.location.pathname}`)}
@@ -98,11 +113,15 @@ function Nav(props) {
           Logout
         </ButtonRefactor>
       ) : (
-        <LinkRefactor to={'/portal'} icon={faSignInAlt} variant={'fill'}>
+        <ButtonRefactor
+          responsive={true}
+          icon={faSignInAlt}
+          variant={'fill'}
+          onClick={() => setModalOpen(true)}
+        >
           Student Login
-        </LinkRefactor>
+        </ButtonRefactor>
       )}
-      {/* <p>created by Kevin Kelbie</p> */}
     </div>
   );
 }
@@ -145,7 +164,7 @@ Nav = styled(Nav)`
   }
   p {
     margin-top: 16px;
-    color: rgb(42, 42, 50);
+    color: ${props => props.theme.PALLET['800']};
     text-shadow: 1px 1px rgba(0, 0, 0, 0.3);
   }
 `;

@@ -24,7 +24,6 @@ Placeholder = styled(Placeholder)`
 `;
 
 function Class(props) {
-  console.log(782323, props);
   return (
     <div {...props}>
       <div className="gradient" />

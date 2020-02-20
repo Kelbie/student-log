@@ -15,36 +15,13 @@ import * as Yup from 'yup';
 // GraphQL
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from 'react-apollo-hooks';
-import { Formik, Field, ErrorMessage } from 'formik';
 
-function Label(props) {
-  return <label {...props}>{props.children}</label>;
-}
-
-Label = styled(Label)`
-  &::after {
-    content: ${props => (props.required ? "''" : 'none')};
-    width: 8px;
-    height: 8px;
-    display: inline-block;
-    background: #ce428e;
-    border-radius: 100%;
-    margin-left: 4px;
-    vertical-align: middle;
-  }
-`;
-
-let StyledField = styled(Field)`
-  outline: none;
-  width: 100%;
-  &:required {
-    box-shadow: none !important;
-  }
-
-  &:invalid {
-    box-shadow: 0 0 3px red;
-  }
-`;
+import { useForm } from 'react-hook-form';
+import ButtonRefactor from './common/ButtonRefactor';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
+import Error from './common/Error';
+import Input from './common/Input';
+import Label from './common/Label';
 
 const GET_SETTINGS_ICS_LINK = gql`
   query {
@@ -76,54 +53,34 @@ function App(props) {
     setMonday(getMonday(selectedDate._d));
   }, [selectedDate]);
 
-  const { data, error, loading } = useQuery(GET_SETTINGS_ICS_LINK);
+  function onSubmit(values) {
+    console.log(values);
+    postICS({
+      variables: {
+        ...values
+      }
+    });
+  }
 
-  console.log(123, data);
+  const { register, handleSubmit, errors } = useForm();
+
+  const { data, error, loading } = useQuery(GET_SETTINGS_ICS_LINK);
 
   if (error || loading) {
     return <></>;
   }
+  console.log(123, data, data.getSettings, data.getSettings.ics_link);
   if (data.getSettings) {
     if (!data.getSettings.ics_link) {
       return (
-        <Formik
-          validationSchema={Yup.object().shape({
-            ics_link: Yup.string().required('Required')
-          })}
-          onSubmit={values => {
-            postICS({
-              variables: {
-                ...values
-              }
-            });
-          }}
-        >
-          {({
-            values,
-            setValues,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting
-            /* and other goodies */
-          }) => (
-            <form onSubmit={handleSubmit}>
-              <Label required>ICS Link</Label>
-              <StyledField
-                required
-                type="text"
-                name="ics_link"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.ics_link}
-              />
-              <ErrorMessage name="ics_link" />
-              <button type="submit">Submit</button>
-            </form>
-          )}
-        </Formik>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Label required>ICS Link</Label>
+          <Input ref={register({ required: true })} type="text" name="ics_link" />
+          <Error errors={errors} name="ics_link" message={'this field is required'}></Error>
+          <ButtonRefactor type="submit" icon={faSave} variant={'fill'}>
+            Submit
+          </ButtonRefactor>
+        </form>
       );
     }
   }

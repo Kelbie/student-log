@@ -17,6 +17,8 @@ import EditDropdown, { EditDropdownButton } from './EditDropdown';
 import { useDispatch } from 'redux-react-hook';
 import { saveResume } from '../actions/actions';
 import ButtonRefactor from './common/ButtonRefactor';
+import Label from './common/Label';
+import Input from './common/Input';
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -39,8 +41,8 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
       </div>
       <div className="content">
         <div className={`form ${!isEditable ? 'hidden' : ''}`}>
-          <label>Award Name*</label>
-          <input
+          <Label required>Award Name</Label>
+          <Input
             type="text"
             name={`awards[${props.index}].name`}
             ref={register({ required: true })}
@@ -52,24 +54,24 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
               )
             : null}
 
-          <label>Award Date</label>
-          <input
+          <Label>Award Date</Label>
+          <Input
             type="text"
             name={`awards[${props.index}].date`}
             ref={register}
             placeholder="May 2015"
           />
 
-          <label>Awarder</label>
-          <input
+          <Label>Awarder</Label>
+          <Input
             type="text"
             name={`awards[${props.index}].awarder`}
             ref={register}
             placeholder="HackNY"
           />
 
-          <label>Summary</label>
-          <input
+          <Label>Summary</Label>
+          <Input
             type="text"
             name={`awards[${props.index}].summary`}
             ref={register}
@@ -148,15 +150,6 @@ export default React.memo(styled(FormElement)`
     flex-grow: 1;
 
     .form {
-      input {
-        width: 100%;
-        background: ${props => rgba(props.theme.PRIMARY_COLOR, 0.1)};
-        padding: 4px;
-        border: 1px solid ${props => props.theme.PRIMARY_COLOR};
-        border-radius: 4px;
-        color: #e5e5e5;
-      }
-
       &.hidden {
         display: none;
       }

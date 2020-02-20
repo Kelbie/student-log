@@ -7,7 +7,7 @@ const queries = gql`
     getTimetable(date: String): [Class]
     getResume: Resume
     getProfile: Profile
-    getWork(first: Int, offset: Int): [Job]
+    getWork(first: Int, offset: Int, approved: Boolean): [Job]
     getJob(id: String): Job
     getSettings: Settings
   }
@@ -19,6 +19,7 @@ const mutations = gql`
     setICSLink(ics_link: String): String
     updateResume(resume: ResumeInput): Resume
     postJob(job: JobInput): Job
+    approveJob(job_id: String): Boolean
   }
 `;
 

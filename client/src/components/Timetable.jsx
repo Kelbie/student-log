@@ -18,7 +18,9 @@ function calculateGaps(classes) {
   let gaps = [];
   let difference = 0; // Difference in time between classes
   for (let i = 1; i < classes.length; i++) {
-    difference = new Date(classes[i].start).getTime() - new Date(classes[i - 1].end).getTime();
+    difference =
+      new Date(parseInt(classes[i].start)).getTime() -
+      new Date(parseInt(classes[i - 1].end)).getTime();
     if (difference > 0) {
       gaps.push({
         type: 'gap',
@@ -33,13 +35,11 @@ function calculateGaps(classes) {
 
 function calculateDuration(classes) {
   return classes.map(class_ => {
-    console.log('class', class_);
-
     return {
       ...class_,
       duration: moment
-        .unix(new Date(class_.end).getTime() / 1000)
-        .diff(moment.unix(new Date(class_.start).getTime() / 1000), 'hour')
+        .unix(new Date(parseInt(class_.end)).getTime() / 1000)
+        .diff(moment.unix(new Date(parseInt(class_.start)).getTime() / 1000), 'hour')
     };
   });
 }
@@ -82,8 +82,6 @@ function Timetable(props) {
     }
   });
 
-  console.log(321, data);
-
   useEffect(() => {
     if (data) {
       setClasses(calculateDuration(data.getTimetable));
@@ -106,7 +104,7 @@ function Timetable(props) {
             <Timelabel index={i}>
               {classes[0] &&
                 moment
-                  .unix(new Date(classes[0].start).getTime() / 1000)
+                  .unix(new Date(parseInt(classes[0].start)).getTime() / 1000)
                   .add(i, 'hours')
                   .format('HH:mm')}
             </Timelabel>
@@ -129,7 +127,7 @@ function Timetable(props) {
               />
             );
           } else {
-            console.log(class_);
+            console.log(321, class_.duration);
             return (
               <Class
                 type={class_.type}

@@ -1,6 +1,10 @@
-// https://www.gov.uk/check-a-university-is-officially-recognised/recognised-bodies
-// https://www.whatismytenantid.com/
-export default {
+import React, { Component } from 'react';
+import ReactSelect from 'react-select';
+
+import styled from 'styled-components';
+import { rgba } from 'polished';
+
+const institutions = {
   'abdn.ac.uk': {
     name: 'University of Aberdeen',
     id: '8c2b19ad-5f9c-49d4-9077-3ec3cfc52b3f'
@@ -226,3 +230,92 @@ export default {
     id: '09ab91a8-e6d6-4fba-98da-63eac7ab3ce2'
   }
 };
+
+function hydrate(institutions) {
+  return Object.keys(institutions).map((institution, i) => {
+    return { label: institutions[institution].name, value: institution };
+  });
+}
+
+const options = hydrate(institutions);
+
+// const options = [
+//   { label: 'Robert Gordon University', value: 'rgu.ac.uk' },
+//   { label: 'University of Aberdeen', value: 'abdn.ac.uk' },
+//   { label: 'The University of Edinburgh', value: 'ed.ac.uk' },
+//   { label: 'North East Scotland College', value: 'nescol.ac.uk' },
+//   { label: 'University of Glasgow', value: 'gla.ac.uk' },
+//   { label: 'University of Strathclyde', value: 'strath.ac.uk' },
+//   { label: 'Harvard University', value: 'harvard.edu' },
+//   { label: 'University of Oxford', value: 'ox.ac.uk' },
+//   { label: 'University of Cambridge', value: 'cam.ac.uk' },
+//   { label: 'University of St Andrews', value: 'st-andrews.ac.uk' },
+//   { label: 'University of the West of Scotland', value: 'uws.ac.uk' },
+//   { label: 'Heriot Watt University', value: 'hw.ac.uk' },
+//   { label: 'University of Pennsylvania', value: 'upenn.edu' },
+//   { label: 'Cornell University', value: 'cornell.edu' },
+//   { label: 'McGill University', value: 'mcgill.ca' },
+//   { label: 'Glasgow Caledonian University', value: 'gcu.ac.uk' },
+//   { label: 'University of Stirling', value: 'stir.ac.uk' },
+//   { label: 'University of Dundee', value: 'dundee.ac.uk' },
+//   { label: 'Edinburgh Napier University', value: 'napier.ac.uk' },
+//   { label: 'Glasgow School of Art', value: 'gsa.ac.uk' },
+//   { label: 'Royal Conservatoire of Scotland', value: 'rcs.ac.uk' }
+// ];
+
+function Select(props) {
+  return <ReactSelect classNamePrefix="react-select" {...props} options={options}></ReactSelect>;
+}
+
+export default styled(Select)`
+  .react-select__input {
+    color: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['600']} !important;
+  }
+  .react-select__option--is-focused {
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['900'] : props.theme.PALLET['300']};
+  }
+
+  .react-select__control {
+    box-shadow: none !important;
+    background: -webkit-linear-gradient(
+      ${props => rgba(props.theme.PRIMARY_COLOR, 0.05)},
+      ${props => rgba(props.theme.SECONDARY_COLOR, 0.05)}
+    );
+    border: 1px solid ${props => rgba(props.theme.PRIMARY_COLOR, 0.5)};
+
+    &:hover {
+      border: 1px solid ${props => rgba(props.theme.PRIMARY_COLOR, 0.5)};
+    }
+  }
+
+  .react-select__menu {
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['800'] : props.theme.PALLET['200']};
+    border: 1px solid ${props => rgba(props.theme.PRIMARY_COLOR, 0.5)};
+  }
+
+  .react-select__single-value,
+  .react-select__placeholder {
+    color: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['600']} !important;
+  }
+
+  .react-select__option,
+  .react-select__option--is-focused {
+    color: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['600']} !important;
+    background: auto;
+  }
+
+  .react-select__option--is-selected {
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['900'] : props.theme.PALLET['300']} !important;
+  }
+
+  .react-select__option:hover {
+    background: ${props =>
+      props.theme.is === 'dark' ? props.theme.PALLET['900'] : props.theme.PALLET['300']};
+  }
+`;

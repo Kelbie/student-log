@@ -7,6 +7,8 @@ import { saveResume } from '../actions/actions';
 
 import _ from 'lodash';
 
+import omitDeep from 'omit-deep-lodash';
+
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
@@ -14,7 +16,7 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import { Link, Route, Switch, useRouteMatch, withRouter } from 'react-router-dom';
 
 import styled from 'styled-components';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 
 import Button from './common/Button';
@@ -26,10 +28,9 @@ import ResumeWorkFrom from './ResumeWorkForm';
 import ResumeTemplatesForm from './ResumeTemplatesForm';
 import ResumeSkillsForm from './ResumeSkillsForm';
 import DraggableForm from './DraggableForm';
-import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ButtonRefactor from './common/ButtonRefactor';
-import ResumeSkills2Form from './ResumeSkills2Form';
+import Modal from 'styled-react-modal';
 
 // fake data generator
 const getItems = count =>
@@ -260,7 +261,7 @@ function ResumePDF(props) {
 
   return (
     <div {...props}>
-      <ResumePDFNav></ResumePDFNav>
+      {/* <ResumePDFNav></ResumePDFNav> */}
       <Document file={url} onLoadSuccess={e => setPages(e.numPages)}>
         <Page pageNumber={page} renderAnnotations={false} renderTextLayer={false} />
       </Document>
@@ -269,9 +270,7 @@ function ResumePDF(props) {
 }
 
 ResumePDF = styled(ResumePDF)`
-  width: 100%;
   height: 100%;
-  overflow: auto;
 
   .react-pdf__Document,
   .react-pdf__Page {
@@ -279,10 +278,11 @@ ResumePDF = styled(ResumePDF)`
   }
 
   canvas {
-    height: 100% !important;
     width: auto !important;
     max-width: 100%;
     margin: auto;
+    height: auto !important;
+    max-height: 100%;
   }
 
   canvas + div {
@@ -302,8 +302,6 @@ function ResumeNav(props) {
 
   const { sections } = useMappedState(mapState);
   const dispatch = useDispatch();
-
-  console.log(sections, 109283);
 
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -405,8 +403,55 @@ function ResumePDFNav(props) {
   );
 }
 
-const POST_RESUME = gql`
-  mutation updateResume($resume: ResumeInput) {
+const GET_RESUME = gql`
+  query {
+    getResume {
+      sections
+      template
+      profile {
+        name
+        email
+        number
+        location
+        link
+      }
+      work {
+        name
+        title
+        location
+        start
+        end
+      }
+      education {
+        name
+        location
+        degree
+        major
+        gpa
+        start
+        end
+      }
+      skills {
+        name
+        keywords
+      }
+      projects {
+        name
+        description
+        link
+      }
+      awards {
+        name
+        date
+        awarder
+        summary
+      }
+    }
+  }
+`;
+
+const UPDATE_RESUME = gql`
+  mutation updateResume($resume: ResumeInput!) {
     updateResume(resume: $resume) {
       profile {
         name
@@ -417,12 +462,21 @@ const POST_RESUME = gql`
 
 const customStyles = {};
 
+function useCallAndSave() {
+  useEffect(() => {}, []);
+}
+
+const StyledModal = Modal.styled`
+
+`;
+
 function ResumePage(props) {
-  const [updateResume] = useMutation(POST_RESUME);
+  const { data, error, loading } = useQuery(GET_RESUME);
+  const [updateResume] = useMutation(UPDATE_RESUME);
   const [showPDF, setShowPDF] = useState(false);
   let { path, url } = useRouteMatch();
+  const dispatch = useDispatch();
 
-  // Get profile resume from store
   const mapState = useCallback(
     state => ({
       resume: state.resume
@@ -435,20 +489,32 @@ function ResumePage(props) {
   useEffect(() => {
     updateResume({
       variables: {
-        resume: {
-          ...resume
-        }
+        resume: omitDeep(resume, '__typename')
       }
     });
   }, [resume]);
 
-  const [modelIsOpen, setModelIsOpen] = useState(false);
+  useEffect(() => {
+    if (data) {
+      if (data.getResume) {
+        if (data.getResume.sections) {
+          if (data.getResume.sections[0]) {
+            dispatch(saveResume(data.getResume));
+          }
+        }
+      }
+    }
+  }, [data]);
   return (
     <div {...props}>
-      <ResumeNav showPDF={b => setShowPDF(b)} />
-      <Modal contentLabel="Example Modal" isOpen={showPDF} onRequestClose={() => setShowPDF(false)}>
+      <Modal
+        isOpen={showPDF}
+        onEscapeKeydown={() => setShowPDF(false)}
+        onBackgroundClick={() => setShowPDF(false)}
+      >
         <ResumePDF />
       </Modal>
+      <ResumeNav showPDF={b => setShowPDF(b)} />
       <Switch>
         <Route path={`${path}/templates`}>
           <ResumeTemplatesForm />

@@ -30,5 +30,6 @@ type Group {
 }
 
 type Profile {
+  email: String
   name: String
 }

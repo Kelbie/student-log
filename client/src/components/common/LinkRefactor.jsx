@@ -10,13 +10,15 @@ import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/wind
 import { FontawesomeObject, IconProp, IconName } from '@fortawesome/fontawesome-svg-core';
 
 function Button({ to, variant, icon, children, className, onClick, ...props }) {
+  const width = useWindowWidth();
+
   return (
     <Link to={to} className={className} onClick={onClick}>
       <div className="link">
         <span className="icon">
           <FontAwesomeIcon icon={icon} />
         </span>
-        <span className="text">{children}</span>
+        {width < 500 && props.responsive ? null : <span className="text">{children}</span>}
       </div>
     </Link>
   );

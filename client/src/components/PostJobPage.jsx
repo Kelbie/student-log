@@ -28,6 +28,8 @@ import * as Yup from 'yup';
 
 import WorkPosting from './WorkPosting';
 import WorkElement from './WorkElement';
+import ButtonRefactor from './common/ButtonRefactor';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 
 function Label(props) {
   return <label {...props}>{props.children}</label>;
@@ -92,7 +94,6 @@ function MyDropzone(props) {
     var file = files[0];
     const reader = new FileReader();
     reader.onload = event => {
-      console.log(123, event.target.result, file.path);
       setImage(event.target.result);
       props.setImage(event.target.result);
       setImagePath(file.path);
@@ -270,8 +271,6 @@ function About(props) {
           location: Yup.string().required('Required')
         })}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log(222, values);
-
           let job = await postJob({
             variables: {
               ...values
@@ -421,7 +420,9 @@ function About(props) {
                 <Geosuggest
                   types={['(regions)']}
                   onChange={e => setFieldValue('location', e)}
-                  onSuggestSelect={e => setFieldValue('location', e.description)}
+                  onSuggestSelect={e => {
+                    setFieldValue('location', e?.description);
+                  }}
                 />
                 <StyledErrorMessage name="location" />
               </fieldset>
@@ -503,9 +504,15 @@ function About(props) {
                 <StyledErrorMessage name="company_desc" />
               </fieldset>
             </div>
-            <Button2 type="submit" onClick={() => console.log(errors)} disabled={isSubmitting}>
+            <ButtonRefactor
+              variant={'fill'}
+              icon={faSave}
+              type="submit"
+              onClick={() => console.log(errors)}
+              disabled={isSubmitting}
+            >
               Submit
-            </Button2>
+            </ButtonRefactor>
           </form>
         )}
       </Formik>

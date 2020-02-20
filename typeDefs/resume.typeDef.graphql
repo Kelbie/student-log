@@ -39,6 +39,7 @@ type ResumeSchool {
 type ResumeSkill {
   id: String
   name: String
+  keywords: [String]
 }
 
 type ResumeProject {
@@ -123,7 +124,7 @@ input ResumeInput {
 }
 
 type Resume {
-  sections: [ResumeSectionsInput]
+  sections: [ResumeSections]
   template: Int
   profile: ResumeProfile
   work: [ResumeJob]

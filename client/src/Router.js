@@ -27,38 +27,41 @@ import WorkPosting from './components/WorkPosting';
 import ResumePage from './components/ResumePage';
 import AboutPage from './components/AboutPage';
 import Login from './components/Login';
-import Modal from './components/common/Modal';
 import ButtonRefactor from './components/common/ButtonRefactor';
+
+import Modal, { ModalProvider, BaseModalBackground } from 'styled-react-modal';
 
 const client = new ApolloClient({
   uri: 'http://localhost:30662/graphql'
 });
 
+const FadingBackground = styled(BaseModalBackground)`
+  opacity: ${props => props.opacity};
+  transition: opacity ease 200ms;
+`;
+
 function MyRouter(props) {
   return (
     <div {...props}>
-      <Router>
-        <Header />
-        <div className="container">
-          <Nav />
-          <Switch>
-            <Route exact path="/timetable" component={TimetablePage} />
-            <Route exact path="/class/:id" />
-            <Route exact path="/profile" />
-            <Route exact path="/settings" />
-            <Route exact path="/work" component={WorkPage} />
-            <Route exact path="/work/:id/:string" component={WorkPosting} />
-            <Route exact path="/job/new" component={PostJobPage} />
-            <Route path="/resume" component={ResumePage} />
-            <Route exact path="/about" component={AboutPage} />
-            <Route exact path="/portal">
-              <Modal>
-                <Login></Login>
-              </Modal>
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+      <ModalProvider backgroundComponent={FadingBackground}>
+        <Router>
+          <Header />
+          <div className="container">
+            <Nav />
+            <Switch>
+              <Route exact path="/timetable" component={TimetablePage} />
+              <Route exact path="/class/:id" />
+              <Route exact path="/profile" />
+              <Route exact path="/settings" />
+              <Route exact path="/work" component={WorkPage} />
+              <Route exact path="/work/:id/:string" component={WorkPosting} />
+              <Route exact path="/job/new" component={PostJobPage} />
+              <Route path="/resume" component={ResumePage} />
+              <Route exact path="/about" component={AboutPage} />
+            </Switch>
+          </div>
+        </Router>
+      </ModalProvider>
       <div className="gradient"></div>
       <div className="pattern"></div>
     </div>
