@@ -9,6 +9,8 @@ import styled from 'styled-components';
 import Button, { Button2 } from '../../../components/common/Button';
 import EditDropdown, { EditDropdownButton } from '../../../components/EditDropdown';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
+import Input from '../../../components/common/Input';
+import Label from '../../../components/common/Label';
 
 function FormElement({ handle, content, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
@@ -21,8 +23,8 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
       </div>
       <div className="content">
         <div className={`form ${!isEditable ? 'hidden' : ''}`}>
-          <label>School Name*</label>
-          <input
+          <Label required>School Name</Label>
+          <Input
             type="text"
             name={`education[${props.index}].name`}
             ref={register({ required: true })}
