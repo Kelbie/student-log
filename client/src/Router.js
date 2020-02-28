@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 import styled, { ThemeProvider } from 'styled-components';
 
-import PostJobPage from './components/PostJobPage';
+import PostJobPage from './pages/post_job/PostJobPage';
 
 import './styles.css';
 
-import TimetablePage from './components/TimetablePage';
+import TimetablePage from './pages/timetable/TimetablePage';
 
 import './styles.css';
 import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -21,18 +21,18 @@ import { rgba } from 'polished';
 
 import Header from './components/Header';
 import Nav from './components/Nav';
-import WorkPage from './components/WorkPage';
+import WorkPage from './pages/work/WorkPage';
 
-import WorkPosting from './components/WorkPosting';
-import ResumePage from './components/ResumePage';
-import AboutPage from './components/AboutPage';
+import WorkPosting from './pages/work/WorkPosting';
+import ResumePage from './pages/resume/ResumePage';
+import AboutPage from './pages/about/AboutPage';
 import Login from './components/Login';
 import ButtonRefactor from './components/common/ButtonRefactor';
 
 import Modal, { ModalProvider, BaseModalBackground } from 'styled-react-modal';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:30662/graphql'
+  uri: `http://localhost:30662/graphql`
 });
 
 const FadingBackground = styled(BaseModalBackground)`
