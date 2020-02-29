@@ -7,6 +7,10 @@ const Input = React.forwardRef((props, ref) => {
 });
 
 export default styled(Input)`
+  &:focus {
+    outline: none;
+  }
+
   width: 100%;
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['600']};
