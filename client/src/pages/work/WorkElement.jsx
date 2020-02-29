@@ -131,7 +131,8 @@ Class = styled(Class)`
 
     .right {
       text-align: right;
-      color: ${props => (props.theme.is === 'dark' ? '#cbcbcb' : '#848484')};
+      color: ${props =>
+        props.theme.is === 'dark' ? props.theme.PALLET['400'] : props.theme.PALLET['600']};
       display: flex;
       flex-direction: column;
       justify-content: space-between;
