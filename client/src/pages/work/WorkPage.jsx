@@ -19,7 +19,8 @@ import {
   setResults,
   updateFilterType,
   updateFilterCompany,
-  updateFilterCategory
+  updateFilterCategory,
+  updateFilterLocation
 } from '../../actions/actions';
 import _ from 'lodash';
 
@@ -91,13 +92,14 @@ function Filter(props) {
   );
 
   const { results } = useMappedState(mapState);
-
+  const [locations, setLocations] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [types, setTypes] = useState([]);
   useEffect(() => {
     if (results) {
       let c = []; // Companies
       let t = []; // Types
+      let l = [];
       results.map(r => {
         if (!c.includes(r.name)) {
           c.push(r.name);
@@ -105,9 +107,13 @@ function Filter(props) {
         if (!t.includes(r.job_type)) {
           t.push(r.job_type);
         }
+        if (!l.includes(r.location)) {
+          l.push(r.location);
+        }
       });
       setCompanies(c);
       setTypes(t);
+      setLocations(l);
     }
   }, [results]);
 
@@ -130,6 +136,27 @@ function Filter(props) {
 
   return (
     <div {...props}>
+      <fieldset>
+        <legend>By Location:</legend>
+        {locations.map(location => {
+          return (
+            <Checkbox
+              shape="curve"
+              icon={<FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon>}
+              onChange={e => {
+                dispatch(
+                  updateFilterLocation({
+                    name: location,
+                    active: e.target.checked
+                  })
+                );
+              }}
+            >
+              {location}
+            </Checkbox>
+          );
+        })}
+      </fieldset>
       <fieldset>
         <legend>By Company:</legend>
         {companies.map(company => {
@@ -385,6 +412,13 @@ function WorkPage(props) {
         {/* <div className="search-results">{data.getWork.length} results</div> */}
         {data.getWork
           .filter(function(w) {
+            let passLocation = false;
+            for (let i = 0; i < filter.locations.length; i++) {
+              if (w.location === filter.locations[i].name && filter.locations[i].active) {
+                passLocation = true;
+              }
+            }
+
             let passType = false;
             for (let i = 0; i < filter.types.length; i++) {
               if (w.job_type === filter.types[i].name && filter.types[i].active) {
@@ -408,6 +442,12 @@ function WorkPage(props) {
               }
             }
 
+            if (!passLocation) {
+              passLocation = filter.locations.every(function(el) {
+                return !el.active;
+              });
+            }
+
             if (!passType) {
               passType = filter.types.every(function(el) {
                 return !el.active;
@@ -426,7 +466,7 @@ function WorkPage(props) {
               });
             }
 
-            return passCompanies && passType && passCategories;
+            return passCompanies && passType && passCategories && passLocation;
           })
           .map((w, i) => {
             return (

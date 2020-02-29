@@ -4,7 +4,8 @@ import { stat } from 'fs';
 const initialState = {
   types: [],
   companies: [],
-  categories: []
+  categories: [],
+  locations: []
 };
 
 // Reducer
@@ -60,6 +61,23 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         categories: categories
+      };
+    case ACTION_TYPES.UPDATE_FILTER_LOCATION:
+      let locations = state.locations;
+      let added4 = false;
+      for (let i = 0; i < locations.length; i++) {
+        if (locations[i].name === action.payload.name) {
+          locations[i] = action.payload;
+          added4 = true;
+          break;
+        }
+      }
+      if (!added4) {
+        locations.push(action.payload);
+      }
+      return {
+        ...state,
+        locations: locations
       };
     default:
       return state;

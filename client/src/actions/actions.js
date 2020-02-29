@@ -26,6 +26,13 @@ export const toggleTheme = () => {
   };
 };
 
+export const updateFilterLocation = filter => {
+  return {
+    type: ACTION_TYPES.UPDATE_FILTER_LOCATION,
+    payload: filter
+  };
+};
+
 export const updateFilterType = filter => {
   return {
     type: ACTION_TYPES.UPDATE_FILTER_TYPE,
