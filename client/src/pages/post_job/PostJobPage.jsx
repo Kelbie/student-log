@@ -280,6 +280,8 @@ function About(props) {
           });
 
           props.onSubmit({ id: job.data.postJob.id, ...values });
+
+          window.location.href="/work";
         }}
       >
         {({
