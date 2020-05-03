@@ -39,10 +39,11 @@ function TemplatesPage(props) {
 
   const { template } = useMappedState(mapState);
 
+  console.log(template);
   // Form config
-  const { register, handleSubmit, watch, errors, triggerValidation, setValue } = useForm({
+  const { register, handleSubmit, watch } = useForm({
     defaultValues: {
-      template: '1'
+      template: template.toString()
     }
   });
 
@@ -57,7 +58,10 @@ function TemplatesPage(props) {
   };
 
   useEffect(() => {
-    dispatch(saveResume({ template: parseInt(watch('template')) }));
+    console.log(watch('template'))
+    if (watch('template')) {
+      dispatch(saveResume({ template: parseInt(watch('template')) }));
+    }
   }, [watch('template')]);
 
   return (
