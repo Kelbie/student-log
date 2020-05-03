@@ -1,52 +1,38 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 
+// Styling
 import styled from 'styled-components';
+
+import Geosuggest from 'react-geosuggest';
+import './geo.css';
 
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+
 import { useDropzone } from 'react-dropzone';
-import Jimp from 'jimp';
 
 import StepWizard from 'react-step-wizard';
 import RichTextEditor from 'react-rte';
 
+// Forms
 import { Formik, ErrorMessage, Field } from 'formik';
+
+// Styling
 import { rgba } from 'polished';
 
-import moment from 'moment';
-
-import { Button2 } from '../../components/common/Button';
-
-import Geosuggest from 'react-geosuggest';
-import gql from 'graphql-tag';
-import { useMutation } from 'react-apollo-hooks';
-import Class from '../timetable/TimetableClass';
-import WorkElement2 from '../work/WorkElement';
-import Card from '../../components/common/Card';
-import './geo.css';
-import * as Yup from 'yup';
-
-import WorkPosting from '../work/WorkPosting';
-import WorkElement from '../work/WorkElement';
-import ButtonRefactor from '../../components/common/ButtonRefactor';
+// Icons
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 
-function Label(props) {
-  return <label {...props}>{props.children}</label>;
-}
+// GraphQL
+import gql from 'graphql-tag';
+import { useMutation } from 'react-apollo-hooks';
 
-Label = styled(Label)`
-  &::after {
-    content: ${props => (props.required ? "''" : 'none')};
-    width: 8px;
-    height: 8px;
-    display: inline-block;
-    background: ${props => props.theme.PRIMARY_COLOR};
-    border-radius: 100%;
-    margin-left: 4px;
-    vertical-align: middle;
-  }
-`;
+// Common
+import ButtonRefactor from '../../components/common/ButtonRefactor';
+import Label from '../../components/common/Label';
+
+// Testing
+import * as Yup from 'yup';
 
 function StyledErrorMessage(props) {
   return (
@@ -116,13 +102,7 @@ function MyDropzone(props) {
 
   return (
     <div {...props} {...getRootProps({ style })}>
-      <input
-        name={props.name}
-        {...getInputProps()}
-        // onChange={props.onChange}
-        // onBlur={props.onBlur}
-        // value={props.value}
-      />
+      <input name={props.name} {...getInputProps()} />
       <p>
         {imagePath
           ? imagePath.split('\\')[imagePath.split('\\').length - 1]
@@ -247,6 +227,25 @@ const POST_JOB = gql`
   }
 `;
 
+function isEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function isURL(url) {
+  return !/^(?:f|ht)tps?\:\/\//.test(url);
+}
+
+// add the relevant protocol to the input
+function addProtocol(url) {
+  if (isEmail(url)) {
+    url = 'mailto://' + url;
+  } else if (isURL(url)) {
+    url = 'http://' + url;
+  }
+  return url;
+}
+
 function About(props) {
   const [postJob, { loading }] = useMutation(POST_JOB);
 
@@ -273,7 +272,10 @@ function About(props) {
         onSubmit={async (values, { setSubmitting }) => {
           let job = await postJob({
             variables: {
-              ...values
+              ...values,
+              website: addProtocol(values.website),
+              apply_link: addProtocol(values.apply_link),
+              email: addProtocol(values.email)
             }
           });
 
@@ -377,14 +379,6 @@ function About(props) {
                 <p>Link to Application page or Email address</p>
                 <StyledErrorMessage name="apply_link" />
                 <Label required>Job Description</Label>
-                {/* <StyledField
-                                    required
-                                    type="text"
-                                    name="job_desc"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.job_desc}
-                                /> */}
                 <RichTextEditor
                   value={value}
                   onChange={e => {
@@ -459,7 +453,7 @@ function About(props) {
                   your company’s profile.
                 </p>
                 <StyledErrorMessage name="company_statement" />
-                <label>Logo (.png file)</label>
+                <Label required>Logo (.png file)</Label>
                 <MyDropzone
                   type="text"
                   name="logo"

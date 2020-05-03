@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-
-import move from 'lodash-move';
+import React, { useState, useEffect } from 'react';
 
 import { Draggable } from 'react-beautiful-dnd';
 
+// Helper
+import move from 'lodash-move';
+
+// Styling
 import styled from 'styled-components';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// Icons
 import {
-  faEllipsisV,
   faPlus,
   faTrash,
   faSave,
@@ -16,24 +17,19 @@ import {
   faMinus
 } from '@fortawesome/free-solid-svg-icons';
 
-import DraggableForm from '../../../components/DraggableForm';
-import EditDropdown, { EditDropdownButton } from '../../../components/EditDropdown';
+// Components
+import DraggableForm from '../../../components/common/DraggableForm';
+
+// Common
+import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
 import Input from '../../../components/common/Input';
-import Button, { Button2 } from '../../../components/common/Button';
+import { Button2 } from '../../../components/common/Button';
 import Label from '../../../components/common/Label';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
-import { useMappedState, useDispatch } from 'redux-react-hook';
+
+// Redux
+import { useDispatch } from 'redux-react-hook';
 import { saveResume } from '../../../actions/actions';
-
-function isEmpty(obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      return false;
-    }
-  }
-
-  return JSON.stringify(obj) === JSON.stringify({});
-}
 
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
@@ -91,7 +87,6 @@ Skill = styled(Skill)`
 
 function FormElement({ handle, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
-  const [editDropdownActive, setEditDropdownActive] = useState(false);
 
   const [numberOfDeletes, setNumberOfDeletes] = useState(1);
 
@@ -136,8 +131,6 @@ function FormElement({ handle, register, editable, errors, ...props }) {
       }
     });
 
-    console.log(871927397, absoluteIndex, index, props.index, id);
-
     dispatch(
       saveResume({
         skills: props.skills.map((skill, i) => {
@@ -177,22 +170,6 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               setItems={setItems}
               onDragEnd={(start, end) => {
                 setItems(move(items, start, end));
-                // dispatch(
-                //   saveResume({
-                //     skills: [
-                //       ...props.skills.map((skill, i) => {
-                //         if (i != props.index) {
-                //           return skill;
-                //         } else {
-                //           return {
-                //             ...skill,
-                //             keywords: move(skill.keywords, start, end)
-                //           };
-                //         }
-                //       })
-                //     ]
-                //   })
-                // );
               }}
             >
               {items.map((item, index) => {
@@ -229,7 +206,6 @@ function FormElement({ handle, register, editable, errors, ...props }) {
               type={'button'}
               variant={'border'}
               onClick={() => {
-                // console.log(98172873, items);
                 setItems([
                   ...items,
                   {
@@ -239,21 +215,6 @@ function FormElement({ handle, register, editable, errors, ...props }) {
                     isEditable: true
                   }
                 ]);
-                console.log(
-                  [
-                    ...props.skills.map((skill, i) => {
-                      if (i != props.index) {
-                        return skill;
-                      } else {
-                        return {
-                          ...skill,
-                          keywords: [...skill.keywords, '']
-                        };
-                      }
-                    })
-                  ],
-                  98172873
-                );
                 dispatch(
                   saveResume({
                     skills: [

@@ -1,14 +1,16 @@
 import React from 'react';
 
+import Markdown from 'react-markdown';
+
+// Styling
 import styled from 'styled-components';
 
-import Markdown from 'react-markdown';
-import WorkElement from './WorkElement';
+// Component
+import WorkElement from '../work/WorkElement';
 
+// GraphQL
 import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo-hooks';
-
-import moment from 'moment';
 
 const GET_JOB = gql`
   query getJob($id: String) {
@@ -43,6 +45,10 @@ function WorkPosting(props) {
     return <div>Loading</div>;
   }
 
+  if (error) {
+    return <></>
+  }
+
   return (
     <div {...props}>
       <WorkElement
@@ -55,7 +61,7 @@ function WorkPosting(props) {
         featured={false}
         apply_link={data.getJob.apply_link}
         location={data.getJob.location}
-        date={moment(new Date(parseInt(data.getJob.created_at)))}
+        date={new Date()}
       />
       <div className="job-desc">
         <Markdown source={data.getJob.job_desc} />

@@ -1,13 +1,15 @@
 import React from 'react';
 
-import styled, { withTheme } from 'styled-components';
-
 import getSlug from 'speakingurl';
 
-import A from '../../components/common/A';
+// Styling
+import styled, { withTheme } from 'styled-components';
 
-import moment from 'moment';
-import { ButtonExternal } from '../../components/common/Button';
+// Common
+import A from '../../components/common/A';
+import LinkRefactor from '../../components/common/LinkRefactor';
+
+// Icons
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Class(props) {
@@ -33,23 +35,23 @@ function Class(props) {
             <div className="company">{props.company}</div>
             <div className="module raise">
               {props.apply_link ? `${props.location} • ` : null}
-              {props.date.format('MMM DD')}
-              {` • `}
+              {/* {props.date.format('MMM DD')} */}
+              {/* {` • `} */}
               {props.job_type}
             </div>
           </div>
-          {props.apply_link ? (
-            <ButtonExternal variant={'fill'} href={props.apply_link} icon={faExternalLinkAlt}>
-              Apply
-            </ButtonExternal>
-          ) : (
-            <div className="right">
-              <div>{props.location}</div>
-              <div className="new">
-                {props.date.add(3, 'days').isAfter(moment(new Date())) ? 'NEW' : ''}
+          <div>
+            {props.apply_link ? (
+              <LinkRefactor variant={'fill'} to={{pathname: props.apply_link}} icon={faExternalLinkAlt} target="_blank" rel="noreferrer noopener">
+                Apply
+              </LinkRefactor>
+            ) : (
+              <div className="right">
+                <div>{props.location}</div>
+                <div className="new"></div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import * as ACTION_TYPES from '../actions/action_types';
-import { stat } from 'fs';
 
 const initialState = {
   types: [],

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 
+// Styling
 import styled from 'styled-components';
 
 // GraphQL
@@ -26,6 +27,10 @@ function ProfilePage({ staticContext, ...props }) {
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error</div>
   }
 
   return <div {...props}>{data.getProfile.name}</div>;

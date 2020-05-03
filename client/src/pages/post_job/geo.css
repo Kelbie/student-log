@@ -2,14 +2,21 @@
  * The geosuggest module
  * NOTE: duplicated font-sizes' are for browsers which don't support rem (only IE 8)
  */
+
+ *, *:before, *:after {
+  box-sizing: border-box;
+}
+
 .geosuggest {
   font-size: 16px;
   position: relative;
   text-align: left;
+  transition: 0s ease 0s;
 }
 .geosuggest__input {
   width: 100%;
   border: 2px solid transparent;
+  border-radius: 2px;
 }
 .geosuggest__input:focus {
   box-shadow: 0 0 0 transparent;
@@ -21,14 +28,12 @@
   right: 0;
   max-height: 25em;
   padding: 0;
-  margin-top: -1px;
+  /* margin-top: -1px; */
   border-top-width: 0;
   overflow-x: hidden;
   overflow-y: auto;
   list-style: none;
   z-index: 5;
-  -webkit-transition: max-height 0.2s, border 0.2s;
-  transition: max-height 0.2s, border 0.2s;
 }
 .geosuggest__suggests--hidden {
   max-height: 0;

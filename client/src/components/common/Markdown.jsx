@@ -1,6 +1,9 @@
 import Markdown from 'markdown-to-jsx';
+
+// Styling
 import styled from 'styled-components';
 
+// add custom styling to Markdown to keep it consistent to our styles
 export default styled(Markdown)`
   color: ${props => (props.theme.is === 'dark' ? 'white' : 'black')} code {
     display: inline-block;

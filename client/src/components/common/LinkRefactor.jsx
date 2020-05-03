@@ -1,24 +1,18 @@
-import React, { ReactNode } from 'react';
-import { Link, LinkProps } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import styled, { css } from 'styled-components';
 import { rgba, darken } from 'polished';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faBriefcase, faComments } from '@fortawesome/free-solid-svg-icons';
 
-import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
-import { FontawesomeObject, IconProp, IconName } from '@fortawesome/fontawesome-svg-core';
-
-function Button({ to, variant, icon, children, className, onClick, ...props }) {
-  const width = useWindowWidth();
-
+function Button({ to, variant, icon, children, className, onClick, rel, target, ...props }) {
   return (
-    <Link to={to} className={className} onClick={onClick}>
+    <Link to={to} className={className} onClick={onClick} target={target} rel={rel}>
       <div className="link">
         <span className="icon">
           <FontAwesomeIcon icon={icon} />
         </span>
-        {width < 500 && props.responsive ? null : <span className="text">{children}</span>}
+        <span className="text">{children}</span>
       </div>
     </Link>
   );
@@ -39,6 +33,13 @@ export default styled(Button)`
     background: transparent;
 
     transition: 0.15s ease 0s;
+
+    @media only screen and (max-width: 480px) {
+      .text {
+        display: none;
+      }
+    }
+
     * {
       transition: 0.15s ease 0s;
     }
@@ -47,11 +48,12 @@ export default styled(Button)`
       position: relative;
       svg,
       path {
-        color: ${props => (props.active ? props.theme.PRIMARY_COLOR : props.theme.PALLET['100'])};
+        color: ${props =>
+          props.variant === 'fill' ? props.theme.PALLET['100'] : props.theme.PALLET['400']};
       }
     }
     .text {
-      color: ${props => (props.active ? props.theme.PRIMARY_COLOR : props.theme.PALLET['100'])};
+      color: ${props => props.theme.PALLET['100']};
       margin-left: ${props => (props.children ? '8px' : '0px')};
     }
   }

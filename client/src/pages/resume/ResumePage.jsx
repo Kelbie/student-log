@@ -1,54 +1,43 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
-import { faFilePdf, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import {Link, Route, withRouter, useRouteMatch, Switch} from "react-router-dom";
+
+import { Draggable } from 'react-beautiful-dnd';
+
+import Modal from 'styled-react-modal';
+
+// Helper
+import _ from 'lodash';
 import move from 'lodash-move';
+import omitDeep from 'omit-deep-lodash';
+
+// Icons
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+
+// Redux
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { saveResume } from '../../actions/actions';
 
-import _ from 'lodash';
-
-import omitDeep from 'omit-deep-lodash';
-
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-
-import { Link, Route, Switch, useRouteMatch, withRouter } from 'react-router-dom';
-
+// Styling
 import styled from 'styled-components';
+
+// GraphQL
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 
-import Button from '../../components/common/Button';
+// Pages
 import ResumeAwardsForm from './awards/AwardsForm';
 import ResumeEducationFrom from './education/EducationForm';
 import ResumeProfileForm from './profile/ProfileForm';
 import ResumeProjectsForm from './projects/ProjectsForm';
 import ResumeWorkFrom from './work/WorkForm';
-import ResumeTemplatesForm from './template/TemplateForm';
+import ResumeTemplatesForm from './template/TemplatePage';
 import ResumeSkillsForm from './skills/SkillsForm';
-import DraggableForm from '../../components/DraggableForm';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ResumePDF from "./pdf_view/PDFView";
+
+// Components
+import DraggableForm from '../../components/common/DraggableForm';
 import ButtonRefactor from '../../components/common/ButtonRefactor';
-import Modal from 'styled-react-modal';
-
-// fake data generator
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }));
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-const grid = 8;
 
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
@@ -66,12 +55,6 @@ const getItemStyle = (isDragging, draggableStyle) => {
     ...activeTransform
   };
 };
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250
-});
 
 function ResumeNavElement({ handle, ...props }) {
   let active = '/resume/' + props.title.toLowerCase() === props.location.pathname;
@@ -125,169 +108,6 @@ ResumeNavElement = styled(withRouter(ResumeNavElement))`
       bottom: 0;
       background: ${props => props.theme.PRIMARY_COLOR};
     }
-  }
-`;
-
-function ResumePDF(props) {
-  // Get resume from store
-  const mapState = useCallback(
-    state => ({
-      resume: state.resume
-    }),
-    []
-  );
-
-  const { resume } = useMappedState(mapState);
-
-  const [pages, setPages] = useState(null);
-  const [page, setPage] = useState(1);
-  const [url, setUrl] = useState('');
-
-  useEffect(() => {
-    async function hydrate() {
-      let data = resume;
-
-      // Profile Map
-      data = _.mapKeys(data, function(value, key) {
-        switch (key) {
-          case 'profile':
-            return 'basics';
-          case 'template':
-            return 'selectedTemplate';
-          default:
-            return key;
-        }
-      });
-
-      // Awards Map
-      data.awards = data.awards.map(award => {
-        return _.mapKeys(award, function(value, key) {
-          switch (key) {
-            case 'name':
-              return 'title';
-            default:
-              return key;
-          }
-        });
-      });
-
-      // Education Map
-      data.education = data.education.map(education => {
-        return _.mapKeys(education, function(value, key) {
-          switch (key) {
-            case 'name':
-              return 'institution';
-            case 'degree':
-              return 'studyType';
-            case 'major':
-              return 'area';
-            case 'start':
-              return 'startDate';
-            case 'end':
-              return 'endDate';
-            default:
-              return key;
-          }
-        });
-      });
-
-      // Projects Map
-      data.projects = data.projects.map(project => {
-        return _.mapKeys(project, function(value, key) {
-          switch (key) {
-            case 'link':
-              return 'url';
-            default:
-              return key;
-          }
-        });
-      });
-
-      // Work Map
-      data.work = data.work.map(work => {
-        return _.mapKeys(work, function(value, key) {
-          switch (key) {
-            case 'name':
-              return 'company';
-            case 'end':
-              return 'endDate';
-            case 'start':
-              return 'startDate';
-            case 'title':
-              return 'position';
-            default:
-              return key;
-          }
-        });
-      });
-
-      // Profile Map
-      data.basics = _.mapKeys(data.basics, function(value, key) {
-        switch (key) {
-          case 'number':
-            return 'phone';
-          case 'link':
-            return 'website';
-          default:
-            return key;
-        }
-      });
-
-      data.basics.location = {
-        address: data.basics.location
-      };
-
-      data.sections = data.sections.map(section => {
-        return section.toLowerCase();
-      });
-
-      const request = {
-        method: 'POST',
-        headers: {
-          Accept: 'application/pdf',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      };
-
-      const response = await fetch('/api/generate/resume', request);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      setUrl(url);
-    }
-
-    hydrate();
-  }, []);
-
-  return (
-    <div {...props}>
-      {/* <ResumePDFNav></ResumePDFNav> */}
-      <Document file={url} onLoadSuccess={e => setPages(e.numPages)}>
-        <Page pageNumber={page} renderAnnotations={false} renderTextLayer={false} />
-      </Document>
-    </div>
-  );
-}
-
-ResumePDF = styled(ResumePDF)`
-  height: 100%;
-
-  .react-pdf__Document,
-  .react-pdf__Page {
-    height: 100%;
-  }
-
-  canvas {
-    width: auto !important;
-    max-width: 100%;
-    margin: auto;
-    height: auto !important;
-    max-height: 100%;
-  }
-
-  canvas + div {
-    height: auto;
-    width: auto;
   }
 `;
 
@@ -392,16 +212,17 @@ ResumeNav = styled(ResumeNav)`
   }
 `;
 
-function ResumePDFNav(props) {
-  return (
-    <div {...props}>
-      <div>
-        <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
-        Page 1<FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
-      </div>
-    </div>
-  );
-}
+// TODO: ADD Resume Nav Bar
+// function ResumePDFNav(props) {
+//   return (
+//     <div {...props}>
+//       <div>
+//         <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
+//         Page 1<FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
+//       </div>
+//     </div>
+//   );
+// }
 
 const GET_RESUME = gql`
   query {
@@ -458,16 +279,6 @@ const UPDATE_RESUME = gql`
       }
     }
   }
-`;
-
-const customStyles = {};
-
-function useCallAndSave() {
-  useEffect(() => {}, []);
-}
-
-const StyledModal = Modal.styled`
-
 `;
 
 function ResumePage(props) {

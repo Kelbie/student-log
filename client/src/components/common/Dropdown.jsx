@@ -1,16 +1,18 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React from 'react';
 
-import styled from 'styled-components';
-
-import Dropdown from 'react-dropdown';
+import { Dropdown as ReactDropdown } from 'react-dropdown';
 import 'react-dropdown/style.css';
 
+// Styling
+import styled from 'styled-components';
 import { rgba } from 'polished';
 
+// Wrapper for ReactDropdown
 function StyledDropdown(props) {
-  return <Dropdown {...props} />;
+  return <ReactDropdown {...props} />;
 }
 
+// Overriding opinionated styles from ReactDropdown
 export default styled(StyledDropdown)`
   .Dropdown-control {
     color: ${props =>

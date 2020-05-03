@@ -1,12 +1,13 @@
 import React from 'react';
 
-import styled from 'styled-components';
-import { rgba, darken } from 'polished';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faBriefcase, faComments } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
-import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
+// Styling
+import styled from 'styled-components';
+import { rgba, darken } from 'polished';
+
+// Icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Button({ type, ...props }) {
   if (props.to) {

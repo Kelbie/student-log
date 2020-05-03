@@ -3,23 +3,15 @@ import React, { useState } from 'react';
 import { faEllipsisV, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+// Styling
 import styled from 'styled-components';
 
-import Button, { Button2 } from '../../../components/common/Button';
-import EditDropdown from '../../../components/EditDropdown';
+// Common
+import ButtonRefactor from '../../../components/common/ButtonRefactor';
+import EditDropdown from '../../../components/common/EditDropdown';
+import { Button2 } from '../../../components/common/Button';
 import Input from '../../../components/common/Input';
 import Label from '../../../components/common/Label';
-import ButtonRefactor from '../../../components/common/ButtonRefactor';
-
-function isEmpty(obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      return false;
-    }
-  }
-
-  return JSON.stringify(obj) === JSON.stringify({});
-}
 
 function FormElement({ handle, content, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
@@ -98,6 +90,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
   );
 }
 
+// Memoized to improve performance
 export default React.memo(styled(FormElement)`
   display: flex;
   align-items: center;

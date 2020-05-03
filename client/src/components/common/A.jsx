@@ -1,8 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
 
+// Styling
+import styled from 'styled-components';
+
+// Wrapper for react-router-dom Link
 function A(props) {
   return <Link {...props}>{props.children}</Link>;
 }
@@ -36,10 +39,6 @@ A = styled(A)`
       ${props => props.theme.SECONDARY_COLOR}
     );
   }
-
-  /* &:hover:after {
-    width: 100%;
-  } */
 `;
 
 export default A;

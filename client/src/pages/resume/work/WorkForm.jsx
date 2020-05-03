@@ -1,33 +1,30 @@
 import React, { useCallback, useState } from 'react';
 
-import move from 'lodash-move';
-
 import { Draggable } from 'react-beautiful-dnd';
 
+// Helper
+import move from 'lodash-move';
+
+// Forms
 import { useForm } from 'react-hook-form';
 
-import { useDispatch, useMappedState } from 'redux-react-hook';
-
+// Styling
 import styled from 'styled-components';
 
+// Redux
+import { useDispatch, useMappedState } from 'redux-react-hook';
 import { saveResume } from '../../../actions/actions';
 
-import Button, { Button2 } from '../../../components/common/Button';
-import DraggableForm from '../../../components/DraggableForm';
-import ResumeWorkFormElement from './WorkFormElement';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+// Common
+import H1 from '../../../components/common/H1';
+import DraggableForm from '../../../components/common/DraggableForm';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+// Icons
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-  return result;
-};
-
-const grid = 8;
+// Components
+import ResumeWorkFormElement from './WorkFormElement';
 
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
@@ -45,26 +42,6 @@ const getItemStyle = (isDragging, draggableStyle) => {
     ...activeTransform
   };
 };
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250
-});
-
-function createArrayWithNumbers(length) {
-  return Array.from({ length }, (_, k) => k + 1);
-}
-
-function Work(index, name, title, location, start, end) {
-  let result = {};
-  result[`name[${index}]`] = name;
-  result[`title[${index}]`] = title;
-  result[`location[${index}]`] = location;
-  result[`start[${index}]`] = start;
-  result[`end[${index}]`] = end;
-  return result;
-}
 
 function WorkForm(props) {
   const [numberOfDeletes, setNumberOfDeletes] = useState(1);
@@ -90,7 +67,7 @@ function WorkForm(props) {
   );
 
   // Form config
-  const { register, handleSubmit, watch, errors, triggerValidation, reset } = useForm({
+  const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
     defaultValues: {
       work
     }
@@ -137,7 +114,7 @@ function WorkForm(props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} {...props}>
-      <h1>Your Work Experience</h1>
+      <H1>Your Work Experience</H1>
       <DraggableForm
         items={items}
         setItems={setItems}
@@ -199,6 +176,7 @@ function WorkForm(props) {
   );
 }
 
+// Memoized to improve performance
 export default React.memo(styled(WorkForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};

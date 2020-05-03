@@ -1,12 +1,16 @@
 import React from 'react';
+
+// Styling
 import styled from 'styled-components';
 import { rgba } from 'polished';
 
+// Wrapper for input
 const Input = React.forwardRef((props, ref) => {
   return <input {...props} ref={ref}></input>;
 });
 
 export default styled(Input)`
+  /* Remove default styles */
   &:focus {
     outline: none;
   }

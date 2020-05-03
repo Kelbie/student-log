@@ -2,36 +2,22 @@ import React, { useCallback, useState, useEffect } from 'react';
 
 import { Draggable } from 'react-beautiful-dnd';
 
+// Forms
 import { useForm } from 'react-hook-form';
 
+// Redux
 import { useDispatch, useMappedState } from 'redux-react-hook';
-
-import styled from 'styled-components';
-
 import { saveResume } from '../../../actions/actions';
 
-import { useQuery, useMutation } from 'react-apollo-hooks';
-import gql from 'graphql-tag';
-import DraggableForm from '../../../components/DraggableForm';
+// Styling
+import styled from 'styled-components';
+
+// Common
+import DraggableForm from '../../../components/common/DraggableForm';
+import H1 from '../../../components/common/H1';
+
+// Components
 import ResumeProfileFormElement from './ProfileFormElement';
-
-// fake data generator
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }));
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-const grid = 8;
 
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
@@ -49,16 +35,6 @@ const getItemStyle = (isDragging, draggableStyle) => {
     ...activeTransform
   };
 };
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250
-});
-
-function createArrayWithNumbers(length) {
-  return Array.from({ length }, (_, k) => k + 1);
-}
 
 function ProfileForm(props) {
   // State for item
@@ -95,7 +71,7 @@ function ProfileForm(props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} {...props}>
-      <h1>Your Personal Info</h1>
+      <H1>Your Personal Info</H1>
       <DraggableForm items={items} setItems={setItems}>
         {items.map((item, index) => {
           return (
@@ -128,6 +104,7 @@ function ProfileForm(props) {
   );
 }
 
+// Memoized to improve performance
 export default React.memo(styled(ProfileForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};

@@ -1,11 +1,13 @@
 require('dotenv').config();
 
 import chalk from 'chalk';
-import tweet from '../bot/twitter';
+
 import SQL from 'sql-template-strings';
-const uuidv4 = require('uuid/v4');
+
 const short = require('short-uuid');
 const fs = require('fs');
+
+// Postgres
 const { Client } = require('pg');
 const client = new Client({
   user: process.env.PGUSER,
@@ -32,16 +34,7 @@ export default {
                         ON job_company.job_id = job.id 
                             JOIN company 
                                 ON company.id = job_company.company_id
-                                    WHERE job.approved=${
-                                      req.user && req.user.upn === '1806579@rgu.ac.uk'
-                                        ? 'NULL'
-                                        : 'TRUE'
-                                    }
-                                    OR job.approved=${
-                                      req.user && req.user.upn === '1806579@rgu.ac.uk'
-                                        ? 'TRUE'
-                                        : 'TRUE'
-                                    } 
+                                    WHERE job.approved=TRUE
                                       ORDER BY job.created_at DESC
                                           LIMIT ${first}
                                               OFFSET ${offset}
@@ -129,9 +122,9 @@ export default {
       await client.query(
         `
                 INSERT INTO job (
-                    id, title, category, type, apply_link, description, created_at, location
+                    id, title, category, type, apply_link, description, created_at, location, approved
                 ) VALUES (
-                    $1, $2, $3, $4, $5, $6, $7, $8
+                    $1, $2, $3, $4, $5, $6, $7, $8, TRUE
                 )
             `,
         [
@@ -147,41 +140,35 @@ export default {
       );
 
       await client.query(
+        SQL`
+          INSERT INTO company (
+              id, name, statement, website, email, description, created_at
+          ) VALUES (
+              ${company_id}, 
+              ${args.name}, 
+              ${args.company_statement}, 
+              ${args.website}, 
+              ${args.email}, 
+              ${args.company_desc}, 
+              ${new Date()}
+          );
         `
-                INSERT INTO company (
-                    id, name, statement, website, email, description, created_at
-                ) VALUES (
-                    $1, $2, $3, $4, $5, $6, $7
-                );
-            `,
-        [
-          company_id,
-          args.name,
-          args.company_statement,
-          args.website,
-          args.email,
-          args.company_desc,
-          new Date()
-        ]
       );
 
       await client.query(
+        SQL`
+          INSERT INTO job_company (
+              job_id, company_id
+          ) VALUES (
+              ${job_id}, ${company_id}
+          )
         `
-                INSERT INTO job_company (
-                    job_id, company_id
-                ) VALUES (
-                    $1, $2
-                )
-            `,
-        [job_id, company_id]
       );
 
       var imageBuffer = decodeBase64Image(args.logo);
       fs.writeFile(`public/logos/${company_id}.png`, imageBuffer.data, function(err) {
         console.log(123, err);
       });
-
-      tweet('url', args.name, args.job_title, args.job_type, args.category, args.location);
 
       return {
         id: job_id

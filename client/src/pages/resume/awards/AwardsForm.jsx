@@ -12,10 +12,11 @@ import styled from 'styled-components';
 import { saveResume } from '../../../actions/actions';
 
 import Button from '../../../components/common/Button';
-import DraggableForm from '../../../components/DraggableForm';
+import DraggableForm from '../../../components/common/DraggableForm';
 import ResumeAwardsFormElement from './AwardsFormElement';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
+import H1 from '../../../components/common/H1';
 
 // fake data generator
 const getItems = count =>
@@ -133,7 +134,7 @@ function AwardsForm(props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} {...props}>
-      <h1>Honors & Awards</h1>
+      <H1>Honors & Awards</H1>
       <DraggableForm
         items={items}
         setItems={setItems}
@@ -196,6 +197,7 @@ function AwardsForm(props) {
   );
 }
 
+// Memoized to improve performance
 export default React.memo(styled(AwardsForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};

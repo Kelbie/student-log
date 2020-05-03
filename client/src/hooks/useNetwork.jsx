@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+// this determines if the user has an active connection
 function useNetwork() {
   const [isOnline, setNetwork] = useState(window.navigator.onLine);
 

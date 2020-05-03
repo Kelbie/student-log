@@ -1,3 +1,4 @@
-type Settings {
-  ics_link: String
+type Profile {
+  email: String
+  name: String
 }

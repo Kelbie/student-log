@@ -1,40 +1,31 @@
 import React, { useCallback, useState } from 'react';
 
-import move from 'lodash-move';
-
 import { Draggable } from 'react-beautiful-dnd';
 
+// Helper
+import move from 'lodash-move';
+
+// Forms
 import { useForm } from 'react-hook-form';
 
+// Redux
 import { useDispatch, useMappedState } from 'redux-react-hook';
-
-import styled from 'styled-components';
-
 import { saveResume } from '../../../actions/actions';
 
-import Button, { Button2 } from '../../../components/common/Button';
-import DraggableForm from '../../../components/DraggableForm';
-import ResumeEducationFormElement from './EducationFormElement';
+// Styling
+import styled from 'styled-components';
+
+// Icons
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
+// Common
+import Button, { Button2 } from '../../../components/common/Button';
+import DraggableForm from '../../../components/common/DraggableForm';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
+import H1 from '../../../components/common/H1';
 
-// fake data generator
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }));
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-const grid = 8;
+// Components
+import ResumeEducationFormElement from './EducationFormElement';
 
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
@@ -52,16 +43,6 @@ const getItemStyle = (isDragging, draggableStyle) => {
     ...activeTransform
   };
 };
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250
-});
-
-function createArrayWithNumbers(length) {
-  return Array.from({ length }, (_, k) => k + 1);
-}
 
 function EducationForm(props) {
   const [numberOfDeletes, setNumberOfDeletes] = useState(1);
@@ -87,7 +68,7 @@ function EducationForm(props) {
   );
 
   // Form config
-  const { register, handleSubmit, watch, errors, triggerValidation, reset } = useForm({
+  const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
     defaultValues: {
       education
     }
@@ -134,7 +115,7 @@ function EducationForm(props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} {...props}>
-      <h1>Your Educational Background</h1>
+      <H1>Your Educational Background</H1>
       <DraggableForm
         items={items}
         setItems={setItems}
@@ -200,6 +181,7 @@ function EducationForm(props) {
   );
 }
 
+// Memoized to improve performance
 export default React.memo(styled(EducationForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};

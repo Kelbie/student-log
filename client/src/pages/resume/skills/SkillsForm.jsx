@@ -1,33 +1,29 @@
 import React, { useCallback, useState } from 'react';
 
-import move from 'lodash-move';
+import ResumeSkillsFormElement from './SkillsFormElement';
 
 import { Draggable } from 'react-beautiful-dnd';
 
+// Helper
+import move from 'lodash-move';
+
+// Forms
 import { useForm } from 'react-hook-form';
 
+// Redux
 import { useDispatch, useMappedState } from 'redux-react-hook';
-
-import styled from 'styled-components';
-
 import { saveResume } from '../../../actions/actions';
 
-import Button, { Button2 } from '../../../components/common/Button';
-import DraggableForm from '../../../components/DraggableForm';
-import ResumeSkillsFormElement from './SkillsFormElement';
+// Styling
+import styled from 'styled-components';
+
+// Icons
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
+// Common
+import DraggableForm from '../../../components/common/DraggableForm';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-const grid = 8;
+import H1 from '../../../components/common/H1';
 
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
@@ -45,26 +41,6 @@ const getItemStyle = (isDragging, draggableStyle) => {
     ...activeTransform
   };
 };
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250
-});
-
-function createArrayWithNumbers(length) {
-  return Array.from({ length }, (_, k) => k + 1);
-}
-
-function Skill(index, name, title, location, start, end) {
-  let result = {};
-  result[`name[${index}]`] = name;
-  result[`title[${index}]`] = title;
-  result[`location[${index}]`] = location;
-  result[`start[${index}]`] = start;
-  result[`end[${index}]`] = end;
-  return result;
-}
 
 function SkillsForm(props) {
   const [numberOfDeletes, setNumberOfDeletes] = useState(1);
@@ -97,7 +73,7 @@ function SkillsForm(props) {
   );
 
   // Form config
-  const { register, handleSubmit, watch, errors, triggerValidation, reset } = useForm({
+  const { register, handleSubmit, watch, errors, triggerValidation } = useForm({
     defaultValues: {
       skills
     }
@@ -114,18 +90,6 @@ function SkillsForm(props) {
         })
       };
     });
-
-    // // filter undefined
-    // sortedSkills = sortedSkills.map(skill => {
-    //   return {
-    //     ...skill,
-    //     keywords: skill.keywords.filter(keyword => {
-    //       return keyword != undefined || keyword != null;
-    //     })
-    //   };
-    // });
-
-    // console.log(sortedSkills, 98172873);
 
     dispatch(saveResume({ skills: sortedSkills }));
   };
@@ -161,7 +125,7 @@ function SkillsForm(props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} {...props}>
-      <h1>Your Skills</h1>
+      <H1>Your Skills</H1>
       <DraggableForm
         items={items}
         setItems={setItems}
@@ -185,7 +149,6 @@ function SkillsForm(props) {
                     setItems={keywords =>
                       setItems(
                         items.map(i => {
-                          console.log(98172873, i);
                           if (item.id == i.id) {
                             return {
                               ...i,
@@ -243,6 +206,7 @@ function SkillsForm(props) {
   );
 }
 
+// Memoized to improve performance
 export default React.memo(styled(SkillsForm)`
   color: ${props =>
     props.theme.is === 'dark' ? props.theme.PALLET[400] : props.theme.PALLET[700]};

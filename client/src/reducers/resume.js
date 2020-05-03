@@ -1,8 +1,5 @@
 import * as ACTION_TYPES from '../actions/action_types';
 
-const PRIMARY_COLOR = '#E87BBE';
-const SECONDARY_COLOR = '#8E9DEF';
-
 const initialState = {
   sections: ['TEMPLATE', 'PROFILE', 'EDUCATION', 'WORK', 'PROJECTS', 'SKILLS', 'AWARDS'],
   template: 1,

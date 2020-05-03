@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 
-import { faEllipsisV, faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { rgba } from 'polished';
+// Styling
 import styled from 'styled-components';
+import { rgba } from 'polished';
 
-import Button, { Button2 } from '../../../components/common/Button';
-import EditDropdown, { EditDropdownButton } from '../../../components/EditDropdown';
+// Icons
+import { faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
+
+// Common
+import { Button2 } from '../../../components/common/Button';
+import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 import Input from '../../../components/common/Input';
 import Label from '../../../components/common/Label';
 
 function FormElement({ handle, content, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
-  const [editDropdownActive, setEditDropdownActive] = useState(false);
 
   return (
     <div {...props}>

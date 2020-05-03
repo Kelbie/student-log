@@ -1,29 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
+// Styling
 import styled from 'styled-components';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
+// Icons
+import { faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 
-import EditDropdown, { EditDropdownButton } from '../../../components/EditDropdown';
-import Button, { Button2 } from '../../../components/common/Button';
+// Common
+import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
+import { Button2 } from '../../../components/common/Button';
 import Input from '../../../components/common/Input';
 import Label from '../../../components/common/Label';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 
-function isEmpty(obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      return false;
-    }
-  }
-
-  return JSON.stringify(obj) === JSON.stringify({});
-}
-
 function FormElement({ handle, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
-  const [editDropdownActive, setEditDropdownActive] = useState(false);
 
   return (
     <div {...props}>

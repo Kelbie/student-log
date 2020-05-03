@@ -1,19 +1,9 @@
 require('dotenv').config();
 
-import sql from 'sql-template-strings';
 import logger from '../logger';
 
-const { Client } = require('pg');
-
-const client = new Client({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDB,
-  password: process.env.PGPASS,
-  port: process.env.PGPORT
-});
-
-client.connect();
+// Models
+import Resume from '../models/resume';
 
 export default {
   Query: {
@@ -24,14 +14,7 @@ export default {
         return {};
       }
 
-      const resumeResponse = await client.query(
-        sql`
-          SELECT json from resume
-            WHERE user_id=${req.user.upn}
-        `
-      );
-
-      console.log(JSON.parse(resumeResponse.rows[0].json));
+      const resumeResponse = await Resume.get(req.user.upn);
 
       return JSON.parse(resumeResponse.rows[0].json).resume;
     }
@@ -44,20 +27,7 @@ export default {
         return {};
       }
 
-      const query = `
-        INSERT INTO resume (
-          user_id, 
-          json
-        ) VALUES (
-            '${req.user.upn}', 
-            '${JSON.stringify(resume)}'
-          ) ON CONFLICT (user_id) 
-              DO UPDATE 
-                SET 
-                  json='${JSON.stringify(resume)}'
-      `;
-
-      client.query(query);
+      Resume.update(req.user.upn, JSON.stringify(resume));
 
       return resume;
     }

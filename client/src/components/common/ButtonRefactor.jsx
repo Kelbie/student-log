@@ -1,22 +1,19 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
+// Styling
 import styled, { css } from 'styled-components';
 import { rgba, darken } from 'polished';
+
+// Icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faBriefcase, faComments } from '@fortawesome/free-solid-svg-icons';
 
-import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
-import { FontawesomeObject, IconProp, IconName } from '@fortawesome/fontawesome-svg-core';
-
-function Button({ type, variant, icon, children, className, onClick, disabled, ...props }) {
-  const width = useWindowWidth();
-
+function Button({ type, variant, icon, children, className, onClick, disabled }) {
   return (
     <button type={type} className={className} onClick={onClick} disabled={disabled}>
       <span className="icon">
         <FontAwesomeIcon icon={icon} />
       </span>
-      {width < 500 && props.responsive ? null : <span className="text">{children}</span>}
+      <span className="text">{children}</span>
     </button>
   );
 }
@@ -33,6 +30,13 @@ export default styled(Button)`
   background: transparent;
 
   transition: 0.15s ease 0s;
+
+  @media only screen and (max-width: 480px) {
+    .text {
+      display: none;
+    }
+  }
+
   * {
     transition: 0.15s ease 0s;
   }
@@ -41,7 +45,8 @@ export default styled(Button)`
     position: relative;
     svg,
     path {
-      color: ${props => props.theme.PALLET['100']};
+      color: ${props =>
+        props.variant === 'fill' ? props.theme.PALLET['100'] : props.theme.PALLET['400']};
     }
   }
   .text {

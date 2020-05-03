@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import Router from './Router';
+
+import App from './App';
 
 const rootElement = document.getElementById('root');
-ReactDOM.render(<Router />, rootElement);
+ReactDOM.render(<App />, rootElement);

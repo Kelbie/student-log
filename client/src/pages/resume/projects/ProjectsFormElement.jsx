@@ -13,24 +13,13 @@ import { rgba } from 'polished';
 import styled from 'styled-components';
 
 import Button, { Button2 } from '../../../components/common/Button';
-import EditDropdown, { EditDropdownButton } from '../../../components/EditDropdown';
+import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
 import Input from '../../../components/common/Input';
 import Label from '../../../components/common/Label';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 
-function isEmpty(obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      return false;
-    }
-  }
-
-  return JSON.stringify(obj) === JSON.stringify({});
-}
-
 function FormElement({ handle, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
-  const [editDropdownActive, setEditDropdownActive] = useState(false);
 
   return (
     <div {...props}>
@@ -119,6 +108,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
   );
 }
 
+// Memoized to improve performance
 export default React.memo(styled(FormElement)`
   display: flex;
   align-items: center;

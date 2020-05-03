@@ -1,13 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-// fake data generator
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }));
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -17,31 +10,6 @@ const reorder = (list, startIndex, endIndex) => {
 
   return result;
 };
-
-const grid = 8;
-
-const getItemStyle = (isDragging, draggableStyle) => {
-  const { transform } = draggableStyle;
-  let activeTransform = {};
-  if (transform) {
-    activeTransform = {
-      transform: `translate(0, ${transform.substring(
-        transform.indexOf(',') + 1,
-        transform.indexOf(')')
-      )})`
-    };
-  }
-  return {
-    ...draggableStyle,
-    ...activeTransform
-  };
-};
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250
-});
 
 class DraggableForm extends React.Component {
   constructor(props) {
@@ -82,7 +50,7 @@ class DraggableForm extends React.Component {
       <>
         <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
+            {provided => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 {this.props.children}
                 {provided.placeholder}

@@ -2,33 +2,30 @@ import React, { useState, useEffect } from 'react';
 
 import { withRouter } from 'react-router-dom';
 
-import styled, { withTheme } from 'styled-components';
+import Modal from 'styled-react-modal';
+
+import Login from '../pages/login/Login';
+
+// Common
+import { Button2 } from './common/Button';
+import LinkRefactor from './common/LinkRefactor';
+import ButtonRefactor from './common/ButtonRefactor';
+
+// Styling
+import styled from 'styled-components';
 import {
   faBriefcase,
-  faBell,
-  faCog,
-  faBus,
   faUser,
   faGraduationCap,
   faSignInAlt,
   faSignOutAlt,
-  faCalendar,
-  faCalendarDay,
-  faDollarSign,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-import { useWindowSize, useWindowWidth, useWindowHeight } from '@react-hook/window-size';
-
-import Button, { Button2, ButtonLink2 } from './common/Button';
-
 // GraphQL
 import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo-hooks';
-import LinkRefactor from './common/LinkRefactor';
-import ButtonRefactor from './common/ButtonRefactor';
-import Modal from 'styled-react-modal';
-import Login from './Login';
+import { useQuery } from 'react-apollo-hooks';
+
 const GET_PROFILE = gql`
   query {
     getProfile {
@@ -40,6 +37,7 @@ const GET_PROFILE = gql`
 
 function Nav(props) {
   const [modalOpen, setModalOpen] = useState(false);
+
   const { data } = useQuery(GET_PROFILE, {
     fetchPolicy: 'cache-first',
     variables: {}
@@ -60,14 +58,25 @@ function Nav(props) {
       >
         <Login></Login>
       </Modal>
-      <LinkRefactor
+      {/* <LinkRefactor
         responsive={true}
         to="/work"
         icon={faGraduationCap}
         onClick={() => {
           setActive('work');
         }}
-      ></LinkRefactor>
+      ></LinkRefactor> */}
+      <LinkRefactor
+        responsive={true}
+        to="/about"
+        active={active === 'about' ? 1 : 0}
+        icon={faInfoCircle}
+        onClick={() => {
+          setActive('about');
+        }}
+      >
+        About
+      </LinkRefactor>
       <LinkRefactor
         responsive={true}
         to="/work"
@@ -90,19 +99,6 @@ function Nav(props) {
       >
         Résumé
       </LinkRefactor>
-      {data?.getProfile?.email?.includes('rgu.ac.uk') ? (
-        <LinkRefactor
-          responsive={true}
-          to="/timetable"
-          active={active === 'timetable' ? 1 : 0}
-          icon={faCalendar}
-          onClick={() => {
-            setActive('timetable');
-          }}
-        >
-          Timetable
-        </LinkRefactor>
-      ) : null}
       {data?.getProfile?.name ? (
         <ButtonRefactor
           responsive={true}

@@ -1,5 +1,6 @@
-import { store } from '../store';
 import * as ACTION_TYPES from './action_types';
+
+// All of the redux actions
 
 export const setDarkTheme = () => {
   return {

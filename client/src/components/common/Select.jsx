@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
+
 import ReactSelect from 'react-select';
 
+// Styling
 import styled from 'styled-components';
 import { rgba } from 'polished';
 
+// All of the institutions that we support by default
 const institutions = {
   'abdn.ac.uk': {
     name: 'University of Aberdeen',
@@ -231,42 +234,36 @@ const institutions = {
   }
 };
 
+/*
+ * {
+ *     'key': {
+ *         name,
+ *         id,
+ *     }
+ * }
+ * turns into ->
+ * [
+ *     {
+ *         label,
+ *         value
+ *     }
+ * ]
+ */
 function hydrate(institutions) {
   return Object.keys(institutions).map((institution, i) => {
     return { label: institutions[institution].name, value: institution };
   });
 }
 
+// keep outside component so ensure its only executed once
 const options = hydrate(institutions);
 
-// const options = [
-//   { label: 'Robert Gordon University', value: 'rgu.ac.uk' },
-//   { label: 'University of Aberdeen', value: 'abdn.ac.uk' },
-//   { label: 'The University of Edinburgh', value: 'ed.ac.uk' },
-//   { label: 'North East Scotland College', value: 'nescol.ac.uk' },
-//   { label: 'University of Glasgow', value: 'gla.ac.uk' },
-//   { label: 'University of Strathclyde', value: 'strath.ac.uk' },
-//   { label: 'Harvard University', value: 'harvard.edu' },
-//   { label: 'University of Oxford', value: 'ox.ac.uk' },
-//   { label: 'University of Cambridge', value: 'cam.ac.uk' },
-//   { label: 'University of St Andrews', value: 'st-andrews.ac.uk' },
-//   { label: 'University of the West of Scotland', value: 'uws.ac.uk' },
-//   { label: 'Heriot Watt University', value: 'hw.ac.uk' },
-//   { label: 'University of Pennsylvania', value: 'upenn.edu' },
-//   { label: 'Cornell University', value: 'cornell.edu' },
-//   { label: 'McGill University', value: 'mcgill.ca' },
-//   { label: 'Glasgow Caledonian University', value: 'gcu.ac.uk' },
-//   { label: 'University of Stirling', value: 'stir.ac.uk' },
-//   { label: 'University of Dundee', value: 'dundee.ac.uk' },
-//   { label: 'Edinburgh Napier University', value: 'napier.ac.uk' },
-//   { label: 'Glasgow School of Art', value: 'gsa.ac.uk' },
-//   { label: 'Royal Conservatoire of Scotland', value: 'rcs.ac.uk' }
-// ];
-
+// Wrapper for ReactSelect
 function Select(props) {
   return <ReactSelect classNamePrefix="react-select" {...props} options={options}></ReactSelect>;
 }
 
+// Overriding opinionated styles from ReactSelect
 export default styled(Select)`
   .react-select__input {
     color: ${props =>

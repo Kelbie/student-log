@@ -1,38 +1,25 @@
 import React, { useState } from 'react';
 
+// Icons
 import {
-  faEllipsisV,
-  faGripVertical,
   faSave,
   faTrash,
   faEdit
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { rgba } from 'polished';
+// Styling
 import styled from 'styled-components';
 
-import Button, { Button2 } from '../../../components/common/Button';
-import EditDropdown, { EditDropdownButton } from '../../../components/EditDropdown';
-import { useDispatch } from 'redux-react-hook';
-import { saveResume } from '../../../actions/actions';
+// Common
+import { Button2 } from '../../../components/common/Button';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 import Label from '../../../components/common/Label';
 import Input from '../../../components/common/Input';
+import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
 
-function isEmpty(obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      return false;
-    }
-  }
-
-  return JSON.stringify(obj) === JSON.stringify({});
-}
 
 function FormElement({ handle, content, register, editable, errors, ...props }) {
   const [isEditable, setIsEditable] = useState(editable);
-  const [editDropdownActive, setEditDropdownActive] = useState(false);
 
   return (
     <div {...props}>
@@ -135,6 +122,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
   );
 }
 
+// Memoized to improve performance
 export default React.memo(styled(FormElement)`
   display: flex;
   align-items: center;

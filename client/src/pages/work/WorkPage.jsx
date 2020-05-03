@@ -1,19 +1,26 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import moment from 'moment';
+import { Checkbox } from 'pretty-checkbox-react';
+import './style.scss';
 
+// Helper
+import _ from 'lodash';
+
+// Styling
 import styled from 'styled-components';
 
+// Common
 import A from '../../components/common/A';
+import { Button2 } from '../../components/common/Button';
+import LinkRefactor from '../../components/common/LinkRefactor';
+
 import WorkElement2 from './WorkElement';
-import Button, { Button2 } from '../../components/common/Button';
+
+// Icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 
-// GraphQL
-import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo-hooks';
-import { Checkbox } from 'pretty-checkbox-react';
+// Redux
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import {
   setResults,
@@ -22,10 +29,10 @@ import {
   updateFilterCategory,
   updateFilterLocation
 } from '../../actions/actions';
-import _ from 'lodash';
 
-import './style.scss';
-import LinkRefactor from '../../components/common/LinkRefactor';
+// GraphQL
+import { useQuery } from 'react-apollo-hooks';
+import gql from 'graphql-tag';
 
 function WorkElement(props) {
   return (
@@ -477,7 +484,6 @@ function WorkPage(props) {
                 company={w.name}
                 job_type={w.job_type}
                 location={w.location}
-                date={moment(new Date(parseInt(w.created_at)))}
               />
             );
           })}
