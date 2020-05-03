@@ -12,13 +12,14 @@ export default {
   },
   Query: {
     getProfile: async (_, {}, { req }) => {
-      if (req.user) {
-        return {
-          name: `${req.user.name.givenName} ${req.user.name.familyName}`,
-          email: req.user.upn
-        };
+      if (!req.isAuthenticated()) {
+        return {};
       }
-      return { name: null };
+
+      return {
+        name: `${req.user.name.givenName} ${req.user.name.familyName}`,
+        email: req.user.upn
+      };
     }
   }
 };
