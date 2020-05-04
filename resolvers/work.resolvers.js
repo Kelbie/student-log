@@ -131,7 +131,7 @@ export default {
       } catch(err) {
         throw new Error("invalid email");
       }
-      if (args.desc == "" || args.desc.length > 256) {
+      if (args.company_desc == "" || args.company_desc.length > 256) {
         throw new Error('invalid description');
       }
 
