@@ -2,12 +2,14 @@ require('dotenv').config();
 
 import chalk from 'chalk';
 
-import SQL from 'sql-template-strings';
-
 const short = require('short-uuid');
+
 const fs = require('fs');
 
+import Work from '../models/work.model';
+
 // Postgres
+import SQL from 'sql-template-strings';
 const { Client } = require('pg');
 const client = new Client({
   user: process.env.PGUSER,
@@ -27,21 +29,7 @@ export default {
         req.user ? req.user.displayName : 'Unknown'
       );
 
-      let jobs = await client.query(
-        SQL`
-                SELECT * FROM job 
-                    JOIN job_company 
-                        ON job_company.job_id = job.id 
-                            JOIN company 
-                                ON company.id = job_company.company_id
-                                    WHERE job.approved=TRUE
-                                      ORDER BY job.created_at DESC
-                                          LIMIT ${first}
-                                              OFFSET ${offset}
-            `
-      );
-
-      console.log(jobs.rows);
+      let jobs = await Work.getMultiple(first, offset);
 
       return jobs.rows.map(job => ({
         job_title: job.title,
@@ -56,119 +44,118 @@ export default {
         req.user ? req.user.displayName : 'Unknown'
       );
 
-      let job = await client.query(
-        `
-                SELECT title, type, job.description as job_desc, * FROM job 
-                    JOIN job_company 
-                        ON job_company.job_id = job.id 
-                            JOIN company 
-                                ON company.id = job_company.company_id
-                                    WHERE job_id=$1
-            `,
-        [id]
-      );
-
-      console.log(222, job);
+      let job = await Work.get(id);
 
       return job.rows.map(job => ({ job_title: job.title, job_type: job.type, ...job }))[0];
     }
   },
   Mutation: {
-    approveJob: async (_, { job_id }, { req }) => {
-      if (!req.isAuthenticated()) {
-        return {};
-      }
-
-      if (req.user.upn === '1806579@rgu.ac.uk') {
-        await client.query(
-          `
-          UPDATE job
-            set approved=TRUE
-              WHERE job.id = $1
-        `,
-          [job_id]
-        );
-
-        return true;
-      } else {
-        return false;
-      }
-    },
     postJob: async (_, { job: args }, { req }) => {
       console.log(
         chalk.green(`> postJob(${JSON.stringify({ job: args })})`),
         req.user ? req.user.displayName : 'Unknown'
       );
 
-      function decodeBase64Image(dataString) {
-        var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-          response = {};
-
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
-        }
-
-        response.type = matches[1];
-        response.data = new Buffer(matches[2], 'base64');
-
-        return response;
-      }
-
       var translator = short();
 
       let job_id = translator.new();
       let company_id = translator.new();
-      // add job to postgreSQL
-      await client.query(
-        `
-                INSERT INTO job (
-                    id, title, category, type, apply_link, description, created_at, location, approved
-                ) VALUES (
-                    $1, $2, $3, $4, $5, $6, $7, $8, TRUE
-                )
-            `,
-        [
-          job_id,
-          args.job_title,
-          args.category,
-          args.job_type,
-          args.apply_link,
-          args.job_desc,
-          new Date(),
-          args.location
-        ]
-      );
 
-      await client.query(
-        SQL`
-          INSERT INTO company (
-              id, name, statement, website, email, description, created_at
-          ) VALUES (
-              ${company_id}, 
-              ${args.name}, 
-              ${args.company_statement}, 
-              ${args.website}, 
-              ${args.email}, 
-              ${args.company_desc}, 
-              ${new Date()}
-          );
-        `
-      );
+      // sanity check
+      if (args.job_title == "" || args.job_title.length > 128) {
+        throw new Error('invalid job title');
+      }
+      if (
+        ![
+          'Design',
+          'Programming',
+          'Customer Support',
+          'Copywriting',
+          'DevOps & Sysadmin',
+          'Sales & Marketing',
+          'Business & Management',
+          'Finance & Legal',
+          'Product',
+          'Administrative',
+          'Education',
+          'Translation & Transacription',
+          'Medial/Health',
+          'Other'
+        ].includes(args.category)
+      ) {
+        throw new Error('Invalid job category');
+      }
+      if (!['Full-time', 'Internship', 'Project'].includes(args.job_type)) {
+        throw new Error('Invalid job type');
+      }
+      if (args.apply_link == "" || args.apply_link.length > 256) {
+        throw new Error("invalid apply link");
+      }
+      try {
+        new URL(args.apply_link);
+      } catch(err) {
+        throw new Error("invalid apply link");
+      }
+      if (args.job_desc == "" || args.job_desc.length > 1000) {
+        throw new Error("invalid job desc");
+      }
+      if (args.location == "" || args.location.length > 64) {
+        throw new Error("invalid location");
+      }
+      if (args.logo == "" || args.logo.length === 0) {
+        throw new Error('invalid logo');
+      }
 
-      await client.query(
-        SQL`
-          INSERT INTO job_company (
-              job_id, company_id
-          ) VALUES (
-              ${job_id}, ${company_id}
-          )
-        `
-      );
+      if (company_id == "" || company_id.length > 25) {
+        throw new Error('invalid company id');
+      }
+      if (args.name == "" || args.name.length > 128) {
+        throw new Error('invalid name');
+      }
+      if (args.company_statement == "" || args.company_statement.length > 256) {
+        throw new Error('invalid statement');
+      }
+      if (args.website == "" || args.website.length > 256) {
+        throw new Error('invalid website');
+      }
+      try {
+        new URL(args.website);
+      } catch(err) {
+        throw new Error("invalid website");
+      }
+      if (args.email == "" || args.email.length > 70) {
+        throw new Error('invalid email');
+      }
+      try {
+        new URL(args.email);
+      } catch(err) {
+        throw new Error("invalid email");
+      }
+      if (args.job_desc == "" || args.job_desc.length > 256) {
+        throw new Error('invalid description');
+      }
 
-      var imageBuffer = decodeBase64Image(args.logo);
-      fs.writeFile(`public/logos/${company_id}.png`, imageBuffer.data, function(err) {
-        console.log(123, err);
-      });
+
+      await Work.create(
+        {
+          id: job_id,
+          title: args.job_title,
+          category: args.category,
+          type: args.job_type,
+          apply_link: args.apply_link,
+          desc: args.job_desc,
+          location: args.location
+        },
+        {
+          id: company_id,
+          name: args.name,
+          statement: args.company_statement,
+          website: args.website,
+          email: args.email,
+          desc: args.desc,
+          logo: args.logo
+        }
+      );
 
       return {
         id: job_id

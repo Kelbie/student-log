@@ -327,7 +327,7 @@ function ResumePage(props) {
       </Modal>
       <ResumeNav showPDF={b => setShowPDF(b)} />
       <Switch>
-        <Route path={`${path}/templates`}>
+        <Route path={`/(${path}/templates|)/`}>
           <ResumeTemplatesForm />
         </Route>
         <Route path={`${path}/profile`}>

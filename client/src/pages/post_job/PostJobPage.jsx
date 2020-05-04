@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 
+import urlRegex from "url-regex";
+
 // Styling
 import styled from 'styled-components';
 
@@ -256,18 +258,55 @@ function About(props) {
       <Formik
         initialValues={{ logo: '' }}
         validationSchema={Yup.object().shape({
-          job_title: Yup.string().required('Required'),
+          job_title: Yup.string()
+            .required('Required')
+            .max(128),
           category: Yup.string().required('Required'),
           job_type: Yup.string().required('Required'),
-          apply_link: Yup.string().required('Required'),
-          job_desc: Yup.string().required('Required'),
-          name: Yup.string().required('Required'),
-          company_statement: Yup.string().required('Required'),
+          apply_link: Yup.string('Enter your Email/Phone Number')
+            // .email("Enter a valid email")
+            .required('Required')
+            .test('test-name', 'Enter Valid Url/Email', function(value) {
+              // gets either a valid url or email
+              let isValidUrl = urlRegex({exact: true, strict: false}).test(value);
+              const emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+              let isValidEmail = emailRegex.test(value);
+              if (!isValidEmail && !isValidUrl) {
+                return false;
+              }
+              return true;
+            }),
+          job_desc: Yup.string()
+            .required('Required')
+            .max(1000),
+          name: Yup.string()
+            .required('Required')
+            .max(128),
+          company_statement: Yup.string()
+            .required('Required')
+            .max(256),
           logo: Yup.string().required('Required'),
-          website: Yup.string().required('Required'),
-          email: Yup.string().required('Required'),
-          company_desc: Yup.string().required('Required'),
-          location: Yup.string().required('Required')
+          website: Yup.string()
+            .required('Required')
+            .max(256)
+            .test('test-name', 'Enter a valid url', function(value) {
+              // gets either a valid url or email
+              let isValidUrl = urlRegex({exact: true, strict: false}).test(value);
+              if (!isValidUrl) {
+                return false;
+              }
+              return true;
+            }),
+          email: Yup.string()
+            .required('Required')
+            .max(70)
+            .email(),
+          company_desc: Yup.string()
+            .required('Required')
+            .max(256),
+          location: Yup.string()
+            .required('Required')
+            .max(64)
         })}
         onSubmit={async (values, { setSubmitting }) => {
           let job = await postJob({
@@ -281,7 +320,7 @@ function About(props) {
 
           props.onSubmit({ id: job.data.postJob.id, ...values });
 
-          window.location.href="/work";
+          window.location.href = '/work';
         }}
       >
         {({

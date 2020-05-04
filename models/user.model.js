@@ -15,5 +15,16 @@ const client = new Client({
 client.connect();
 
 export default {
-  
+  create: async (id) => {
+    await client.query(
+      SQL`
+            INSERT INTO users (
+                id
+            ) VALUES (
+                ${id}
+            ) ON CONFLICT 
+                DO NOTHING
+      `,
+    );
+  }
 }

@@ -18,7 +18,6 @@ const mutations = gql`
     login: Profile
     updateResume(resume: ResumeInput): Resume
     postJob(job: JobInput): Job
-    approveJob(job_id: String): Boolean
   }
 `;
 

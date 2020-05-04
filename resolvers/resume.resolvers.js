@@ -3,7 +3,7 @@ require('dotenv').config();
 import logger from '../logger';
 
 // Models
-import Resume from '../models/resume';
+import Resume from '../models/resume.model';
 
 export default {
   Query: {
@@ -27,9 +27,14 @@ export default {
         return {};
       }
 
-      Resume.update(req.user.upn, JSON.stringify(resume));
+      const jsonString = JSON.stringify(resume);
 
-      return resume;
+      // sanity check
+      if (jsonString.length < 25000) {
+        Resume.update(req.user.upn, JSON.stringify(resume));
+      } else {
+        throw new Error("Resume too long to render");
+      }
     }
   }
 };

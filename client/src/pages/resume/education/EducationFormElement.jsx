@@ -124,9 +124,6 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
               </span>
               <span className="degree">{props.watch(`education[${props.index}].degree`)}</span>
             </div>
-            {/* <div className="gpa">
-                        {props.watch(`gpa[${props.index}]`)}
-                    </div> */}
           </div>
           <div className="right">
             <div className="location">{props.watch(`education[${props.index}].location`)}</div>

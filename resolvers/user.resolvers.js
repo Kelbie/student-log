@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-import sql from 'sql-template-strings';
-
 export default {
   Mutation: {
     login: async (_, {}, { req }) => {

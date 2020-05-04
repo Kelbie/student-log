@@ -37,9 +37,8 @@ function Router(props) {
             <Nav />
             <Suspense fallback={<Loader />}>
               <Switch>
-                <Route exact path="/class/:id" />
-                <Route exact path="/profile" />
-                <Route exact path="/settings" />
+                {/* Make the initial page be the job board */}
+                <Route exact path="/" component={WorkPage} />
                 <Route exact path="/work" component={WorkPage} />
                 <Route exact path="/work/:id/:string" component={WorkPosting} />
                 <Route exact path="/job/new" component={PostJobPage} />
