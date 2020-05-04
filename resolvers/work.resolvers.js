@@ -96,7 +96,7 @@ export default {
       } catch(err) {
         throw new Error("invalid apply link");
       }
-      if (args.job_desc == "" || args.job_desc.length > 1000) {
+      if (args.job_desc == "" || args.job_desc.length > 25000) {
         throw new Error("invalid job desc");
       }
       if (args.location == "" || args.location.length > 64) {
@@ -131,7 +131,7 @@ export default {
       } catch(err) {
         throw new Error("invalid email");
       }
-      if (args.job_desc == "" || args.job_desc.length > 25000) {
+      if (args.desc == "" || args.desc.length > 256) {
         throw new Error('invalid description');
       }
 
