@@ -278,7 +278,7 @@ function About(props) {
             }),
           job_desc: Yup.string()
             .required('Required')
-            .max(1000),
+            .max(25000),
           name: Yup.string()
             .required('Required')
             .max(128),
