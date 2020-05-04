@@ -35,7 +35,7 @@ const initialState = {
       name: 'Piper Chat',
       description: 'A video chat app with great picture quality.',
       link: 'http://piperchat.com',
-      keywords: ['NodeJS', 'ExpressJS', 'PostgreSQL', 'GraphQL', 'ReactJS', 'Stripe API']
+      keywords: ['Java']
     }
   ],
   skills: [

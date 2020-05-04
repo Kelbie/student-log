@@ -90,7 +90,7 @@ function Nav(props) {
       </LinkRefactor>
       <LinkRefactor
         responsive={true}
-        to="/resume"
+        to="/resume/templates"
         active={active === 'resume' ? 1 : 0}
         icon={faUser}
         onClick={() => {
