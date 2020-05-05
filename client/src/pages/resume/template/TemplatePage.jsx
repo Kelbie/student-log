@@ -85,12 +85,12 @@ function TemplatesPage(props) {
           <img src={template3} alt="" />
           <label htmlFor="template3"></label>
         </div>
-
+{/* 
         <div>
           <input ref={register} type="radio" name="template" id="template4" value="4" />
           <img src={template4} alt="" />
           <label htmlFor="template4"></label>
-        </div>
+        </div> */}
 
         <div>
           <input ref={register} type="radio" name="template" id="template5" value="5" />
@@ -104,11 +104,11 @@ function TemplatesPage(props) {
           <label htmlFor="template6"></label>
         </div> */}
 
-        <div>
+        {/* <div>
           <input ref={register} type="radio" name="template" id="template7" value="7" />
           <img src={template7} alt="" />
           <label htmlFor="template7"></label>
-        </div>
+        </div> */}
 
         {/* <div>
           <input ref={register} type="radio" name="template" id="template8" value="8" />
