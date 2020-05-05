@@ -52,6 +52,10 @@ yarn start
 yarn run test
 ``` -->
 
+## Configuration
+
+Generate secrets for .env file.
+
 ## Author
 
 👤 **Kevin Kelbie**
