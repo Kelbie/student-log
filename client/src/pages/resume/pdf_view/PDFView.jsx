@@ -146,7 +146,7 @@ function ResumePDF(props) {
   return (
     <div {...props}>
       {/* <ResumePDFNav></ResumePDFNav> */}
-      <Document file={url} onLoadSuccess={e => setPages(e.numPages)}>
+      <Document file={url} onLoadSuccess={e => setPages(e.numPages)} noData="">
         <Page pageNumber={page} renderAnnotations={false} renderTextLayer={false} />
       </Document>
     </div>
