@@ -28,7 +28,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
             type="text"
             name={`profile.email`}
             ref={register}
-            placeholder="johnsmith@gmail.com (required)"
+            placeholder="johnsmith@gmail.com"
           />
 
           <Label>Phone Number</Label>
