@@ -17,18 +17,6 @@ import { GraphQLServer } from 'graphql-yoga';
 import { default as resolvers } from './resolvers';
 import { default as typeDefs } from './typeDefs';
 
-// PostgreSQL
-import { Client } from 'pg';
-const client = new Client({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDB,
-  password: process.env.PGPASS,
-  port: process.env.PGPORT
-});
-
-client.connect();
-
 // GraphQL Options
 const opts = {
   port: 30662,

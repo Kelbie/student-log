@@ -93,12 +93,13 @@ function Filter(props) {
   const dispatch = useDispatch();
   const mapState = useCallback(
     state => ({
-      results: state.results
+      results: state.results,
+      filter: state.filter
     }),
     []
   );
 
-  const { results } = useMappedState(mapState);
+  const { results, filter } = useMappedState(mapState);
   const [locations, setLocations] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [types, setTypes] = useState([]);
@@ -148,6 +149,7 @@ function Filter(props) {
         {locations.map(location => {
           return (
             <Checkbox
+              checked={filter.locations.filter(e => e.name === location && e.active).length > 0}
               shape="curve"
               icon={<FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon>}
               onChange={e => {
@@ -158,6 +160,7 @@ function Filter(props) {
                   })
                 );
               }}
+              key={location}
             >
               {location}
             </Checkbox>
@@ -169,6 +172,7 @@ function Filter(props) {
         {companies.map(company => {
           return (
             <Checkbox
+              checked={filter.companies.filter(e => e.name === company && e.active).length > 0}
               shape="curve"
               icon={<FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon>}
               onChange={e => {
@@ -190,6 +194,7 @@ function Filter(props) {
         {types.map(type => {
           return (
             <Checkbox
+              checked={filter.types.filter(e => e.name === type && e.active).length > 0}
               shape="curve"
               icon={<FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon>}
               onChange={e => {
@@ -211,6 +216,7 @@ function Filter(props) {
         {categories.map(category => {
           return (
             <Checkbox
+              checked={filter.categories.filter(e => e.name === category && e.active).length > 0}
               shape="curve"
               icon={<FontAwesomeIcon icon={faCheckSquare}></FontAwesomeIcon>}
               onChange={e => {
