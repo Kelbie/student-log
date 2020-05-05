@@ -11,7 +11,6 @@ import {
 import styled from 'styled-components';
 
 // Common
-import { Button2 } from '../../../components/common/Button';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 import Label from '../../../components/common/Label';
 import Input from '../../../components/common/Input';
@@ -33,7 +32,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
             type="text"
             name={`awards[${props.index}].name`}
             ref={register({ required: true })}
-            placeholder="Supreme Hacker"
+            placeholder="Supreme Hacker (required)"
           />
           {errors.name
             ? errors.name[props.index] && (
@@ -147,14 +146,6 @@ export default React.memo(styled(FormElement)`
         display: flex;
         justify-content: flex-end;
         margin-top: 8px;
-
-        ${Button2}:first-child {
-          margin-left: 0px;
-        }
-
-        ${Button2} {
-          margin-left: 4px;
-        }
       }
     }
 

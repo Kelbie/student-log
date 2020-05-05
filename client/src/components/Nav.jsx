@@ -7,7 +7,6 @@ import Modal from 'styled-react-modal';
 import Login from '../pages/login/Login';
 
 // Common
-import { Button2 } from './common/Button';
 import LinkRefactor from './common/LinkRefactor';
 import ButtonRefactor from './common/ButtonRefactor';
 
@@ -51,6 +50,7 @@ function Nav(props) {
 
   return (
     <div {...props}>
+      {/* Pop up modal for loggin in */}
       <Modal
         isOpen={modalOpen}
         onEscapeKeydown={() => setModalOpen(false)}
@@ -58,14 +58,6 @@ function Nav(props) {
       >
         <Login></Login>
       </Modal>
-      {/* <LinkRefactor
-        responsive={true}
-        to="/work"
-        icon={faGraduationCap}
-        onClick={() => {
-          setActive('work');
-        }}
-      ></LinkRefactor> */}
       <LinkRefactor
         responsive={true}
         to="/about"
@@ -99,6 +91,7 @@ function Nav(props) {
       >
         Résumé
       </LinkRefactor>
+      {/* If the user is authenticated */}
       {data?.getProfile?.name ? (
         <ButtonRefactor
           responsive={true}
@@ -131,11 +124,6 @@ Nav = styled(Nav)`
 
   a {
     text-decoration: none;
-  }
-
-  ${Button2} {
-    white-space: normal;
-    min-width: 100%;
   }
 
   h1 {

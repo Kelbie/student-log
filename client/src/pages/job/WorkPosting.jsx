@@ -12,6 +12,7 @@ import WorkElement from '../work/WorkElement';
 import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo-hooks';
 
+// Graphql query to get job
 const GET_JOB = gql`
   query getJob($id: String) {
     getJob(id: $id) {

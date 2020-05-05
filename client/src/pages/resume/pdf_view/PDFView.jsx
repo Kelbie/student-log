@@ -27,6 +27,7 @@ function ResumePDF(props) {
   const [url, setUrl] = useState('');
 
   useEffect(() => {
+    // we need to hydrade the data into a new format because resumake doesn't accept the same format as we have used on the front-end.
     async function hydrate() {
       let data = resume;
 

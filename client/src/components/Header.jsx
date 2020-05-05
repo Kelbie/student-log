@@ -6,6 +6,7 @@ import styled, { withTheme } from 'styled-components';
 // Components
 import ThemePicker from './ThemePicker';
 
+// Header which shows "studentlog" and theme picker
 function Header(props) {
   return (
     <div {...props}>

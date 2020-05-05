@@ -19,7 +19,6 @@ import styled from 'styled-components';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 // Common
-import Button, { Button2 } from '../../../components/common/Button';
 import DraggableForm from '../../../components/common/DraggableForm';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 import H1 from '../../../components/common/H1';
@@ -27,6 +26,7 @@ import H1 from '../../../components/common/H1';
 // Components
 import ResumeEducationFormElement from './EducationFormElement';
 
+// Get the current style which is used to style the animation of the dragging.
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
   let activeTransform = {};
@@ -84,6 +84,7 @@ function EducationForm(props) {
     dispatch(saveResume({ ...data, education: sortedEducation }));
   };
 
+  // delete the item from the drag list and redux
   function del(id) {
     setNumberOfDeletes(numberOfDeletes + 1);
     let index = -1;
@@ -103,7 +104,8 @@ function EducationForm(props) {
         absoluteIndex = i;
       }
     });
-
+    
+    // ensure redux deletes the item
     dispatch(
       saveResume({
         education: education.filter((e, i) => {
@@ -156,6 +158,7 @@ function EducationForm(props) {
         icon={faPlus}
         variant={'border'}
         onClick={() => {
+          // create new draggable item
           setItems([
             ...items,
             {
@@ -165,6 +168,7 @@ function EducationForm(props) {
               isEditable: true
             }
           ]);
+          // create new item with no data in redux
           dispatch(
             saveResume({
               education: [

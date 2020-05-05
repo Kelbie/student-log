@@ -1,3 +1,4 @@
+// decodes base64image from client side.
 export function decodeBase64Image(dataString) {
 	try {
 		var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),

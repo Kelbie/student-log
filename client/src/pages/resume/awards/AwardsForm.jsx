@@ -1,41 +1,35 @@
 import React, { useCallback, useState } from 'react';
 
-import move from 'lodash-move';
-
 import { Draggable } from 'react-beautiful-dnd';
 
-import { useForm } from 'react-hook-form';
-import { useDispatch, useMappedState } from 'redux-react-hook';
-import _ from 'lodash';
-import styled from 'styled-components';
-
-import { saveResume } from '../../../actions/actions';
-
-import Button from '../../../components/common/Button';
+// Common
 import DraggableForm from '../../../components/common/DraggableForm';
-import ResumeAwardsFormElement from './AwardsFormElement';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 import H1 from '../../../components/common/H1';
 
-// fake data generator
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }));
+// Helper
+import move from 'lodash-move';
+import _ from 'lodash';
 
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+// Forms
+import { useForm } from 'react-hook-form';
 
-  return result;
-};
+// Redux
+import { useDispatch, useMappedState } from 'redux-react-hook';
+import { saveResume } from '../../../actions/actions';
+
+// Stylign
+import styled from 'styled-components';
+
+// Components
+import ResumeAwardsFormElement from './AwardsFormElement';
+
+// Icons
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const grid = 8;
 
+// Get the current style which is used to style the animation of the dragging.
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
   let activeTransform = {};
@@ -103,6 +97,7 @@ function AwardsForm(props) {
     dispatch(saveResume({ ...data, awards: sortedAwards }));
   };
 
+  // delete draggable item and redux item
   function del(id) {
     setNumberOfDeletes(numberOfDeletes + 1);
     let index = -1;
@@ -175,6 +170,7 @@ function AwardsForm(props) {
         variant="border"
         icon={faPlus}
         onClick={() => {
+          // if clicked add a new draggable item
           setItems([
             ...items,
             {
@@ -184,6 +180,7 @@ function AwardsForm(props) {
               isEditable: true
             }
           ]);
+          // if clicked add a new empty item
           dispatch(
             saveResume({
               awards: [...awards, { name: '', date: '', awarder: '', summary: '' }]

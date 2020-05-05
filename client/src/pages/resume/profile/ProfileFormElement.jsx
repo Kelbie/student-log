@@ -9,7 +9,6 @@ import styled from 'styled-components';
 // Common
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 import EditDropdown from '../../../components/common/EditDropdown';
-import { Button2 } from '../../../components/common/Button';
 import Input from '../../../components/common/Input';
 import Label from '../../../components/common/Label';
 
@@ -29,7 +28,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
             type="text"
             name={`profile.email`}
             ref={register}
-            placeholder="johnsmith@gmail.com"
+            placeholder="johnsmith@gmail.com (required)"
           />
 
           <Label>Phone Number</Label>
@@ -75,6 +74,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
           <div className="bottom">{props.watch(`summary[${props.index}]`)}</div>
         </div>
       </div>
+      {/* if item isn't editable then show edit button */}
       {!isEditable ? (
         <div
           className="edit"
@@ -114,14 +114,6 @@ export default React.memo(styled(FormElement)`
         display: flex;
         justify-content: flex-end;
         margin-top: 8px;
-
-        ${Button2}:first-child {
-          margin-left: 0px;
-        }
-
-        ${Button2} {
-          margin-left: 4px;
-        }
       }
     }
 

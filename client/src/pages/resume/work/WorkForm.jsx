@@ -26,6 +26,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 // Components
 import ResumeWorkFormElement from './WorkFormElement';
 
+// Get the current style which is used to style the animation of the dragging.
 const getItemStyle = (isDragging, draggableStyle) => {
   const { transform } = draggableStyle;
   let activeTransform = {};
@@ -83,6 +84,7 @@ function WorkForm(props) {
     dispatch(saveResume({ ...data, work: sortedWork }));
   };
 
+  // delete the item from the drag list and redux
   function del(id) {
     setNumberOfDeletes(numberOfDeletes + 1);
     let index = -1;

@@ -8,7 +8,6 @@ import { rgba } from 'polished';
 import { faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 // Common
-import { Button2 } from '../../../components/common/Button';
 import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 import Input from '../../../components/common/Input';
@@ -29,7 +28,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
             type="text"
             name={`education[${props.index}].name`}
             ref={register({ required: true })}
-            placeholder="Stanford University"
+            placeholder="Stanford University (required)"
           />
           {errors.name
             ? errors.name[props.index] && (
@@ -138,6 +137,7 @@ function FormElement({ handle, content, register, editable, errors, ...props }) 
           </div>
         </div>
       </div>
+      {/* if item isn't editable then show edit button */}
       {!isEditable ? (
         <EditDropdown>
           <EditDropdownButton icon={faEdit} onClick={() => setIsEditable(!isEditable)}>
@@ -185,14 +185,6 @@ export default React.memo(styled(FormElement)`
         display: flex;
         justify-content: flex-end;
         margin-top: 8px;
-
-        ${Button2}:first-child {
-          margin-left: 0px;
-        }
-
-        ${Button2} {
-          margin-left: 4px;
-        }
       }
     }
 

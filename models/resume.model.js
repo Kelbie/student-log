@@ -14,6 +14,7 @@ client.connect();
 
 export default {
   update: async (user_id, json) => {
+		// update resume
     await client.query(SQL`
 			INSERT INTO resume (
 				user_id, 
@@ -28,6 +29,7 @@ export default {
 		`);
   },
   get: async user_id => {
+		// get resume
     return await client.query(
       SQL`
 				SELECT json from resume

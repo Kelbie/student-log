@@ -229,16 +229,18 @@ const POST_JOB = gql`
   }
 `;
 
+// check if the email is valid
 function isEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
 
+// check if the url is valid
 function isURL(url) {
   return !/^(?:f|ht)tps?\:\/\//.test(url);
 }
 
-// add the relevant protocol to the input
+// add the relevant protocol to the email or website
 function addProtocol(url) {
   if (isEmail(url)) {
     url = 'mailto://' + url;
@@ -430,7 +432,6 @@ function About(props) {
                     display: [
                       'INLINE_STYLE_BUTTONS',
                       'BLOCK_TYPE_BUTTONS',
-                      'LINK_BUTTONS',
                       'BLOCK_TYPE_DROPDOWN',
                       'HISTORY_BUTTONS'
                     ],
@@ -555,6 +556,7 @@ function About(props) {
   );
 }
 
+// have to override text editor styles
 About = styled(About)`
   .RichTextEditor__root___2QXK- {
     background: -webkit-linear-gradient(

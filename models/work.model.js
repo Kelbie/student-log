@@ -20,6 +20,7 @@ client.connect();
 
 export default {
   get: async id => {
+		// join to combine jobs with company
     return await client.query(
       SQL`
 					SELECT title, type, job.description as job_desc, * FROM job 
@@ -32,6 +33,7 @@ export default {
     );
   },
   getMultiple: async (first, offset) => {
+		// join to combile all jobs with their companies
     return await client.query(
       SQL`
 						SELECT * FROM job 
@@ -66,6 +68,7 @@ export default {
 			`
     );
 
+		// insert company into db
     await client.query(
       SQL`
 				INSERT INTO company (

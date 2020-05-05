@@ -8,7 +8,6 @@ import { faTrash, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 // Common
 import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
-import { Button2 } from '../../../components/common/Button';
 import Input from '../../../components/common/Input';
 import Label from '../../../components/common/Label';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
@@ -28,7 +27,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
             type="text"
             name={`work[${props.index}].name`}
             ref={register({ required: true })}
-            placeholder="Google"
+            placeholder="Google (required)"
           />
           {errors.name
             ? errors.name[props.index] && (
@@ -151,14 +150,6 @@ export default React.memo(styled(FormElement)`
         display: flex;
         justify-content: flex-end;
         margin-top: 8px;
-
-        ${Button2}:first-child {
-          margin-left: 0px;
-        }
-
-        ${Button2} {
-          margin-left: 4px;
-        }
       }
     }
 

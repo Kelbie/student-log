@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+// Icons
 import {
   faEllipsisV,
   faGripVertical,
@@ -9,10 +10,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { rgba } from 'polished';
+// Styling
 import styled from 'styled-components';
+import { rgba } from 'polished';
 
-import Button, { Button2 } from '../../../components/common/Button';
+// Common
 import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
 import Input from '../../../components/common/Input';
 import Label from '../../../components/common/Label';
@@ -33,7 +35,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
             type="text"
             name={`projects[${props.index}].name`}
             ref={register({ required: true })}
-            placeholder="Supreme Hacker"
+            placeholder="Supreme Hacker (required)"
           />
           {errors.name
             ? errors.name[props.index] && (
@@ -94,6 +96,7 @@ function FormElement({ handle, register, editable, errors, ...props }) {
           <div className="bottom">{props.watch(`projects[${props.index}].description`)}</div>
         </div>
       </div>
+      {/* If the button isn't editable then show the dropdown */}
       {!isEditable ? (
         <EditDropdown>
           <EditDropdownButton icon={faEdit} onClick={() => setIsEditable(!isEditable)}>
@@ -142,14 +145,6 @@ export default React.memo(styled(FormElement)`
         display: flex;
         justify-content: flex-end;
         margin-top: 8px;
-
-        ${Button2}:first-child {
-          margin-left: 0px;
-        }
-
-        ${Button2} {
-          margin-left: 4px;
-        }
       }
     }
 

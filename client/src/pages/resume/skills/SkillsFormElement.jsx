@@ -23,7 +23,6 @@ import DraggableForm from '../../../components/common/DraggableForm';
 // Common
 import EditDropdown, { EditDropdownButton } from '../../../components/common/EditDropdown';
 import Input from '../../../components/common/Input';
-import { Button2 } from '../../../components/common/Button';
 import Label from '../../../components/common/Label';
 import ButtonRefactor from '../../../components/common/ButtonRefactor';
 
@@ -306,14 +305,6 @@ export default styled(FormElement)`
         display: flex;
         justify-content: flex-end;
         margin-top: 8px;
-
-        ${Button2}:first-child {
-          margin-left: 0px;
-        }
-
-        ${Button2} {
-          margin-left: 4px;
-        }
       }
     }
 
@@ -333,14 +324,6 @@ export default styled(FormElement)`
     display: flex;
     align-items: flex-end;
     align-content: flex-end;
-
-    ${Button2} {
-      padding: 4px;
-      border-radius: 100px;
-      width: 22px;
-      margin-left: 4px;
-      margin-bottom: 4px;
-    }
 
     ${ButtonRefactor} {
       padding: 6px;

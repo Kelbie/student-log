@@ -10,12 +10,15 @@ export default {
     getResume: async (_, {}, { req }) => {
       logger('<', 'getResume', null, req, 'green');
 
+      // check if the user is logged in
       if (!req.isAuthenticated()) {
         return {};
       }
 
+      // get json resume
       const resumeResponse = await Resume.get(req.user.upn);
 
+      // return json resume
       return JSON.parse(resumeResponse.rows[0].json).resume;
     }
   },
@@ -23,6 +26,7 @@ export default {
     updateResume: async (_, resume, { req }) => {
       logger('>', 'updateResume', { resume }, req, 'green');
 
+      // check if user is authenticated
       if (!req.isAuthenticated()) {
         return {};
       }

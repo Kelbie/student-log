@@ -8,19 +8,6 @@ const fs = require('fs');
 
 import Work from '../models/work.model';
 
-// Postgres
-import SQL from 'sql-template-strings';
-const { Client } = require('pg');
-const client = new Client({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDB,
-  password: process.env.PGPASS,
-  port: process.env.PGPORT
-});
-
-client.connect();
-
 export default {
   Query: {
     getWork: async (_, { first, offset }, { req }) => {
@@ -29,8 +16,10 @@ export default {
         req.user ? req.user.displayName : 'Unknown'
       );
 
+      // get alls the jobs
       let jobs = await Work.getMultiple(first, offset);
 
+      // export jobs to graphql
       return jobs.rows.map(job => ({
         job_title: job.title,
         job_type: job.type,
@@ -44,8 +33,10 @@ export default {
         req.user ? req.user.displayName : 'Unknown'
       );
 
+      // get job
       let job = await Work.get(id);
 
+      // export job to graphql
       return job.rows.map(job => ({ job_title: job.title, job_type: job.type, ...job }))[0];
     }
   },
@@ -57,11 +48,12 @@ export default {
       );
 
       var translator = short();
-
+      
+      // create a short unique id for job and company
       let job_id = translator.new();
       let company_id = translator.new();
 
-      // sanity check
+      // sanity checks
       if (args.job_title == "" || args.job_title.length > 128) {
         throw new Error('invalid job title');
       }
@@ -135,7 +127,7 @@ export default {
         throw new Error('invalid description');
       }
 
-
+      // create a job post and store in db
       await Work.create(
         {
           id: job_id,
@@ -157,6 +149,7 @@ export default {
         }
       );
 
+      // export id to graphql
       return {
         id: job_id
       };

@@ -11,7 +11,6 @@ import styled from 'styled-components';
 
 // Common
 import A from '../../components/common/A';
-import { Button2 } from '../../components/common/Button';
 import LinkRefactor from '../../components/common/LinkRefactor';
 
 import WorkElement2 from './WorkElement';
@@ -308,53 +307,6 @@ Filter = styled(Filter)`
 
         margin-bottom: 8px;
     }
-`;
-
-function Search(props) {
-  return (
-    <div {...props}>
-      <div className="search">
-        <FontAwesomeIcon icon={faSearch} />
-        <input />
-      </div>
-      <Button2 active>Search</Button2>
-    </div>
-  );
-}
-
-Search = styled(Search)`
-  display: flex;
-  flex-direction: row;
-  grid-area: search;
-
-  svg {
-    align-self: center;
-    color: white;
-    margin: 8px;
-  }
-
-  .search {
-    background: -webkit-linear-gradient(
-      ${props => props.theme.PRIMARY_COLOR},
-      ${props => props.theme.SECONDARY_COLOR}
-    );
-    border-radius: 4px;
-    flex-grow: 1;
-    display: flex;
-    margin-right: 4px;
-  }
-
-  input {
-    border: none;
-    margin: 2px;
-    margin-left: 0px;
-    border-radius: 0px 4px 4px 0px;
-    padding: 4px 8px;
-    background: ${props => (props.theme.is === 'dark' ? '#17171C' : 'white')};
-    caret-color: ${props => (props.theme.is === 'dark' ? 'white' : '#17171C')};
-    color: ${props => (props.theme.is === 'dark' ? 'white' : '#17171C')};
-    flex-grow: 1;
-  }
 `;
 
 const GET_JOBS = gql`
