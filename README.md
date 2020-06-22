@@ -60,7 +60,7 @@ Generate secrets for .env file.
 
 👤 **Kevin Kelbie**
 
-- Github: [@KevinKelbie](https://github.com/KevinKelbie)
+- Github: [@Kelbie](https://github.com/Kelbie)
 - LinkedIn: [@kelbie](https://linkedin.com/in/kelbie/)
 
 ## Show your support
